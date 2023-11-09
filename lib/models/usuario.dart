@@ -14,18 +14,22 @@ class Usuario {
         required this.nombre,
         required this.email,
         required this.uid,
+        this.cupon
     });
 
     bool online;
     String nombre;
     String email;
     String uid;
+    List<dynamic>? cupon;
 
     factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
         online: json["online"],
         nombre: json["nombre"],
         email: json["email"],
         uid: json["uid"],
+        cupon: json["cupon"] == null ? null : List<dynamic>.from(json["cupon"].map((x) => x)),
+
     );
 
     Map<String, dynamic> toJson() => {
@@ -33,5 +37,6 @@ class Usuario {
         "nombre": nombre,
         "email": email,
         "uid": uid,
+         "cupon": List<dynamic>.from(cupon!.map((x) => x)),
     };
 }

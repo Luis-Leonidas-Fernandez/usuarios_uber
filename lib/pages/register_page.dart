@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'package:usuario_inri/login-ui/input_decorations.dart';
@@ -6,6 +7,7 @@ import 'package:usuario_inri/providers/login_form_validar.dart';
 
 import 'package:usuario_inri/routes/routes.dart';
 import 'package:usuario_inri/service/auth_service.dart';
+import 'package:usuario_inri/widgets/alert_screen.dart';
 import 'package:usuario_inri/widgets/card_container.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -31,29 +33,22 @@ class RegisterPage extends StatelessWidget {
 
                   SizedBox(height: 10,),
 
-                  Text('Registrarme', style: TextStyle(fontSize: 20)),
+                  Text('Registrarme', style: GoogleFonts.lobster(
+                    color: Colors.black, fontSize: 25
+                    ),),
 
-                  SizedBox(height: 25,),
+                  SizedBox(height: 45,),
 
                   ChangeNotifierProvider(
                     create: (_) => LoginFormValidar(),
                     child:  _LoginForm(),
                     
-                    )
-                  
-                 
-                  
+                    ),
                 
                 ],
               )
             ),
-            SizedBox(height: 50),
-            TextButton(onPressed: ()=> Navigator.pushReplacementNamed(context, 'login'),
-            style: ButtonStyle(
-              overlayColor: MaterialStateProperty.all(Colors.indigo.withOpacity(0.2))
-            ),
-             child: Text('Tengo una Cuenta', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)
-            )
+            
             
           
           ],
@@ -104,7 +99,7 @@ class _LoginFormState extends State<_LoginForm> {
            controller: nameCtrl,            
            ),
          
-         SizedBox(height: 30),
+         SizedBox(height: 10),
          
          TextFormField(
            autocorrect: false,
@@ -127,7 +122,7 @@ class _LoginFormState extends State<_LoginForm> {
              controller: emailCtrl,             
            ),
          
-         SizedBox(height: 30),
+         SizedBox(height: 10),
          
          TextFormField(
            autocorrect: false,
@@ -148,61 +143,58 @@ class _LoginFormState extends State<_LoginForm> {
               },
               controller: passCtrl, 
          ),
-         SizedBox(height: 30,),
+         SizedBox(height: 25,),
          
          MaterialButton(
-           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
            disabledColor: Colors.grey,
            elevation: 0,
-           color: Colors.purple,
-           
-           onPressed:  authService.autenticando ? null : () async {
+           color: Colors.indigo,           
+           onPressed:  authService.autenticando ? (){} 
+           : () async {
 
            
            if (!loginFormValidar.isValidForm()) return;
-
             loginFormValidar.isLoading = true;
             await Future.delayed(Duration(seconds: 2));
-            loginFormValidar.isLoading = false; 
+            loginFormValidar.isLoading = false;
+            
+             final registerOk = await authService.register(nameCtrl.text.toString(), emailCtrl.text.toString(), passCtrl.text.toString());
+                         
+            if(!mounted) return;      
+                      
+            if(registerOk && mounted){
 
-            registerOk();
+             Navigator.pushReplacementNamed(context, 'loading');
 
-           //loginFormValidar.isLoading? && FocusScope.of(context).unfocus();
+            }else{
+              
+             mostrarAlerta(context, 'Registro incorrecto', registerOk );
+            }
 
             
           
         },
         child: Container(
-             padding: EdgeInsets.symmetric(horizontal:  80, vertical: 15),
+             padding: const EdgeInsets.symmetric(horizontal:  80, vertical: 15),
              child: Text(
                loginFormValidar.isLoading? 'Espere'
                : 'Registrar',
-               style: TextStyle(color: Colors.white),
+               style: const TextStyle(color: Colors.white, fontSize: 18),
              ),
-           ),          
-      )
+           )           
+      ),
+      SizedBox(height: 15),
+            ElevatedButton(onPressed: ()=> Navigator.pushReplacementNamed(context, 'login'),
+            style: ButtonStyle(
+              overlayColor: MaterialStateProperty.all(Colors.indigo.withOpacity(0.2))
+            ),
+             
+              
+              child: const Text('Tengo una Cuenta', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)
+            )
       ],
      ) 
     );
   }
-  void registerOk() async {
-
-  final authService = Provider.of<AuthService>(context, listen:  false);   
-  await authService.register(nameCtrl.text.toString(), emailCtrl.text.toString(), passCtrl.text.toString());
-
-    if (!mounted) return;
-  Navigator.pushReplacementNamed(context, 'loading');
-  }
 }
-
-
-             /* loginFormValidar.isLoading? &&
-             FocusScope.of(context).unfocus();
-
-            if (!loginFormValidar.isValidForm()) return;
-
-            loginFormValidar.isLoading = true;
-           await Future.delayed(Duration(seconds: 2));
-          loginFormValidar.isLoading = false;
-
- */          

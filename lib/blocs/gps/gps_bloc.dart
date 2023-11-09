@@ -71,6 +71,8 @@ GpsBloc() : super(const GpsState(isGpsEnabled: false, isGpsPermissionGranted: fa
   switch(status){
 
     case PermissionStatus.granted:
+    case PermissionStatus.provisional:
+
       //habilita los permisos de la ubicacion
       add(GpsAndPermissionEvent(isGpsEnabled: state.isGpsEnabled,
       isGpsPermissionGranted: true));
@@ -85,6 +87,8 @@ GpsBloc() : super(const GpsState(isGpsEnabled: false, isGpsPermissionGranted: fa
     add(GpsAndPermissionEvent(isGpsEnabled: state.isGpsEnabled,
     isGpsPermissionGranted: false)); 
     openAppSettings(); 
+    
+      
   }
 
   }

@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:usuario_inri/models/address.dart';
 
 import 'package:usuario_inri/service/addresses_service.dart';
-import 'package:usuario_inri/service/auth_service.dart';
 part 'address_event.dart';
 part 'address_state.dart';
 
@@ -24,11 +23,17 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
 
   on<OnStartLoadingOrderUser>((event, emit) => emit(state.copyWith(loading: true)));
   on<OnStopLoadingOrderUser> ((event, emit)  => emit(state.copyWith(loading: false)));
-  on<DeleteOrderUserEvent> ((event, emit)  => emit(const AddressState()));  
-  on<LoadOrderUserEvent>((event, emit) {
+  on<ExistOrderUserEvent> ((event, emit)  => emit(state.copyWith(existOrder: false)));
+  on<OnIsAcceptedTravel>((event, emit) => emit(state.copyWith(isAccepted: true)));
+  on<OnIsDeclinedTravel>((event, emit) => emit(state.copyWith(isAccepted: false)));
+  on<OnClearStateEvent> ((event, emit)  => emit(const UserInitialState()));  
+
+  
+  on<AddOrderUserEvent>((event, emit) {
 
       emit(state.copyWith(
         orderUser: event.orderUser,
+        existOrder: true,
         orderhistory: [...state.orderHistory, event.orderUser]
       
       ));
@@ -39,38 +44,27 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
     
   }
   
-  Stream<OrderUser> get getOrder async* {
+  Stream<OrderUser> get getOrder async* {    
 
-    final List<OrderUser> orderUsers = [];
+    final  respOrder = await addressService.getAddress();
 
-    final  obj = await addressService.getAddress();
+    final id = respOrder.idDriver;
 
-    if(obj.isNotEmpty){
-
-    final orderUser = obj.first; 
+    if(id == '0'){   
     
-    add( LoadOrderUserEvent( orderUser ) ); 
-    await AuthService().guardarIdDriver(orderUser.idDriver);
-
-    for( OrderUser orderUser in orderUsers){
-      
-     orderUsers.add(orderUser);
-     await Future.delayed(const Duration(seconds: 2));
+        
+      return;       
      
-     }
-
-     _addressController.add(orderUser); 
-     yield orderUser;
-
     }else{
-      return;
-    }   
+     
+     add(AddOrderUserEvent(respOrder));
+
+    _addressController.add(respOrder); 
+
+     yield respOrder;
+    }    
 
     }
-
-  get orderUser => null;
-
-  
   
   
   void startLoadingAddress(){ 

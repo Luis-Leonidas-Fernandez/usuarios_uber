@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AuthBackground extends StatelessWidget {
   
@@ -21,7 +22,9 @@ class AuthBackground extends StatelessWidget {
         children: [
 
           _PurpleBox(),
-          _HederIcon(),
+          _HederIconLocation(),
+          _HederIconText(),
+          _HederIcon(),          
           child,
 
         ],
@@ -38,15 +41,75 @@ class _HederIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return Positioned(
+                top: 140,
+                left: 110,
+                right: 110,
       child: Container(
-        width: double.infinity,
-        margin: EdgeInsets.only(top: 30),           
-        child: Icon(Icons.person_pin, color: Colors.white, size: 100),
+        alignment: AlignmentDirectional.bottomCenter,       
+        height: 80,
+        width: 150,
+        margin: const EdgeInsets.only(top: 18),           
+        child: Image.asset('assets/driver.png'),        
       ),
     );
   }
 }
+
+class _HederIconText extends StatelessWidget {
+
+
+  
+  const _HederIconText({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+
+      
+    return Positioned(
+                top: 75,
+                left: 60,
+                right: 60,
+      child: Container(        
+        alignment: AlignmentDirectional.bottomCenter,    
+        margin: const EdgeInsets.only(top: 45),           
+        child: Text('I N R I   R E M I S E S',
+                  style: GoogleFonts.lobster(
+                    color: Colors.white, fontSize: 29
+                    ),
+                    ),
+      ),
+    );
+  }
+}
+
+class _HederIconLocation extends StatelessWidget {
+  const _HederIconLocation({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+                top: 10,
+                left: 105,
+                right: 105,
+      child: Container(
+        alignment: AlignmentDirectional.bottomCenter,     
+        margin: const EdgeInsets.only(top: 16),           
+        child: const Icon(Icons.location_on,
+         color:  Colors.white,
+         size: 95 ,
+
+         ),        
+      ),
+    );
+  }
+}
+
+
 
 class _PurpleBox extends StatelessWidget {
   
@@ -57,7 +120,7 @@ class _PurpleBox extends StatelessWidget {
   
     return Container(
       width: double.infinity,
-      height: size.height * 0.4,      
+      height: size.height * 0.5,      
       decoration: _purpleBackground(),
       child: Stack(
         children: [

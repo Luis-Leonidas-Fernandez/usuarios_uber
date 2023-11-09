@@ -19,7 +19,7 @@ class OnStartFollowingUserEvent extends MapEvent {}
 // se creo el evento que guarda las address
 class OnAddAddressEvent extends MapEvent {}
 
-class OnIsAcceptedTravel extends MapEvent{}
-class OnIsDeclinedTravel extends MapEvent{}
+//class OnIsAcceptedTravel extends MapEvent{}
+//class OnIsDeclinedTravel extends MapEvent{}
 
 

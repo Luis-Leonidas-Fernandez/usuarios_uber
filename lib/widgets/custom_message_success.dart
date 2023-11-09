@@ -21,11 +21,11 @@ class CustomSnackBarContentSuccess extends StatelessWidget {
               color: Color.fromARGB(248, 54, 160, 111),
                borderRadius: BorderRadius.all(Radius.circular(20)),
             ),
-            child: Row(children: [
+            child: Row(children: const [
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text('Felicitaciones!',
                         style: TextStyle(fontSize: 19, color: Colors.white)),
                     Spacer(),

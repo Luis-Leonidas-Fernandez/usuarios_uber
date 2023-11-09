@@ -1,4 +1,7 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'package:usuario_inri/login-ui/input_decorations.dart';
@@ -6,6 +9,7 @@ import 'package:usuario_inri/providers/login_form_validar.dart';
 
 import 'package:usuario_inri/routes/routes.dart';
 import 'package:usuario_inri/service/auth_service.dart';
+import 'package:usuario_inri/widgets/alert_screen.dart';
 import 'package:usuario_inri/widgets/card_container.dart';
 
 class LoginPage extends StatelessWidget {
@@ -30,7 +34,7 @@ class LoginPage extends StatelessWidget {
 
                   SizedBox(height: 10,),
 
-                  Text('Inicio sesion', style: TextStyle(fontSize: 20)),
+                  Text('Inicio sesion', style: GoogleFonts.lobster(color: Colors.black, fontSize: 25)),
 
                   SizedBox(height: 25,),
 
@@ -47,12 +51,7 @@ class LoginPage extends StatelessWidget {
               )
             ),
             SizedBox(height: 50),
-            TextButton(onPressed: ()=> Navigator.pushReplacementNamed(context, 'register'),
-            style: ButtonStyle(
-              overlayColor: MaterialStateProperty.all(Colors.indigo.withOpacity(0.2))
-            ),
-             child: Text('Crear una Cuenta', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)
-            )
+            
           ],
         ),
         )
@@ -106,7 +105,7 @@ class _LoginFormState extends State<_LoginForm> {
              controller: emailCtrl,             
            ),
          
-         SizedBox(height: 30),
+         SizedBox(height: 10),
          
          TextFormField(
            autocorrect: false,
@@ -127,17 +126,29 @@ class _LoginFormState extends State<_LoginForm> {
               },
               controller: passCtrl,
          ),
-         SizedBox(height: 30,),
+         SizedBox(height: 25),
          MaterialButton(
-           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
            disabledColor: Colors.grey,
            elevation: 0,
-           color: Colors.purple,          
-           onPressed: authService.autenticando ? null : () async {
+           color: Colors.indigo,          
+           onPressed: authService.autenticando ? (){}
+           : () async {
              
-             loginOk(context);
+              final loginOk =await authService.login(emailCtrl.text.toString(), passCtrl.text.toString());
              
-            
+             print("----------login ok: $loginOk-----------mounted: $mounted-------");
+             
+             if(!mounted) return;
+             
+             if(loginOk && mounted){
+
+              Navigator.pushReplacementNamed(context, 'loading');
+
+             } else{
+
+              mostrarAlerta(context, 'Login incorrecto','Revise sus credenciales nuevamente');
+             }
 
           
 
@@ -147,26 +158,24 @@ class _LoginFormState extends State<_LoginForm> {
              child: Text(
                loginFormValidar.isLoading? 'Espere'
                : 'Ingresar',
-               style: const TextStyle(color: Colors.white),
+               style: const TextStyle(color: Colors.white, fontSize: 18),
              ),
            )
           
-         )
+         ), 
+          const SizedBox(height: 15),
+          ElevatedButton(
+                onPressed: () =>
+                    Navigator.pushReplacementNamed(context, 'register'),
+                style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(
+                        Colors.indigo.withOpacity(0.2))),
+                child: const Text(
+                  'Crear una Cuenta',
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                ))
        ],
      ) 
      );
-  }
-  void loginOk(BuildContext context) async {
-
-   
-
-  final authService = Provider.of<AuthService>(context, listen: false); 
-
-  await authService.login(emailCtrl.text.toString(), passCtrl.text.toString());
-  
-  
-
-  if (!mounted) return;
-  Navigator.pushReplacementNamed(context, 'loading');
-}
+  } 
 }

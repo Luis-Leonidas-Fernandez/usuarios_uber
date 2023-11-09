@@ -2,22 +2,21 @@ import 'dart:convert';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-
-
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:usuario_inri/global/environment.dart';
 import 'package:usuario_inri/models/login.dart';
 import 'package:usuario_inri/models/usuario.dart';
+import 'package:usuario_inri/service/storage_service.dart';
 
 
 class AuthService with ChangeNotifier {
 
 late Usuario usuario;
+late Usuario perfilUsuario;
 bool _autenticando = false;
 //crear storage
-final storage = const FlutterSecureStorage();
+final storage = StorageService.instance;
 
 
 //determina la autenticacion
@@ -26,56 +25,10 @@ bool get autenticando => _autenticando;
 set autenticando( bool valor ) {
   _autenticando = valor;
 
-  notifyListeners();
-} 
+  notifyListeners();    
 
-// Getters del token de forma estática
-static  Future<String?> getToken() async {
-    final storage = FlutterSecureStorage();
-    final token = await storage.read(key: 'token', aOptions: _getAndroidOptions());       
-    return token; 
-  }
- 
-
-
-  Future<void> deleteToken() async {
-    final storage = FlutterSecureStorage();
-    await storage.delete(key: 'token', aOptions: _getAndroidOptions());
-  }
-//delete token
- static  Future<String?> getId() async {    
-    
-    final storage = FlutterSecureStorage();
-    final id = await storage.read(key: 'id', aOptions: _getAndroidOptions());       
-    return id; 
-  }
-
-   Future guardarIdOder( String? id ) async {
-    return await storage.write(key: 'idOrder', value: id, aOptions: _getAndroidOptions() );
-
-  }
-
-  static Future<void> deleteIdOrder() async {
-    final storage = FlutterSecureStorage();
-    await storage.delete(key: 'idOrder', aOptions: _getAndroidOptions());
-  }   
-  /* static Future<String?> getIdOrder() async {    
-    
-    final storage = FlutterSecureStorage();
-    final idOrder = await storage.read(key: 'idOrder', aOptions: _getAndroidOptions());       
-    return idOrder; 
-  } */
-
-   static Future<dynamic> getIdDriver() async {    
-    
-    final storage = FlutterSecureStorage();
-    final id = await storage.read(key: 'idOrder', aOptions: _getAndroidOptions());       
-    return id; 
-  }
-   static Future<void> deleteIdDriver() async {
-    final storage = FlutterSecureStorage();
-    await storage.delete(key: 'idDriver', aOptions: _getAndroidOptions());
-  }          
+}   
+          
 
 //Registro de Usuario
 Future register(String nombre, String email, String password ) async {
@@ -94,10 +47,13 @@ Future register(String nombre, String email, String password ) async {
     
     final loginResponse = loginResponseFromJson( resp.body );
     usuario = loginResponse.usuario;
+    
     final id = loginResponse.usuario.uid;
-
-    await _guardarToken(loginResponse.token);
-    await guardarId(id);
+    perfilUsuario= usuario;
+    
+    await storage.saveToken(loginResponse.token);
+    await storage.saveId(id);
+    
     return true;
     
     } else {
@@ -109,7 +65,7 @@ Future register(String nombre, String email, String password ) async {
 
   Future<bool> isLoggedIn(String token) async {
     
-    final token  = await storage.read(key: 'token');
+    final token  = await StorageService.instance.getToken();
     
     final Map<String, String> headers = {'Content-Type': 'application/json', 'x-token': token.toString()};
   
@@ -121,14 +77,14 @@ Future register(String nombre, String email, String password ) async {
 
       usuario = loginResponse.usuario;
       
-      await _guardarToken(loginResponse.token);
+      await storage.saveToken(loginResponse.token);
       
 
       return true;
 
     } else {
 
-      logout();
+     storage.deleteToken();
       return false;
 
     }
@@ -149,41 +105,17 @@ Future register(String nombre, String email, String password ) async {
 
     if ( resp.statusCode == 200 ) {
       final loginResponse = loginResponseFromJson( resp.body );
-      usuario = loginResponse.usuario;
 
-      await _guardarToken(loginResponse.token);
+      usuario = loginResponse.usuario;
+      perfilUsuario= usuario;
+
+      await storage.saveToken(loginResponse.token);
+      await storage.saveId(usuario.uid);
       
       return true;
     } else {
       return false;
     }
-  }
- 
-  static AndroidOptions _getAndroidOptions() => const AndroidOptions(
-     encryptedSharedPreferences: true,
-   );
-
-   // ignore: unused_element
-   IOSOptions _getIOSOptions() => const IOSOptions(
-   
-   );
-
-  Future _guardarToken( String? token ) async {
-    return await storage.write(key: 'token', value: token, aOptions: _getAndroidOptions() );
-  }     
-
-  Future logout() async {
-    await storage.delete(key: 'token', aOptions: _getAndroidOptions());
-  }
-
-  Future guardarId( String? id ) async {
-    return await storage.write(key: 'id', value: id, aOptions: _getAndroidOptions() );
-  }
-  
- Future guardarIdDriver( String? id ) async {
-    return await storage.write(key: 'idDriver', value: id, aOptions: _getAndroidOptions() );
-  }
-   
-
+  }  
   
 }

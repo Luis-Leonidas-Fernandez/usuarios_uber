@@ -1,11 +1,9 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 
-//import 'package:xml/xml.dart' as xml;
-import 'package:xml/xml.dart';
+
 
 class BtnMyTracking extends StatelessWidget { 
   
@@ -31,7 +29,7 @@ class BtnMyTracking extends StatelessWidget {
             child: const Icon(Icons.gps_fixed),
             onPressed: () {
 
-                 data();
+                 
               
               }   
                       
@@ -43,10 +41,4 @@ class BtnMyTracking extends StatelessWidget {
   }
 }
 
-void data() async {
-   final item = await rootBundle.loadString("assets/developer.xml");
-   final res = XmlDocument.parse(item);
-   
-   print(res);
-   
-  }
+

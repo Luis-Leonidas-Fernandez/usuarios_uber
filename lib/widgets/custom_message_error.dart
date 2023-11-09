@@ -21,11 +21,11 @@ class CustomSnackBarContentError extends StatelessWidget {
               color: const Color(0xFFC72C41),
               borderRadius: BorderRadius.all(Radius.circular(20)),
             ),
-            child: Row(children: [
+            child: Row(children: const [
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text('Lo sentimos!',
                         style: TextStyle(fontSize: 18, color: Colors.white)),
                     Spacer(),

@@ -7,17 +7,19 @@ abstract class AddressEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class LoadOrderUserEvent extends AddressEvent{
+class AddOrderUserEvent extends AddressEvent{
 
   final OrderUser orderUser;
-  const LoadOrderUserEvent(this.orderUser);
+  const AddOrderUserEvent(this.orderUser);
 
 }
-class DeleteOrderUserEvent extends AddressEvent{
+class OnClearStateEvent extends AddressEvent{
   
-  const DeleteOrderUserEvent();
+  const OnClearStateEvent();
 
 }
 class OnStartLoadingOrderUser extends AddressEvent{}
 class OnStopLoadingOrderUser extends AddressEvent{}
-
+class ExistOrderUserEvent extends AddressEvent{}
+class OnIsAcceptedTravel extends AddressEvent{}
+class OnIsDeclinedTravel extends AddressEvent{}

@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 
 import 'package:usuario_inri/models/address.dart';
-
+import 'package:usuario_inri/models/usuario.dart';
+import 'package:intl/intl.dart';
 
 
 class CardView extends StatelessWidget {
 
   final OrderUser orderUser;
+  final Usuario usuario;
   
   const CardView({
   Key? key,
-  required this.orderUser
+  required this.orderUser,
+  required this.usuario
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) { 
+    
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -22,7 +26,7 @@ class CardView extends StatelessWidget {
         
         margin: const EdgeInsets.only(top: 90, bottom: 50,  ),
         width: double.infinity,
-        height: 173,
+        height: 195,
         decoration: _cardBorders(),
         child: Stack(
           
@@ -31,22 +35,23 @@ class CardView extends StatelessWidget {
              
             
             _AddressDetails(
-              nombre: orderUser.nombre?? '',
+
+              nombre: orderUser.nombre?? '',              
               email: orderUser.email?? '',
               apellido: orderUser.apellido?? '',
               vehiculo: orderUser.vehiculo?? '',
               modelo: orderUser.modelo?? '',
               patente: orderUser.patente?? '',
               order: orderUser.order?? '',
+              cupon: usuario.cupon ?? [],
                            
             ),
             
             Align(
                alignment: Alignment(0.9, -1.0),
               child: Container(              
-                margin: const EdgeInsets.only(top: 18, bottom: 12), 
-                //alignment: Alignment.bottomRight,             
-                height: 50,
+                margin: const EdgeInsets.only(top: 18, bottom: 12),                             
+                height: 55,
                 width: 68,
                 color: Colors.transparent,
                 child: Image.asset('assets/person.jpg'),
@@ -55,10 +60,10 @@ class CardView extends StatelessWidget {
             Align(
                alignment: Alignment(1.0, -1.0),
               child: Container(              
-                margin: const EdgeInsets.only(top: 98, bottom: 28), 
+                margin: const EdgeInsets.only(top: 110, bottom: 39), 
                           
-                height: 70,
-                width: 98,
+                height: 68,
+                width: 93,
                 color: Colors.transparent,
                 child: Image.asset('assets/driver.png'),
               ),
@@ -92,7 +97,8 @@ class _AddressDetails extends StatelessWidget {
   final String vehiculo; 
   final String modelo; 
   final String patente;
-  final String order; 
+  final String order;
+  final List<dynamic> cupon;
 
   const _AddressDetails({
   required this.nombre,
@@ -101,19 +107,25 @@ class _AddressDetails extends StatelessWidget {
   required this.vehiculo,
   required this.modelo,
   required this.patente,
-  required this.order  
+  required this.order,
+  required this.cupon  
   
   }); 
 
   @override
   Widget build(BuildContext context) {
 
-    final nombreCustom   = 'nombre: $nombre';
-    final apellidoCustom = 'apellido: $apellido ';    
-    final vehiculoCustom = 'vehiculo: $vehiculo';
-    final modeloCustom    = 'modelo: $modelo';
+    final idCupon = cupon.isNotEmpty ? cupon[0] : 0;
+    final price   = cupon.isNotEmpty ? cupon[1]:  0;
+
+    final nombreCustom    = 'nombre: $nombre';
+    final apellidoCustom  = 'apellido: $apellido ';    
+    final vehiculoCustom  = 'vehiculo: $vehiculo';
+  
     final patenteCustom   = 'patente: $patente';
     final orderCustom     = 'estado del pedido: $order';
+    final idCuponCustom   = 'cupon N°: $idCupon';
+ 
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
@@ -151,7 +163,7 @@ class _AddressDetails extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            const SizedBox(height: 9), 
+            const SizedBox(height: 3), 
             Align(
               alignment: Alignment(-0.9, 0),
               child: Text(
@@ -161,18 +173,19 @@ class _AddressDetails extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            const SizedBox(height: 3), 
+            const SizedBox(height: 3),            
+           
             Align(
               alignment: Alignment(-0.9, 0),
               child: Text(
-                modeloCustom,
+                orderCustom ,
                 style: const TextStyle( fontSize: 20, color: Colors.white),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            const SizedBox(height: 3), 
-            Align(
+            const SizedBox(height: 3),
+             Align(
               alignment: Alignment(-0.9, 0),
               child: Text(
                 patenteCustom,
@@ -185,13 +198,26 @@ class _AddressDetails extends StatelessWidget {
             Align(
               alignment: Alignment(-0.9, 0),
               child: Text(
-                orderCustom ,
+                idCupon is String ? idCuponCustom 
+                : '',
                 style: const TextStyle( fontSize: 20, color: Colors.white),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            const SizedBox(height: 3),             
+            const SizedBox(height: 3),
+             Align(
+              alignment: Alignment(-0.9, 0),
+              child: Text(
+                 price > 0 ?
+                'descuento: ${NumberFormat.currency(decimalDigits: 0).format(price)}'
+                : '',                
+                style: const TextStyle( fontSize: 20, color: Colors.white),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),             
+                         
             
           ],
         ),     

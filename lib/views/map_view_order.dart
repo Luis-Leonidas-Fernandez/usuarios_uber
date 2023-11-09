@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -44,12 +46,15 @@ class _MapViewOrderState extends State<MapViewOrder> {
 
     final locationBloc = BlocProvider.of<LocationBloc>(context);
     final myLocation = locationBloc.state.lastKnownLocation!;
-    final location =BlocProvider.of<AddressBloc>(context).state.orderUser!.mensaje!.last;
-   
-   
-    // ignore: avoid_print
-    print('************Mensaje last $location****************');
-    final userLocation = LatLng(location[0], location[1]);
+    
+    final location =BlocProvider.of<AddressBloc>(context).state.orderUser!.mensaje;    
+    final mapBloc = BlocProvider.of<MapBloc>(context);  
+
+    final zoom   = mapBloc.getZoom(location!);
+    final center = mapBloc.bounds(location);
+       
+    
+    final userLocation = LatLng(location[1], location[0]);
 
     final size = MediaQuery.of(context).size; 
 
@@ -60,10 +65,10 @@ class _MapViewOrderState extends State<MapViewOrder> {
         child: FlutterMap(          
           mapController: _mapController,          
           options: MapOptions(             
-            zoom: 15.0,
+            zoom: zoom,
             minZoom: 5.0,
-            maxZoom: 17.0,            
-            center:  LatLng(myLocation.latitude, myLocation.longitude),
+            maxZoom: 20.0,            
+            center:  center,
           ),
           nonRotatedChildren: [
             TileLayer(
@@ -94,8 +99,8 @@ class _MapViewOrderState extends State<MapViewOrder> {
               markers: [
                 Marker(                  
                   point: LatLng(  userLocation.latitude, userLocation.longitude,) ,
-                  width: 105,
-                  height: 105,
+                  width: 110,
+                  height: 110,
                   builder: (context) => 
                  Container(                                                   
                   color: Colors.transparent,

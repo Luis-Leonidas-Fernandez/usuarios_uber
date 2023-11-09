@@ -8,14 +8,18 @@ static InputDecoration authInputDecoration({
   IconData? prefixIcon,
 }){
     return InputDecoration(
-             enabledBorder: UnderlineInputBorder(
+
+             enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(25), 
                borderSide: BorderSide(
-                 color: Colors.deepPurple
+                 color: Colors.indigo,
+                 width: 2
                ),                 
              ),
              focusedBorder: UnderlineInputBorder(
+               borderRadius: BorderRadius.circular(25),
                borderSide: BorderSide(
-                 color: Colors.deepPurple,
+                 color: Colors.indigo,
                  width: 2 
                  )
              ),
