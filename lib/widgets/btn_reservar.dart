@@ -42,9 +42,8 @@ class ReservarButton extends StatelessWidget {
                       //Se reservo un conductor
                       final myLocation = locationBloc.state.lastKnownLocation!;
                      
-                      final idOrder = await  addressService.postAddresses(myLocation); 
-                                        
-                      print("-------ID ORDER: $idOrder----------------");
+                      final idOrder = await  addressService.postAddresses(myLocation);                                         
+                     
                         if (!mounted) return;
 
                         if(idOrder== null){
@@ -99,9 +98,7 @@ class ReservarButton extends StatelessWidget {
 
                       //Se reservo un conductor
                       final myLocation = locationBloc.state.lastKnownLocation!;                       
-                      final idOrder =await  addressService.postAddresses(myLocation); 
-
-                      print("-------ID ORDER: $idOrder----------------");                   
+                      final idOrder =await  addressService.postAddresses(myLocation);                                     
                    
                         if (!mounted) return;
 

@@ -49,9 +49,7 @@ class BtnCancelTravel extends StatelessWidget {
                             // intentando emitir un evento 
                             addressBloc.add(const OnClearStateEvent());
 
-                            if (!mounted) return;
-
-                            Navigator.pushReplacementNamed(context, 'loading' );
+                           
                                                     
 
                            },
@@ -76,18 +74,12 @@ class BtnCancelTravel extends StatelessWidget {
                             await  addressService.finishTravel(); 
 
                             await StorageService.instance.deleteIdDriver();
-                            await StorageService.instance.deleteIdOrder();                       
+                            await StorageService.instance.deleteIdOrder();                     
                             
-
-                            // ocultando boton finalizar
-                            //addressBloc.add(OnIsDeclinedTravel());
                             
                             // intentando emitir un evento 
                             addressBloc.add(const OnClearStateEvent());
-
-                            if (!mounted) return;
-
-                            Navigator.pushReplacementNamed(context, 'loading' );
+                            
                                                     
 
                            },

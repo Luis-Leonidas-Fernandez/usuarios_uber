@@ -43,7 +43,7 @@ class CardView extends StatelessWidget {
               modelo: orderUser.modelo?? '',
               patente: orderUser.patente?? '',
               order: orderUser.order?? '',
-              cupon: usuario.cupon ?? [],
+              cupon: usuario.cupon?.first ?? {},
                            
             ),
             
@@ -98,7 +98,7 @@ class _AddressDetails extends StatelessWidget {
   final String modelo; 
   final String patente;
   final String order;
-  final List<dynamic> cupon;
+  final Map<String, dynamic> cupon;
 
   const _AddressDetails({
   required this.nombre,
@@ -115,8 +115,9 @@ class _AddressDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final idCupon = cupon.isNotEmpty ? cupon[0] : 0;
-    final price   = cupon.isNotEmpty ? cupon[1]:  0;
+    final idCupon = cupon.entries.isNotEmpty ? cupon.values.first : 0;
+    final price   = cupon.entries.isNotEmpty ? cupon.values.last :  0;
+   
 
     final nombreCustom    = 'nombre: $nombre';
     final apellidoCustom  = 'apellido: $apellido ';    
@@ -199,7 +200,7 @@ class _AddressDetails extends StatelessWidget {
               alignment: Alignment(-0.9, 0),
               child: Text(
                 idCupon is String ? idCuponCustom 
-                : '',
+                  : '',
                 style: const TextStyle( fontSize: 20, color: Colors.white),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -209,9 +210,9 @@ class _AddressDetails extends StatelessWidget {
              Align(
               alignment: Alignment(-0.9, 0),
               child: Text(
-                 price > 0 ?
+                price is int?
                 'descuento: ${NumberFormat.currency(decimalDigits: 0).format(price)}'
-                : '',                
+                : '',               
                 style: const TextStyle( fontSize: 20, color: Colors.white),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

@@ -23,8 +23,10 @@ class AddressService {
 
 
   Future getAddressesBackground() async {
+
     final token = await storage.getToken();
     final idUser = await storage.getId();
+    
 
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
@@ -37,21 +39,26 @@ class AddressService {
         headers: headers);
 
     if (resp.statusCode == 200) {
-      final data = resp.body;
-      storage.deleteIdOrder();
+      
+      final data = resp.body;      
+    
+     await storage.deleteIdOrder();  
+      
 
       final respuesta = await ParseData.instance.isolateFunction(data);
+     
 
       final idOrder = respuesta.id;
       
-      storage.saveIdOrder(idOrder);
+      await storage.saveIdOrder(idOrder);
 
       return respuesta;
     }
 
     if (resp.statusCode == 201) {
+
       //convert data a Address Model
-      storage.deleteIdOrder();
+      await storage.deleteIdOrder();
       final date = OrderUser(id: null);
       final result = date;
 
@@ -59,7 +66,9 @@ class AddressService {
     }
 
     if (resp.statusCode == 401) {
-      storage.deleteIdOrder();
+
+      await storage.deleteIdOrder();
+
       final date = OrderUser(id: null);
       final result = date;
       return result;
@@ -75,23 +84,26 @@ class AddressService {
    
   final token = await storage.getToken();
   final id    = await storage.getId();
-  
+  final newMap = {'id': null};
  
   final Map<String, String> headers = {'Content-Type': 'application/json', 'Charset': 'utf-8','x-token': token.toString()};
   
   final resp = await http.get(Uri.parse('${Environment.apiUrl }/viajes/$id'), headers: headers);
-
-  if ( resp.statusCode == 200) { 
-
+  
+  try {
+    
+    if ( resp.statusCode == 200) {    
+  
   //data decoded
   final dataMap = jsonDecode(resp.body)["address"];
-
-  //convert data a Address Model
-  final Map<String, dynamic> response = dataMap;   
-  final data           = OrderUser.fromJson(response); 
-
   
-  storage.saveIdOrder(data.id);  
+  
+  //convert data a Address Model
+  final Map<String, dynamic> response = dataMap ?? newMap;
+  
+  final data           = OrderUser.fromJson(response);
+  
+  await storage.saveIdOrder(data.id);  
      
   return data;  
   
@@ -100,12 +112,21 @@ class AddressService {
   //convert data a Address Model
   final date = jsonDecode(resp.body)["emptyObject"];
   final result = OrderUser.fromJson(date);
+
+  await storage.deleteIdOrder();
+
   return result;
 
-}else{
-
-  return throw Exception('oops!');
-}
+} else{
+   
+  return OrderUser(id: null);
+  
+} 
+  } on FormatException catch (e) {     
+        
+      return throw Exception(e);
+  } 
+  
 }
 
    
@@ -141,6 +162,7 @@ class AddressService {
   
   
 } else if(resp.statusCode == 201) {
+  
   const idOrderNull = null;
   return idOrderNull;
 }       

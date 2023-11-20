@@ -42,18 +42,12 @@ class BtnFinishTravel extends StatelessWidget {
                             await  addressService.finishTravel();
 
                             await StorageService.instance.deleteIdDriver();
-                            await StorageService.instance.deleteIdOrder();
- 
-                            // ocultando boton finalizar ISACCEPTED== FALSE
-                            //addressBloc.add(OnIsDeclinedTravel());
+                            await StorageService.instance.deleteIdOrder(); 
+                           
                             
                             // Limpiando el State
-                            addressBloc.add(const OnClearStateEvent());
-                           
-
-                            if (!mounted) return;
-
-                            Navigator.pushReplacementNamed(context, 'loading' );
+                            addressBloc.add(const OnClearStateEvent());                          
+                            
                                                     
 
                            },
@@ -80,18 +74,11 @@ class BtnFinishTravel extends StatelessWidget {
 
                             await StorageService.instance.deleteIdDriver();
                             await StorageService.instance.deleteIdOrder();
- 
-                            // ocultando boton finalizar ISACCEPTED = FALSE
-                            //addressBloc.add(OnIsDeclinedTravel());
                             
                             //Limpiando el State
                             // EXIST ORDER = FALSE -- IS ACCEPTED = FALSE
                             addressBloc.add(const OnClearStateEvent());
                            
-
-                            if (!mounted) return;
-
-                            Navigator.pushReplacementNamed(context, 'loading' );
                              
                   }
                   );

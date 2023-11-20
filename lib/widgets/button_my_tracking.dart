@@ -14,9 +14,7 @@ class BtnMyTracking extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) { 
-
-    //final locationBloc = BlocProvider.of<LocationBloc>(context);
-    //final mapBloc = BlocProvider.of<MapBloc>(context);
+    
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,

@@ -135,9 +135,8 @@ class _LoginFormState extends State<_LoginForm> {
            onPressed: authService.autenticando ? (){}
            : () async {
              
-              final loginOk =await authService.login(emailCtrl.text.toString(), passCtrl.text.toString());
-             
-             print("----------login ok: $loginOk-----------mounted: $mounted-------");
+              final loginOk =await authService.login(emailCtrl.text.toString(), passCtrl.text.toString());             
+           
              
              if(!mounted) return;
              

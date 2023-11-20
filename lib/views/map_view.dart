@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:usuario_inri/global/environment.dart';
+import 'package:provider/provider.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:usuario_inri/blocs/blocs.dart';
+import 'package:usuario_inri/models/usuario.dart';
+import 'package:usuario_inri/service/auth_service.dart';
 
 
 class MapView extends StatefulWidget {
@@ -21,12 +23,17 @@ required this.initialLocation
 }
 
 class _MapViewState extends State<MapView> {
+
   late LocationBloc locationBloc;
   late final MapController _mapController;
+  late Usuario usuario;
+  AuthService? authService;
 
   @override
   void initState() {    
     super.initState();
+
+    Provider.of<AuthService>(context, listen:false);
     BlocProvider.of<AddressBloc>(context);
     _mapController = MapController();
     
@@ -40,10 +47,10 @@ class _MapViewState extends State<MapView> {
   @override
   Widget build(BuildContext context) {  
 
+    final usuario      = Provider.of<AuthService>(context).usuario; 
     final locationBloc = BlocProvider.of<LocationBloc>(context);
-    final myLocation = locationBloc.state.lastKnownLocation!;
-   /*  final location =BlocProvider.of<AddressBloc>(context).state.orderUser!.mensaje;
-    final userLocation = LatLng(location![0], location[1]); */
+    final myLocation   = locationBloc.state.lastKnownLocation!;
+   
 
     final size = MediaQuery.of(context).size; 
 
@@ -60,10 +67,10 @@ class _MapViewState extends State<MapView> {
           ),
           nonRotatedChildren: [
             TileLayer(
-              urlTemplate: Environment.urlMapBox,
+              urlTemplate: usuario.urlMapbox,
               additionalOptions: {               
-                'accessToken': Environment.tokenMapBox,
-                'id': Environment.idMapBox,
+                'accessToken': usuario.tokenMapBox,
+                'id': usuario.idMapBox,
               },
               
             ),

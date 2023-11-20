@@ -90,12 +90,12 @@ class _HomePageState extends State<HomePage> {
                ),
               onPressed: () async { 
               
-              LogOutApp.instance.finishApp();
-
-              if (!mounted) return;
-              addressBloc.getOrder;
+              LogOutApp.instance.finishApp();             
+              
+              if (!mounted) return;   
+              setState(() {});          
               Navigator.pushReplacementNamed(context, 'login');
-              setState(() {});
+             
               
         },
               );

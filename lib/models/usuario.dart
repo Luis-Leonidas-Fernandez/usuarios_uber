@@ -14,14 +14,23 @@ class Usuario {
         required this.nombre,
         required this.email,
         required this.uid,
-        this.cupon
+        this.cupon,
+        required this.urlMapbox,
+        required this.tokenMapBox,
+        required this.idMapBox,
+        required this.mapToken
     });
 
-    bool online;
+    bool   online;
     String nombre;
     String email;
     String uid;
     List<dynamic>? cupon;
+    String urlMapbox;
+    String tokenMapBox;
+    String idMapBox;
+    String mapToken;
+
 
     factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
         online: json["online"],
@@ -29,6 +38,10 @@ class Usuario {
         email: json["email"],
         uid: json["uid"],
         cupon: json["cupon"] == null ? null : List<dynamic>.from(json["cupon"].map((x) => x)),
+        urlMapbox: json["urlMapbox"],
+        tokenMapBox: json["tokenMapBox"],
+        idMapBox: json["idMapBox"],
+        mapToken: json["mapToken"],
 
     );
 
@@ -37,6 +50,10 @@ class Usuario {
         "nombre": nombre,
         "email": email,
         "uid": uid,
-         "cupon": List<dynamic>.from(cupon!.map((x) => x)),
+        "cupon": List<dynamic>.from(cupon!.map((x) => x)),
+        "urlMapbox": urlMapbox,
+        "tokenMapBox": tokenMapBox,
+        "idMapBox": idMapBox,
+        "mapToken": mapToken,
     };
 }

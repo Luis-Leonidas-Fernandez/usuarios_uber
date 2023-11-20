@@ -91,7 +91,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     final driver = List.from(location);
     final LatLng myPosition = locationBloc.state.lastKnownLocation!;
-    final driverPosition = LatLng(driver[1], driver[0]);   
+    final driverPosition = LatLng(driver[0], driver[1]);   
     
 
     final double left   = math.min(myPosition.latitude, driverPosition.latitude);
@@ -108,6 +108,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       (southwest.longitude + northeast.longitude) /2, 
       );    
    
+   
    return center;
   }
 
@@ -117,8 +118,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     final driver = List.from(location);
     final LatLng userPosition = locationBloc.state.lastKnownLocation!;
-    final driverPosition = LatLng(driver[1], driver[0]);        
+    final driverPosition = LatLng(driver[0], driver[1]);        
     
+
     
     final distance = getDistanceInKM(userPosition, driverPosition);
 
@@ -126,7 +128,8 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     double radius = distance / 2;
     double scale  = radius / 0.3;
     final zoom    = (16 - math.log(scale) / math.log(2));
-   
+    
+    
     
     if(distance == 0.0){
       return 6.0;
