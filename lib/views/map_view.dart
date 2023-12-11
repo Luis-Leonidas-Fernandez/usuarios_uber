@@ -61,8 +61,8 @@ class _MapViewState extends State<MapView> {
           mapController: _mapController,          
           options: MapOptions(             
             zoom: 15.0,
-            minZoom: 5.0,
-            maxZoom: 17.0,            
+            minZoom: 1.0,
+            maxZoom: 20.0,            
             center:  LatLng(myLocation.latitude, myLocation.longitude),
           ),
           nonRotatedChildren: [
@@ -84,7 +84,7 @@ class _MapViewState extends State<MapView> {
                   builder: (context) => 
                  Container(                                                   
                   color: Colors.transparent,
-                  child: Image.asset('assets/icon.jpg'),                  
+                  child: Image.asset('assets/icon.png'),                  
                  ) 
                 ),
                   

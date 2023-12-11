@@ -23,124 +23,173 @@ class ReservarButton extends StatelessWidget {
     final addressBloc = BlocProvider.of<AddressBloc>(context);
     final locationBloc = BlocProvider.of<LocationBloc>(context);
 
-    final size = MediaQuery.sizeOf(context);
-    final alto = size.height;
+    final alto = MediaQuery.sizeOf(context).height;
+    
 
-    return alto >= 890 ?
-     Positioned(
-            top: 750,
-            left: 90,
-            right: 90,
-            child: BlocBuilder<MapBloc, MapState>(
-              builder: (context, state) {
-                return ButtonOptions(
-                    iconData: Icons.thumb_up_alt_outlined,
-                    buttonText: 'SOLICITAR CONDUCTOR',
-                    onTap: () async {
+    return alto >= 860 ?
+     LargeButton(
+     locationBloc: locationBloc,
+     addressService: addressService,
+     mounted: mounted,
+     addressBloc: addressBloc)
 
+     : ShortButton(
+     locationBloc: locationBloc,
+     addressService: addressService,
+     mounted: mounted,
+     addressBloc: addressBloc);
+  }
+}
 
-                      //Se reservo un conductor
-                      final myLocation = locationBloc.state.lastKnownLocation!;
-                     
-                      final idOrder = await  addressService.postAddresses(myLocation);                                         
-                     
-                        if (!mounted) return;
+class ShortButton extends StatelessWidget {
+  const ShortButton({
+    Key? key,
+    required this.locationBloc,
+    required this.addressService,
+    required this.mounted,
+    required this.addressBloc,
+  }) : super(key: key);
 
-                        if(idOrder== null){
-                                                 
-                        
-                         ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: CustomSnackBarContentError(),
-                          behavior: SnackBarBehavior.floating,
-                          backgroundColor: Colors.transparent,
-                          elevation: 0,
-                          duration: Duration(seconds: 5),
-                        ),
-                      );
+  final LocationBloc locationBloc;
+  final AddressService addressService;
+  final bool mounted;
+  final AddressBloc addressBloc;
 
-                      }else{
-
-                      //Mostramos mensaje de exito 
-                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: CustomSnackBarContentSuccess(),
-                          behavior: SnackBarBehavior.floating,
-                          backgroundColor: Colors.transparent,
-                          elevation: 0,
-                          duration: Duration(seconds: 5),
-                        ),
-                      );
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+        top: 600,
+        left: 90,
+        right: 90,
+        child: BlocBuilder<MapBloc, MapState>(
+          builder: (context, state) {
+            return ButtonOptions(
+                iconData: Icons.thumb_up_alt_outlined,
+                buttonText: 'SOLICITAR CONDUCTOR',
+                onTap: () async {
 
 
-                      // eventos que manejan la visibilidad de botones
-                      addressBloc.add(OnIsAcceptedTravel());
+                  //Se reservo un conductor
+                  final myLocation = locationBloc.state.lastKnownLocation!;                       
+                  final idOrder =await  addressService.postAddresses(myLocation);                                     
+               
+                    if (!mounted) return;
+
+                    if(idOrder == null){
+                                             
+                    
+                     ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: CustomSnackBarContentError(),
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                      duration: Duration(seconds: 5),
+                    ),
+                  );
+
+                  }else{
+
+                  //Mostramos mensaje de exito 
+                   ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: CustomSnackBarContentSuccess(),
+                      behavior: SnackBarBehavior.floating,
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                      duration: Duration(seconds: 5),
+                    ),
+                  );
+
+
+                  // eventos que manejan la visibilidad de botones
+                  //IS ACCEPTED= TRUE
+                  addressBloc.add(OnIsAcceptedTravel());
+                  
+                    
+                  }                      
+                  
+
+                });
+          },
+        ),
+      );
+  }
+}
+
+class LargeButton extends StatelessWidget {
+  const LargeButton({
+    Key? key,
+    required this.locationBloc,
+    required this.addressService,
+    required this.mounted,
+    required this.addressBloc,
+  }) : super(key: key);
+
+  final LocationBloc locationBloc;
+  final AddressService addressService;
+  final bool mounted;
+  final AddressBloc addressBloc;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+           top: 780,
+           left: 90,
+           right: 90,
+           child: BlocBuilder<MapBloc, MapState>(
+             builder: (context, state) {
+               return ButtonOptions(
+                   iconData: Icons.thumb_up_alt_outlined,
+                   buttonText: 'SOLICITAR CONDUCTOR',
+                   onTap: () async {
+
+
+                     //Se reservo un conductor
+                     final myLocation = locationBloc.state.lastKnownLocation!;
+                    
+                     final idOrder = await  addressService.postAddresses(myLocation);                                         
+                    
+                       if (!mounted) return;
+
+                       if(idOrder== null){
+                                                
                        
-                        
-                      }                      
+                        ScaffoldMessenger.of(context).showSnackBar(
+                       SnackBar(
+                         content: CustomSnackBarContentError(),
+                         behavior: SnackBarBehavior.floating,
+                         backgroundColor: Colors.transparent,
+                         elevation: 0,
+                         duration: Duration(seconds: 5),
+                       ),
+                     );
+
+                     }else{
+
+                     //Mostramos mensaje de exito 
+                      ScaffoldMessenger.of(context).showSnackBar(
+                       SnackBar(
+                         content: CustomSnackBarContentSuccess(),
+                         behavior: SnackBarBehavior.floating,
+                         backgroundColor: Colors.transparent,
+                         elevation: 0,
+                         duration: Duration(seconds: 5),
+                       ),
+                     );
+
+
+                     // eventos que manejan la visibilidad de botones
+                     addressBloc.add(OnIsAcceptedTravel());
                       
+                       
+                     }                      
+                     
 
-                    });
-              },
-            ),
-          )
-        : Positioned(
-            top: 600,
-            left: 90,
-            right: 90,
-            child: BlocBuilder<MapBloc, MapState>(
-              builder: (context, state) {
-                return ButtonOptions(
-                    iconData: Icons.thumb_up_alt_outlined,
-                    buttonText: 'SOLICITAR CONDUCTOR',
-                    onTap: () async {
-
-
-                      //Se reservo un conductor
-                      final myLocation = locationBloc.state.lastKnownLocation!;                       
-                      final idOrder =await  addressService.postAddresses(myLocation);                                     
-                   
-                        if (!mounted) return;
-
-                        if(idOrder == null){
-                                                 
-                        
-                         ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: CustomSnackBarContentError(),
-                          behavior: SnackBarBehavior.floating,
-                          backgroundColor: Colors.transparent,
-                          elevation: 0,
-                          duration: Duration(seconds: 5),
-                        ),
-                      );
-
-                      }else{
-
-                      //Mostramos mensaje de exito 
-                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: CustomSnackBarContentSuccess(),
-                          behavior: SnackBarBehavior.floating,
-                          backgroundColor: Colors.transparent,
-                          elevation: 0,
-                          duration: Duration(seconds: 5),
-                        ),
-                      );
-
-
-                      // eventos que manejan la visibilidad de botones
-                      //IS ACCEPTED= TRUE
-                      addressBloc.add(OnIsAcceptedTravel());
-                      
-                        
-                      }                      
-                      
-
-                    });
-              },
-            ),
-          );
+                   });
+             },
+           ),
+         );
   }
 }
 

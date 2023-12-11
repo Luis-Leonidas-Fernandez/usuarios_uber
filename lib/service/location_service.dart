@@ -35,6 +35,16 @@ LocationService._internal();
     return true;
   }
 
+  Future<bool> getIdUserAndToken() async {
+    final existToken = await StorageService.instance.getToken();
+    final existUser = await StorageService.instance.getId();
+    
+    if(existToken == null && existUser == null){
+    return false;
+    }
+    return true;
+  }
+
    Future<bool> _isAccessDeviceGranted() async {
     final isGranted = await Permission.location.isGranted;
     return isGranted;

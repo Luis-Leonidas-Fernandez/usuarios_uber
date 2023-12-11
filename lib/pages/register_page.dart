@@ -160,7 +160,8 @@ class _LoginFormState extends State<_LoginForm> {
             loginFormValidar.isLoading = false;
             
              final registerOk = await authService.register(nameCtrl.text.toString(), emailCtrl.text.toString(), passCtrl.text.toString());             
-                          
+           
+
             if(!mounted) return;      
                       
             if(registerOk && mounted){

@@ -20,14 +20,79 @@ class BtnCancelTravel extends StatelessWidget {
     late AddressService addressService = AddressService();    
     final addressBloc =  BlocProvider.of<AddressBloc>(context);
    
-     final size = MediaQuery.sizeOf(context);
-    final alto = size.height;
+    final alto = MediaQuery.sizeOf(context).height;
+    
+    return  alto >= 860?
 
+    BigButton(
+    addressService: addressService,
+    addressBloc: addressBloc)
 
-    return  alto >= 890?
+    : SmallButton(
+    addressService: addressService,
+    addressBloc: addressBloc);
+  }
+}
 
-    Positioned(
-                top: 750,
+class SmallButton extends StatelessWidget {
+  const SmallButton({
+    Key? key,
+    required this.addressService,
+    required this.addressBloc,
+  }) : super(key: key);
+
+  final AddressService addressService;
+  final AddressBloc addressBloc;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: 600,
+      left: 220,
+      right: 20,
+      child: BlocBuilder<MapBloc, MapState>(
+        builder: (context, state) {
+          return ButtonOptions(iconData: Icons.free_cancellation_outlined,
+                 buttonText: 'Cancelar Viaje',
+                 onTap: () async {
+
+                  // Eliminando viaje de base de datos
+                  await  addressService.finishTravel(); 
+
+                  await StorageService.instance.deleteIdDriver();
+                  await StorageService.instance.deleteIdOrder();                     
+                  
+                  
+                  // intentando emitir un evento 
+                  addressBloc.add(const OnClearStateEvent());
+                  
+                                          
+
+                 },
+                   
+           );
+        }, 
+        
+      ),
+      
+    );
+  }
+}
+
+class BigButton extends StatelessWidget {
+  const BigButton({
+    Key? key,
+    required this.addressService,
+    required this.addressBloc,
+  }) : super(key: key);
+
+  final AddressService addressService;
+  final AddressBloc addressBloc;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+                top: 790,
                 left: 220,
                 right: 20,
                 child: BlocBuilder<MapBloc, MapState>(
@@ -50,36 +115,6 @@ class BtnCancelTravel extends StatelessWidget {
                             addressBloc.add(const OnClearStateEvent());
 
                            
-                                                    
-
-                           },
-                             
-                     );
-                  }, 
-                  
-                ),
-                
-              )
-              : Positioned(
-                top: 600,
-                left: 220,
-                right: 20,
-                child: BlocBuilder<MapBloc, MapState>(
-                  builder: (context, state) {
-                    return ButtonOptions(iconData: Icons.free_cancellation_outlined,
-                           buttonText: 'Cancelar Viaje',
-                           onTap: () async {
-
-                            // Eliminando viaje de base de datos
-                            await  addressService.finishTravel(); 
-
-                            await StorageService.instance.deleteIdDriver();
-                            await StorageService.instance.deleteIdOrder();                     
-                            
-                            
-                            // intentando emitir un evento 
-                            addressBloc.add(const OnClearStateEvent());
-                            
                                                     
 
                            },

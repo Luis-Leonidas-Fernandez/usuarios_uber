@@ -25,7 +25,7 @@ class AddressService {
   Future getAddressesBackground() async {
 
     final token = await storage.getToken();
-    final idUser = await storage.getId();
+    final idUser = await storage.getId();    
     
 
     final Map<String, String> headers = {

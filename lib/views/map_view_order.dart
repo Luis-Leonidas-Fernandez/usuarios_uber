@@ -56,14 +56,17 @@ class _MapViewOrderState extends State<MapViewOrder> {
    final usuario       = Provider.of<AuthService>(context).usuario; 
     final locationBloc = BlocProvider.of<LocationBloc>(context);
     final myLocation   = locationBloc.state.lastKnownLocation!;
-    
-    final location = BlocProvider.of<AddressBloc>(context).state.orderUser!.mensaje;    
-    final mapBloc  = BlocProvider.of<MapBloc>(context);  
-    
-    final zoom   = mapBloc.getZoom(location!);
+    final mapBloc  = BlocProvider.of<MapBloc>(context); 
+    final location = BlocProvider.of<AddressBloc>(context).state.orderUser!.mensaje;
+
+    final driverPosition = LatLng(location![1], location[0]);
+     
+    final userLocation = List.from(location);
+
+    final zoom   = mapBloc.getZoom(userLocation);
     final center = mapBloc.bounds(location);       
     
-    final userLocation = LatLng(location[0], location[1]);
+    
 
     final size = MediaQuery.of(context).size; 
 
@@ -75,7 +78,7 @@ class _MapViewOrderState extends State<MapViewOrder> {
           mapController: _mapController,          
           options: MapOptions(             
             zoom: zoom,
-            minZoom: 5.0,
+            minZoom: 1.0,
             maxZoom: 20.0,            
             center:  center,
           ),
@@ -98,7 +101,7 @@ class _MapViewOrderState extends State<MapViewOrder> {
                   builder: (context) => 
                  Container(                                                   
                   color: Colors.transparent,
-                  child: Image.asset('assets/icon.jpg'),                  
+                  child: Image.asset('assets/icon.png'),                  
                  ) 
                 ),
                   
@@ -107,7 +110,7 @@ class _MapViewOrderState extends State<MapViewOrder> {
             MarkerLayer(
               markers: [
                 Marker(                  
-                  point: LatLng(  userLocation.latitude, userLocation.longitude,) ,
+                  point: LatLng(  driverPosition.latitude, driverPosition.longitude,) ,
                   width: 110,
                   height: 110,
                   builder: (context) => 

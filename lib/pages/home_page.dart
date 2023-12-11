@@ -46,6 +46,7 @@ class _HomePageState extends State<HomePage> {
     Provider.of<AuthService>(context, listen:false);
     
     
+    
   }
 
   @override
@@ -114,12 +115,15 @@ class _HomePageState extends State<HomePage> {
           if(state.lastKnownLocation == null)  return const Center(child: Text('Espere por favor...'));
                     
           final long = (state.lastKnownLocation!.longitude);
-          final lat  = state.lastKnownLocation!.latitude;           
+          final lat  = state.lastKnownLocation!.latitude; 
+          
+                    
           
               return StreamBuilder(
               stream: addressBloc.getOrder,
               builder: (context, AsyncSnapshot<OrderUser> snapshot) {
               final order = snapshot.data;
+              
               
 
                 return SingleChildScrollView(

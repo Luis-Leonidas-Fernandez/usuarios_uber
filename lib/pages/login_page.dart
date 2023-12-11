@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
+//import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -135,8 +136,8 @@ class _LoginFormState extends State<_LoginForm> {
            onPressed: authService.autenticando ? (){}
            : () async {
              
-              final loginOk =await authService.login(emailCtrl.text.toString(), passCtrl.text.toString());             
-           
+              final loginOk =await authService.login(emailCtrl.text.toString(), passCtrl.text.toString());
+             
              
              if(!mounted) return;
              

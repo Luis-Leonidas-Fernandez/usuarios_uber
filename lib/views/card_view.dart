@@ -24,9 +24,9 @@ class CardView extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
         
-        margin: const EdgeInsets.only(top: 90, bottom: 50,  ),
+        margin: const EdgeInsets.only(top: 110, bottom: 50,  ),
         width: double.infinity,
-        height: 195,
+        height: 190,
         decoration: _cardBorders(),
         child: Stack(
           
@@ -51,19 +51,19 @@ class CardView extends StatelessWidget {
                alignment: Alignment(0.9, -1.0),
               child: Container(              
                 margin: const EdgeInsets.only(top: 18, bottom: 12),                             
-                height: 55,
-                width: 68,
+                height: 50,
+                width: 63,
                 color: Colors.transparent,
                 child: Image.asset('assets/person.jpg'),
               ),
             ),
             Align(
-               alignment: Alignment(1.0, -1.0),
+               alignment: Alignment(1.0, -0.5),
               child: Container(              
-                margin: const EdgeInsets.only(top: 110, bottom: 39), 
+                margin: const EdgeInsets.only(top: 105, bottom: 39), 
                           
                 height: 68,
-                width: 93,
+                width: 88,
                 color: Colors.transparent,
                 child: Image.asset('assets/driver.png'),
               ),
@@ -145,7 +145,7 @@ class _AddressDetails extends StatelessWidget {
               alignment: Alignment(-0.9, 0),
               child: Text(
                 nombreCustom,
-                style: const TextStyle( fontSize: 20, color: Colors.white),
+                style: const TextStyle( fontSize: 18, color: Colors.white),
                 
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -159,7 +159,7 @@ class _AddressDetails extends StatelessWidget {
                alignment: Alignment(-0.9, 0),
               child: Text(
                 apellidoCustom,
-                style: const TextStyle( fontSize: 20, color: Colors.white),
+                style: const TextStyle( fontSize: 18, color: Colors.white),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -169,7 +169,7 @@ class _AddressDetails extends StatelessWidget {
               alignment: Alignment(-0.9, 0),
               child: Text(
                 vehiculoCustom,
-                style: const TextStyle( fontSize: 20, color: Colors.white),
+                style: const TextStyle( fontSize: 18, color: Colors.white),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -180,7 +180,7 @@ class _AddressDetails extends StatelessWidget {
               alignment: Alignment(-0.9, 0),
               child: Text(
                 orderCustom ,
-                style: const TextStyle( fontSize: 20, color: Colors.white),
+                style: const TextStyle( fontSize: 18, color: Colors.white),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -190,7 +190,7 @@ class _AddressDetails extends StatelessWidget {
               alignment: Alignment(-0.9, 0),
               child: Text(
                 patenteCustom,
-                style: const TextStyle( fontSize: 20, color: Colors.white),
+                style: const TextStyle( fontSize: 18, color: Colors.white),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -201,7 +201,7 @@ class _AddressDetails extends StatelessWidget {
               child: Text(
                 idCupon is String ? idCuponCustom 
                   : '',
-                style: const TextStyle( fontSize: 20, color: Colors.white),
+                style: const TextStyle( fontSize: 18, color: Colors.white),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -213,7 +213,7 @@ class _AddressDetails extends StatelessWidget {
                 price is int?
                 'descuento: ${NumberFormat.currency(decimalDigits: 0).format(price)}'
                 : '',               
-                style: const TextStyle( fontSize: 20, color: Colors.white),
+                style: const TextStyle( fontSize: 18, color: Colors.white),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),

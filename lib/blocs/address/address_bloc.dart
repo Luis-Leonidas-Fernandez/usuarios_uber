@@ -46,8 +46,8 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
   
   Stream<OrderUser> get getOrder async* {    
 
-    final  respOrder = await addressService.getAddress();
-
+    final  respOrder = await addressService.getAddress();   
+   
     final id = respOrder.idDriver;
 
     if(id == '0'){   
@@ -59,7 +59,8 @@ class AddressBloc extends Bloc<AddressEvent, AddressState> {
      
      add(AddOrderUserEvent(respOrder));
 
-    _addressController.add(respOrder); 
+    _addressController.add(respOrder);
+    
 
      yield respOrder;
     }    

@@ -16,6 +16,7 @@ import 'package:usuario_inri/service/addresses_service.dart';
 import 'package:usuario_inri/service/location_service.dart';
 
 
+
 class BackgroundService {
 
   BackgroundService._internal();
@@ -120,21 +121,21 @@ void onStart(ServiceInstance service) async {
  
   
 
-  Timer.periodic(const Duration(minutes: 1), (timer) async {    
+  Timer.periodic(const Duration(minutes: 1), (timer) async {      
   
- 
-  //StorageService.instance.deleteIdOrder();
-  await existAddress();
   
   // verifica si existe una order activa  en Storage Service
   final isActiveOrder = await LocationService.instance.isActiveOrder();
+  final existUserIdAndToken = await LocationService.instance.getIdUserAndToken();
 
 
-    if (isActiveOrder) {
+    if (isActiveOrder && existUserIdAndToken) {
 
     if (service is AndroidServiceInstance) {     
 
-      if (await service.isForegroundService()) {    
+      if (await service.isForegroundService()) { 
+
+        await existAddress();   
              
         DateTime now = DateTime.now();
         const color = Colors.indigo;        
@@ -153,9 +154,13 @@ void onStart(ServiceInstance service) async {
               android: AndroidNotificationDetails(
             'my_foreground',
             'MY FOREGROUND SERVICE',
+            importance: Importance.max,
+            priority: Priority.high,
             icon: '@drawable/car_launcher',
-            //ongoing: true, 
+            largeIcon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),           
             color: color,
+            colorized: true,
+            
           )),
         );
       } else {
