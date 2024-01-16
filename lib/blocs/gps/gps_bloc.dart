@@ -103,8 +103,16 @@ GpsBloc() : super(const GpsState(gpsModel: null)) {
     //Analiza si los permisos del Gps estan habilitados  
     final isEnable = await Geolocator.isLocationServiceEnabled();
     gpsServiceSubscription = Geolocator.getServiceStatusStream().listen((event) {
+
       final isEnabled = (event.index == 1) ? true : false;
       debugPrint('service status $isEnabled');
+
+      add(GpsAndPermissionEvent(
+        gpsModel: GpsModel(
+          isGpsEnabled: isEnabled,
+          isGpsPermissionGranted: state.gpsModel?.isGpsPermissionGranted  ?? false)
+          ));
+
     });
 
 
