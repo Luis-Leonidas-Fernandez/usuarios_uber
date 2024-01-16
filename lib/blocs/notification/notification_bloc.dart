@@ -1,40 +1,77 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:usuario_inri/models/notification.dart';
 
 part 'notification_event.dart';
 part 'notification_state.dart';
 
-class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
+class NotificationBloc extends HydratedBloc<NotificationEvent, NotificationState> {
 
   late StreamSubscription notificationServiceSubscription;
 
-  NotificationBloc() : super(const NotificationState(isNotificationPermissionGranted:  false)) {
+  NotificationBloc() : super(const NotificationState(notificationModel: null)) {
     
     on<NotificationAndPermissionEvent>((event, emit) => emit(state.copyWith(
+     notificationModel: event.notificationModel,
      
-     isNotificationPermissionGranted: event.isNotificationPermissionGranted
     ))
     
     );
     initBloc();
   }
 
+  
+  
+  @override
+  NotificationState? fromJson(Map<String, dynamic> json) {
+     
+      try {
+
+      final noticationModel  = NotificationModel.fromJson(json);
+            
+      final notificationStatus = NotificationState(
+      notificationModel: noticationModel      
+       );          
+           
+      return notificationStatus;  
+
+      
+    } catch (e) {
+      return null;
+    }
+  }
+  
+  @override
+  Map<String, dynamic>? toJson(NotificationState state) {
+       
+       if(state.notificationModel != null){
+      final data = state.notificationModel!.toJson();      
+     
+      return data;
+     }else{
+      return null;
+     }     
+  } 
+
   Future <void> initBloc() async {
 
-    final isEnable = await _isNotificationPermissionGranted();
-    // ignore: avoid_print
-    print('Habilitado: $isEnable');
+    await _isNotificationPermissionGranted();
+   
     
     final notificationInitStatus = await Future.wait([   
     _isNotificationPermissionGranted(),
     ]);
+
+    final notificationStatus = NotificationModel(
+      isNotificationPermissionGranted: notificationInitStatus[0]);
     
     
     add(NotificationAndPermissionEvent(      
-      isNotificationPermissionGranted: notificationInitStatus[0]));
+      notificationModel: notificationStatus
+      ));
   }
 
 
@@ -56,7 +93,10 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
 
       //habilita los permisos de la ubicacion
       add(NotificationAndPermissionEvent(
-      isNotificationPermissionGranted: true));
+
+        notificationModel: NotificationModel(
+          isNotificationPermissionGranted: true)
+      ));
 
       break;
 
@@ -66,19 +106,24 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     case PermissionStatus.permanentlyDenied:
 
     add(NotificationAndPermissionEvent(
-    isNotificationPermissionGranted: false)); 
+
+    notificationModel: NotificationModel(
+          isNotificationPermissionGranted: false)
+
+   )); 
     openAppSettings();    
     
       
    }
 
   }
-
-
-  @override 
+  
+   @override 
   Future<void> close(){
     notificationServiceSubscription.cancel();
     return super.close();
-  } 
+  }
+
+ 
   
 }

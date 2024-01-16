@@ -1,3 +1,5 @@
+//import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:usuario_inri/service/addresses_service.dart';
 
 import 'package:flutter_background_service/flutter_background_service.dart';
@@ -18,14 +20,14 @@ class LogOutApp {
    void finishApp() async {
 
     
-
+    
     //Eliminar ID ORDER
-    StorageService.instance.deleteIdOrder();
+    await StorageService.instance.deleteIdOrder();
 
-    StorageService.instance.deleteIdDriver();  
+    await StorageService.instance.deleteIdDriver();  
     
     // Eliminar token
-    StorageService.instance.deleteToken();
+    await StorageService.instance.deleteToken();
 
     //finalizar Isolate get Orders
 
@@ -34,6 +36,11 @@ class LogOutApp {
     // Finalizar BackgroundService
     final service = FlutterBackgroundService();
     service.invoke('stopService');
+    
+     // Clear Hydrated Address Bloc
+    HydratedBloc.storage.clear();
+
+    
 
     
 

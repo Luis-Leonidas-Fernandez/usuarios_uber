@@ -9,7 +9,7 @@ import 'package:usuario_inri/widgets/custom_message_error.dart';
 import 'package:usuario_inri/widgets/custom_message_success.dart';
 
 class ReservarButton extends StatelessWidget {
-  const ReservarButton({Key? key}) : super(key: key);
+  const ReservarButton({super.key});
 
   bool get mounted => true;
 
@@ -43,12 +43,12 @@ class ReservarButton extends StatelessWidget {
 
 class ShortButton extends StatelessWidget {
   const ShortButton({
-    Key? key,
+    super.key,
     required this.locationBloc,
     required this.addressService,
     required this.mounted,
     required this.addressBloc,
-  }) : super(key: key);
+  });
 
   final LocationBloc locationBloc;
   final AddressService addressService;
@@ -71,9 +71,10 @@ class ShortButton extends StatelessWidget {
 
                   //Se reservo un conductor
                   final myLocation = locationBloc.state.lastKnownLocation!;                       
-                  final idOrder =await  addressService.postAddresses(myLocation);                                     
-               
-                    if (!mounted) return;
+                  final idOrder = await  addressService.postAddresses(myLocation);                                     
+                  
+                 
+                   if (!mounted) return;
 
                     if(idOrder == null){
                                              
@@ -101,14 +102,11 @@ class ShortButton extends StatelessWidget {
                     ),
                   );
 
-
                   // eventos que manejan la visibilidad de botones
                   //IS ACCEPTED= TRUE
-                  addressBloc.add(OnIsAcceptedTravel());
-                  
+                  addressBloc.add(OnIsAcceptedTravel());  
                     
-                  }                      
-                  
+                  }   
 
                 });
           },
@@ -119,12 +117,12 @@ class ShortButton extends StatelessWidget {
 
 class LargeButton extends StatelessWidget {
   const LargeButton({
-    Key? key,
+    super.key,
     required this.locationBloc,
     required this.addressService,
     required this.mounted,
     required this.addressBloc,
-  }) : super(key: key);
+  });
 
   final LocationBloc locationBloc;
   final AddressService addressService;
@@ -149,7 +147,8 @@ class LargeButton extends StatelessWidget {
                      final myLocation = locationBloc.state.lastKnownLocation!;
                     
                      final idOrder = await  addressService.postAddresses(myLocation);                                         
-                    
+                     
+
                        if (!mounted) return;
 
                        if(idOrder== null){
@@ -178,12 +177,10 @@ class LargeButton extends StatelessWidget {
                        ),
                      );
 
-
-                     // eventos que manejan la visibilidad de botones
-                     addressBloc.add(OnIsAcceptedTravel());
-                      
+                      // eventos que manejan la visibilidad de botones
+                     addressBloc.add(OnIsAcceptedTravel());                      
                        
-                     }                      
+                     }   
                      
 
                    });

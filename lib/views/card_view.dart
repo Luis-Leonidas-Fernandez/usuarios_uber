@@ -11,42 +11,41 @@ class CardView extends StatelessWidget {
   final Usuario usuario;
   
   const CardView({
-  Key? key,
+  super.key,
   required this.orderUser,
   required this.usuario
-  }) : super(key: key);
+  });
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {    
     
-
-    return Padding(
+    return  Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
         
         margin: const EdgeInsets.only(top: 110, bottom: 50,  ),
         width: double.infinity,
-        height: 190,
+        height: 220,
         decoration: _cardBorders(),
         child: Stack(
           
           children: [
             
              
-            
+             
             _AddressDetails(
 
-              nombre: orderUser.nombre?? '',              
+              nombre: orderUser.nombre?? '',                          
               email: orderUser.email?? '',
               apellido: orderUser.apellido?? '',
               vehiculo: orderUser.vehiculo?? '',
               modelo: orderUser.modelo?? '',
               patente: orderUser.patente?? '',
               order: orderUser.order?? '',
-              cupon: usuario.cupon?.first ?? {},
+              cupon: usuario.cupon!.isEmpty? {} : usuario.cupon!.first,
                            
             ),
-            
+             
             Align(
                alignment: Alignment(0.9, -1.0),
               child: Container(              
@@ -153,7 +152,7 @@ class _AddressDetails extends StatelessWidget {
               
               ),
             ),
-            const SizedBox(height: 3),
+            const SizedBox(height: 2),
             
             Align(
                alignment: Alignment(-0.9, 0),
@@ -164,7 +163,7 @@ class _AddressDetails extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            const SizedBox(height: 3), 
+            const SizedBox(height: 2), 
             Align(
               alignment: Alignment(-0.9, 0),
               child: Text(
@@ -174,7 +173,7 @@ class _AddressDetails extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            const SizedBox(height: 3),            
+            const SizedBox(height: 2),            
            
             Align(
               alignment: Alignment(-0.9, 0),
@@ -185,7 +184,7 @@ class _AddressDetails extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            const SizedBox(height: 3),
+            const SizedBox(height: 2),
              Align(
               alignment: Alignment(-0.9, 0),
               child: Text(
@@ -195,7 +194,7 @@ class _AddressDetails extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            const SizedBox(height: 3),
+            const SizedBox(height: 2),
             Align(
               alignment: Alignment(-0.9, 0),
               child: Text(
@@ -206,7 +205,7 @@ class _AddressDetails extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            const SizedBox(height: 3),
+            const SizedBox(height: 2),
              Align(
               alignment: Alignment(-0.9, 0),
               child: Text(

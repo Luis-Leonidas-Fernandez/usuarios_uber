@@ -4,8 +4,8 @@ import 'package:usuario_inri/blocs/blocs.dart';
 
 class CustomSnackBarContentError extends StatelessWidget {
   const CustomSnackBarContentError({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class CustomSnackBarContentError extends StatelessWidget {
            children: [
           Container(
             padding: const EdgeInsets.all(16),
-            height: 90,
+            height: 100,
             decoration: BoxDecoration(
               color: const Color(0xFFC72C41),
               borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -31,7 +31,7 @@ class CustomSnackBarContentError extends StatelessWidget {
                     Spacer(),
                     Text(
                       "Usted esta fuera del area de covertura, pronto estaremos disponibles en su zona",
-                      style: TextStyle(fontSize: 12, color: Colors.white),
+                      style: TextStyle(fontSize: 14, color: Colors.white),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),

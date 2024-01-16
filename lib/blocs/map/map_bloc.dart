@@ -18,10 +18,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   final LocationBloc locationBloc;
   final AddressBloc addressBloc;
-  
-  
-  
-  //late MapboxMapController mapBoxController;  
+
   late MapController mapController; 
 
   StreamSubscription<LocationState>? locationStateSubscription;
@@ -36,9 +33,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     on<OnStartFollowingUserEvent>(_onStartFollowingUser);    
     on<OnStopFollowingUserEvent>((event, emit) => emit( state.copyWith( isfollowingUser: false) ));
     on<OnAddAddressEvent>(_onAddAdress );
-    //on<OnIsAcceptedTravel>((event, emit) => emit(state.copyWith(isAccepted: true)));
-    //on<OnIsDeclinedTravel>((event, emit) => emit(state.copyWith(isAccepted: false)));
-  
+    
       
   
   locationStateSubscription = locationBloc.stream.listen((locationState){

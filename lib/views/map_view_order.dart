@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:provider/provider.dart';
-//import 'package:usuario_inri/global/environment.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:usuario_inri/blocs/blocs.dart';
 import 'package:usuario_inri/models/usuario.dart';
@@ -17,10 +16,10 @@ final LatLng initialLocation;
 
 
 const MapViewOrder({
-Key? key,
+super.key,
 required this.initialLocation,
 
-}) : super(key: key);   
+});   
 
   @override
   State<MapViewOrder> createState() => _MapViewOrderState();
@@ -40,7 +39,7 @@ class _MapViewOrderState extends State<MapViewOrder> {
     super.initState();
 
     BlocProvider.of<AddressBloc>(context);
-    Provider.of<AuthService>(context, listen:false);
+    BlocProvider.of<AuthBloc>(context, listen:false);
     _mapController = MapController();
     
   }
@@ -53,7 +52,7 @@ class _MapViewOrderState extends State<MapViewOrder> {
   @override
   Widget build(BuildContext context) {  
     
-   final usuario       = Provider.of<AuthService>(context).usuario; 
+   final  usuario      = Provider.of<AuthBloc>(context).state.usuario!; 
     final locationBloc = BlocProvider.of<LocationBloc>(context);
     final myLocation   = locationBloc.state.lastKnownLocation!;
     final mapBloc  = BlocProvider.of<MapBloc>(context); 
@@ -63,11 +62,9 @@ class _MapViewOrderState extends State<MapViewOrder> {
      
     final userLocation = List.from(location);
 
-    final zoom   = mapBloc.getZoom(userLocation);
-    final center = mapBloc.bounds(location);       
+    final zoom   = mapBloc.getZoom(userLocation);    
+    final center = mapBloc.bounds(location); 
     
-    
-
     final size = MediaQuery.of(context).size; 
 
        return 

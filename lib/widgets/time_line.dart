@@ -7,7 +7,7 @@ import 'package:usuario_inri/service/addresses_service.dart';
 import 'package:usuario_inri/service/storage_service.dart';
 
 class HomeStepper extends StatelessWidget {
-  const HomeStepper({Key? key}) : super(key: key);
+  const HomeStepper({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class HomeStepper extends StatelessWidget {
     final addressBloc = BlocProvider.of<AddressBloc>(context);
     final storageService = StorageService.instance;
 
-    return addressBloc.state.orderUser == null? 
+    return addressBloc.state.existOrder == false && addressBloc.state.isAccepted == true? 
     BlocBuilder<MapBloc, MapState>(
       builder: (context, state) {
         return Padding(
@@ -89,20 +89,18 @@ class HomeStepper extends StatelessWidget {
                         elevation: 0,
                         color: Colors.purple,
                         onPressed: () async {
+
                           // Eliminando viaje de base de datos
                           await addressService.finishTravel();
                           await storageService.deleteIdDriver();
-                          await storageService.deleteIdOrder();
-
-                          //await Future.delayed(Duration(seconds: 3));
+                          await storageService.deleteIdOrder();                          
 
                           //addressBloc.add(OnIsDeclinedTravel());
 
                           //eliminar order de state
                           addressBloc.add(OnClearStateEvent());
 
-                          //obtener nuevas ordenes existentes
-                          addressBloc.getOrder;
+                          
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(

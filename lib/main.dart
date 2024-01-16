@@ -1,9 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 
-
-
-import 'package:provider/provider.dart';
+//import 'package:provider/provider.dart';
 
 import 'package:usuario_inri/pages/notifications_access.dart';
 import 'package:usuario_inri/routes/routes.dart';
@@ -28,27 +29,36 @@ import 'package:usuario_inri/config/namber_symbol.dart';
 void main() async{
      
      //proyecto final usuarios inri
-     WidgetsFlutterBinding.ensureInitialized();     
+     WidgetsFlutterBinding.ensureInitialized();
+     await BackgroundService.instance.initializeService();
      
-    await BackgroundService.instance.initializeService();
+
+     HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb
+        ? HydratedStorage.webStorageDirectory
+        : await getApplicationDocumentsDirectory(),
+  );     
+     
+    
 
     Intl.defaultLocale = 'es_ARG';
-
-    initializeDateFormatting('es_ARG', null);
-  
+    initializeDateFormatting('es_ARG', null);  
     final enUS = numberFormatSymbols['en_US'] as NumberSymbols;
-
     numberFormatSymbols['es_ARG'] = enUS.copyWith(
       currencySymbol: r'$',
     );
+
+    
     
     
 runApp(
 
     MultiBlocProvider(
       providers: [
+
+        BlocProvider(create: (context) => AuthBloc(authService: AuthService())),
         BlocProvider(create: (context) => GpsBloc() ),
-        BlocProvider(create: (context) => NotificationBloc()),        
+        BlocProvider(create: (context) => NotificationBloc()),                
         BlocProvider(create: (context) => LocationBloc() ),
         BlocProvider(create: (context) => AddressBloc(addressService: AddressService()) ),        
         BlocProvider(create: (context) => MapBloc(locationBloc: BlocProvider.of<LocationBloc>(context),
@@ -64,30 +74,25 @@ runApp(
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => AuthService()),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'usuario inri',
-        initialRoute: 'login',
-        routes: {
-          'login'   : (BuildContext context) => const LoginPage(),
-          'register': (BuildContext context) => const RegisterPage(),
-          'home': (BuildContext context) => const HomePage(),
-          'loading': (BuildContext context) => const LoadingPage(),
-          'gps'           : (BuildContext context) => const GpsAccessPage(),
-          'notification': (BuildContext context) => const NotificationsAccessPage(),
-        },
-        theme: ThemeData.light().copyWith(
-          scaffoldBackgroundColor: Colors.grey[300]
-        ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'usuario inri',
+      initialRoute: 'login',
+      routes: {
+        'login'   : (BuildContext context) => const LoginPage(),
+        'register': (BuildContext context) => const RegisterPage(),
+        'home': (BuildContext context) => const HomePage(),
+        'loading': (BuildContext context) => const LoadingPage(),
+        'gps'           : (BuildContext context) => const GpsAccessPage(),
+        'notification': (BuildContext context) => const NotificationsAccessPage(),
+      },
+      theme: ThemeData.light().copyWith(
+        scaffoldBackgroundColor: Colors.grey[300]
       ),
     );
   }

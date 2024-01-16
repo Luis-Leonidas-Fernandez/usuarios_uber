@@ -11,11 +11,9 @@ List<Object> get props => [];
 
 class NotificationAndPermissionEvent extends NotificationEvent{
  
-  final bool isNotificationPermissionGranted;
+ final NotificationModel? notificationModel;
   
- const NotificationAndPermissionEvent({   
-    required this.isNotificationPermissionGranted
-});
+ const NotificationAndPermissionEvent({ required this.notificationModel});
 
   
 }

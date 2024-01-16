@@ -88,7 +88,8 @@ class AddressService {
  
   final Map<String, String> headers = {'Content-Type': 'application/json', 'Charset': 'utf-8','x-token': token.toString()};
   
-  final resp = await http.get(Uri.parse('${Environment.apiUrl }/viajes/$id'), headers: headers);
+  final resp = await http.get(Uri.parse('${Environment.apiUrl }/viajes/$id'), headers: headers); 
+  
   
   try {
     
@@ -97,7 +98,7 @@ class AddressService {
   //data decoded
   final dataMap = jsonDecode(resp.body)["address"];
   
-  
+ 
   //convert data a Address Model
   final Map<String, dynamic> response = dataMap ?? newMap;
   

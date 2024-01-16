@@ -5,12 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:latlong2/latlong.dart';
-import 'package:provider/provider.dart';
 import 'package:usuario_inri/blocs/blocs.dart';
+
 import 'package:usuario_inri/connection/log_out.dart';
 import 'package:usuario_inri/models/address.dart';
 import 'package:usuario_inri/models/usuario.dart';
-import 'package:usuario_inri/service/auth_service.dart';
+
 import 'package:usuario_inri/views/card_view.dart';
 import 'package:usuario_inri/views/map_view.dart';
 import 'package:usuario_inri/views/map_view_order.dart';
@@ -23,7 +23,7 @@ import 'package:usuario_inri/widgets/time_line.dart';
 
 class HomePage extends StatefulWidget {
 
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -32,7 +32,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   AddressBloc? addressBloc;
   LocationBloc? locationBloc;
-  Usuario? perfilUsuario;
+  AuthBloc? usuarioBloc;
+  Usuario? usuario;
   
   @override
   void initState() {
@@ -43,7 +44,7 @@ class _HomePageState extends State<HomePage> {
     final addressBloc =  BlocProvider.of<AddressBloc>(context);
     addressBloc.state.loading;    
     addressBloc.startLoadingAddress();
-    Provider.of<AuthService>(context, listen:false);
+    BlocProvider.of<AuthBloc>(context);
     
     
     
@@ -54,6 +55,7 @@ class _HomePageState extends State<HomePage> {
     
     locationBloc?.stopFollowingUser();
     addressBloc?.stopLoadingAddress();
+    usuarioBloc?.deleteUser();
     super.dispose();
   }
 
@@ -61,8 +63,13 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     
     final addressBloc =  BlocProvider.of<AddressBloc>(context);
-    final usuario = Provider.of<AuthService>(context).perfilUsuario;
-    addressBloc.state.loading; 
+    final usuarioBloc = BlocProvider.of<AuthBloc>(context);
+
+  
+    final usuario = usuarioBloc.state.usuario;
+    addressBloc.state.loading;
+
+ 
     
     return Scaffold(
       extendBodyBehindAppBar: true, 
@@ -79,7 +86,7 @@ class _HomePageState extends State<HomePage> {
         ), 
 
         title:  Center(child:
-         Text('Bienvenido a Inri ${usuario.nombre}',
+         Text('Bienvenido a Inri ${usuario!.nombre}',
          style: GoogleFonts.satisfy(color: Colors.white, fontSize: 25)
          )
          ),
@@ -115,16 +122,19 @@ class _HomePageState extends State<HomePage> {
           if(state.lastKnownLocation == null)  return const Center(child: Text('Espere por favor...'));
                     
           final long = (state.lastKnownLocation!.longitude);
-          final lat  = state.lastKnownLocation!.latitude; 
-          
-                    
-          
+          final lat  = state.lastKnownLocation!.latitude;          
+         
+                              
               return StreamBuilder(
-              stream: addressBloc.getOrder,
+              stream: addressBloc.getOrderUser(),
               builder: (context, AsyncSnapshot<OrderUser> snapshot) {
-              final order = snapshot.data;
-              
-              
+              final order = snapshot.data;             
+               
+              /*  final exist  = addressBloc.state.existOrder;
+               final accept = addressBloc.state.isAccepted;
+
+               debugPrint("EXIST ORDER: $exist");
+               debugPrint("ACCEPTED ORDER: $accept"); */
 
                 return SingleChildScrollView(
                  
@@ -137,20 +147,20 @@ class _HomePageState extends State<HomePage> {
                       : MapView(initialLocation: LatLng( lat, long)),  //IS ACCEPTED = FALSE                   
                                             
               
-                      addressBloc.state.existOrder == false?
+                      order?.id == null?
                       Container() //IS ACCEPTED= FALSE
                       : CardView(orderUser: order!, usuario: usuario), //IS ACCEPTED = TRUE
                        
                       //BUTTONS
 
                       addressBloc.state.existOrder == true &&
-                      addressBloc.state.isAccepted ==  true ?   
+                      addressBloc.state.isAccepted ==  false ?   
                       BtnFinishTravel() //IS ACCEPTED = TRUE
                       : Container(), // IS ACCEPTED = FALSE
                       
 
                       addressBloc.state.existOrder == true &&
-                      addressBloc.state.isAccepted ==  true ? 
+                      addressBloc.state.isAccepted ==  false ? 
                       BtnCancelTravel() //IS ACCEPTED = TRUE
                       : Container(), // IS ACCEPTED = FALSE
 

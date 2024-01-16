@@ -1,23 +1,26 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
-//import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:usuario_inri/blocs/user/auth_bloc.dart';
 
 import 'package:usuario_inri/login-ui/input_decorations.dart';
 import 'package:usuario_inri/providers/login_form_validar.dart';
 
 import 'package:usuario_inri/routes/routes.dart';
-import 'package:usuario_inri/service/auth_service.dart';
 import 'package:usuario_inri/widgets/alert_screen.dart';
 import 'package:usuario_inri/widgets/card_container.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+
     return  Scaffold(
       body: AuthBackground(
         child: SingleChildScrollView(
@@ -63,7 +66,7 @@ class LoginPage extends StatelessWidget {
   }
 }
 class _LoginForm extends StatefulWidget {
-  const _LoginForm({Key? key}) : super(key: key);
+  const _LoginForm();
 
   @override
   State<_LoginForm> createState() => _LoginFormState();
@@ -76,8 +79,9 @@ class _LoginFormState extends State<_LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    
+    final authUser = BlocProvider.of<AuthBloc>(context);
 
-    final authService = Provider.of<AuthService>(context);
     final loginFormValidar = Provider.of<LoginFormValidar>(context);
 
     return Form(
@@ -133,11 +137,12 @@ class _LoginFormState extends State<_LoginForm> {
            disabledColor: Colors.grey,
            elevation: 0,
            color: Colors.indigo,          
-           onPressed: authService.autenticando ? (){}
+           onPressed: authUser.state.authenticando == true? (){}
            : () async {
              
-              final loginOk =await authService.login(emailCtrl.text.toString(), passCtrl.text.toString());
-             
+              final loginOk =await authUser.initLogin(emailCtrl.text.toString(), passCtrl.text.toString());
+              
+              /* debugPrint("login Ok: $loginOk"); */
              
              if(!mounted) return;
              

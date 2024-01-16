@@ -7,9 +7,9 @@ class AuthBackground extends StatelessWidget {
   final Widget child;
 
   const AuthBackground({
-    Key? key,
+    super.key,
     required this.child,
-    }) : super(key: key);
+    });
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +35,7 @@ class AuthBackground extends StatelessWidget {
 }
 
 class _HederIcon extends StatelessWidget {
-  const _HederIcon({
-    Key? key,
-  }) : super(key: key);
+  const _HederIcon();
 
   @override
   Widget build(BuildContext context) {
@@ -60,9 +58,7 @@ class _HederIconText extends StatelessWidget {
 
 
   
-  const _HederIconText({
-    Key? key,
-  }) : super(key: key);
+  const _HederIconText();
 
   @override
   Widget build(BuildContext context) {
@@ -86,9 +82,7 @@ class _HederIconText extends StatelessWidget {
 }
 
 class _HederIconLocation extends StatelessWidget {
-  const _HederIconLocation({
-    Key? key,
-  }) : super(key: key);
+  const _HederIconLocation();
 
   @override
   Widget build(BuildContext context) {

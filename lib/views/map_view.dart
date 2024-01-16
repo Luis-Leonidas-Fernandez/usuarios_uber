@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:provider/provider.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:usuario_inri/blocs/blocs.dart';
 import 'package:usuario_inri/models/usuario.dart';
@@ -14,9 +13,9 @@ final LatLng initialLocation;
 
 
 const MapView({
-Key? key,
+super.key,
 required this.initialLocation
-}) : super(key: key);   
+});   
 
   @override
   State<MapView> createState() => _MapViewState();
@@ -33,7 +32,7 @@ class _MapViewState extends State<MapView> {
   void initState() {    
     super.initState();
 
-    Provider.of<AuthService>(context, listen:false);
+    BlocProvider.of<AuthBloc>(context);
     BlocProvider.of<AddressBloc>(context);
     _mapController = MapController();
     
@@ -47,7 +46,7 @@ class _MapViewState extends State<MapView> {
   @override
   Widget build(BuildContext context) {  
 
-    final usuario      = Provider.of<AuthService>(context).usuario; 
+    final usuario      = BlocProvider.of<AuthBloc>(context).state.usuario!; 
     final locationBloc = BlocProvider.of<LocationBloc>(context);
     final myLocation   = locationBloc.state.lastKnownLocation!;
    

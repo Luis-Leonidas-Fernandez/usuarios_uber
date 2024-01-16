@@ -3,18 +3,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:usuario_inri/blocs/blocs.dart';
 import 'package:usuario_inri/pages/home_page.dart';
 
-
-
 class NotificationsAccessPage extends StatelessWidget {
-  const NotificationsAccessPage({Key? key}) : super(key: key);
+  const NotificationsAccessPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    
+
     return Scaffold(
       body: Center(
         child: BlocBuilder<NotificationBloc, NotificationState>(
           builder: (context, state) { 
-           return state.isAllNotificationGranted
+
+           final notificationEnabled = state.notificationModel?.isNotificationPermissionGranted?? false;            
+
+           /* debugPrint("NOTIFICACION HABILITADA: $notificationEnabled");  */   
+
+           return notificationEnabled == true 
            ? const HomePage()
            : const _AccessNotificationButton(); 
           }
@@ -25,9 +31,7 @@ class NotificationsAccessPage extends StatelessWidget {
 }
 
 class _AccessNotificationButton extends StatelessWidget {
-  const _AccessNotificationButton({
-    Key? key,
-  }) : super(key: key);
+  const _AccessNotificationButton();
 
   @override
   Widget build(BuildContext context) {

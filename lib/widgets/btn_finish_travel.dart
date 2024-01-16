@@ -1,4 +1,6 @@
 
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:usuario_inri/blocs/address/address_bloc.dart';
@@ -11,7 +13,7 @@ import 'package:usuario_inri/widgets/button_options.dart';
 
 class BtnFinishTravel extends StatelessWidget {
 
-  const BtnFinishTravel({Key? key}) : super(key: key);
+  const BtnFinishTravel({super.key});
   
   bool get mounted => true;
 
@@ -39,10 +41,10 @@ class BtnFinishTravel extends StatelessWidget {
 
 class MySmallButton extends StatelessWidget {
   const MySmallButton({
-    Key? key,
+    super.key,
     required this.addressService,
     required this.addressBloc,
-  }) : super(key: key);
+  });
 
   final AddressService addressService;
   final AddressBloc addressBloc;
@@ -69,6 +71,8 @@ class MySmallButton extends StatelessWidget {
                   //Limpiando el State
                   // EXIST ORDER = FALSE -- IS ACCEPTED = FALSE
                   addressBloc.add(const OnClearStateEvent());
+
+                  Navigator.pushReplacementNamed(context, 'notification');
                  
                    
         }
@@ -83,10 +87,10 @@ class MySmallButton extends StatelessWidget {
 
 class MyBigButton extends StatelessWidget {
   const MyBigButton({
-    Key? key,
+    super.key,
     required this.addressService,
     required this.addressBloc,
-  }) : super(key: key);
+  });
 
   final AddressService addressService;
   final AddressBloc addressBloc;
@@ -113,7 +117,9 @@ class MyBigButton extends StatelessWidget {
                            
                             
                             // Limpiando el State
-                            addressBloc.add(const OnClearStateEvent());                          
+                            addressBloc.add(const OnClearStateEvent()); 
+
+                            Navigator.pushReplacementNamed(context, 'notification');                         
                             
                                                     
 

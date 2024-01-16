@@ -38,6 +38,11 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
   Future getCurrentPosition()async {
 
     final position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    
+    final point = LatLng(position.latitude, position.longitude);
+    
+    // ignore: avoid_print
+    print("EVENT SAVE USER POSITION: $point");
      
     
     add(OnNewUserLocationEvent(LatLng(position.latitude, position.longitude)));
@@ -72,8 +77,7 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
 
 
   @override
-  Future<void> close() {
-    //SocketService.instance.finishSocket();
+  Future<void> close() {    
     stopFollowingUser();
     return super.close();
   }

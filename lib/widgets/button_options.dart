@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 class ButtonOptions extends StatelessWidget {
   
   const ButtonOptions({
-  Key? key,
+  super.key,
   required this.iconData,
   required this.buttonText,
   this.onTap 
-  }) : super(key: key);
+  });
 
   final IconData iconData;
   final String buttonText;

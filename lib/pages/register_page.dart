@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:usuario_inri/blocs/user/auth_bloc.dart';
 
 import 'package:usuario_inri/login-ui/input_decorations.dart';
 import 'package:usuario_inri/providers/login_form_validar.dart';
 
 import 'package:usuario_inri/routes/routes.dart';
-import 'package:usuario_inri/service/auth_service.dart';
 import 'package:usuario_inri/widgets/alert_screen.dart';
 import 'package:usuario_inri/widgets/card_container.dart';
 
 class RegisterPage extends StatelessWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+  const RegisterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +62,7 @@ class RegisterPage extends StatelessWidget {
   }
 }
 class _LoginForm extends StatefulWidget {
-  const _LoginForm({Key? key}) : super(key: key);
+  const _LoginForm();
 
   @override
   State<_LoginForm> createState() => _LoginFormState();
@@ -76,8 +77,9 @@ class _LoginFormState extends State<_LoginForm> {
   @override
   Widget build(BuildContext context) {
 
+    final authUser = BlocProvider.of<AuthBloc>(context);
     final loginFormValidar = Provider.of<LoginFormValidar>(context);
-    final authService = Provider.of<AuthService>(context);
+    
 
     return Form(
 
@@ -150,7 +152,7 @@ class _LoginFormState extends State<_LoginForm> {
            disabledColor: Colors.grey,
            elevation: 0,
            color: Colors.indigo,           
-           onPressed:  authService.autenticando ? (){} 
+           onPressed:  authUser.state.authenticando == true ? (){} 
            : () async {
 
            
@@ -159,8 +161,8 @@ class _LoginFormState extends State<_LoginForm> {
             await Future.delayed(Duration(seconds: 2));
             loginFormValidar.isLoading = false;
             
-             final registerOk = await authService.register(nameCtrl.text.toString(), emailCtrl.text.toString(), passCtrl.text.toString());             
-           
+             final registerOk = await authUser.initRegister(nameCtrl.text.toString(), emailCtrl.text.toString(), passCtrl.text.toString());             
+                         
 
             if(!mounted) return;      
                       
@@ -170,7 +172,7 @@ class _LoginFormState extends State<_LoginForm> {
 
             }else{
               
-             mostrarAlerta(context, 'Registro incorrecto', registerOk );
+             mostrarAlerta(context, 'Registro incorrecto', registerOk.toString() );
             }
 
             

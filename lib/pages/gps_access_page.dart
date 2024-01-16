@@ -5,7 +5,7 @@ import 'package:usuario_inri/blocs/gps/gps_bloc.dart';
 
 
 class GpsAccessPage extends StatelessWidget {
-  const GpsAccessPage({Key? key}) : super(key: key);
+  const GpsAccessPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,10 @@ class GpsAccessPage extends StatelessWidget {
       body: Center(
         child: BlocBuilder<GpsBloc, GpsState>(
           builder: (context, state) { 
-           return !state.isGpsEnabled
+
+            final gpsEnabled = state.gpsModel?.isGpsEnabled?? false;
+
+           return gpsEnabled == false
            ? const _EnableGpsMessage()
            : const _AccessButton(); 
           }
@@ -24,9 +27,7 @@ class GpsAccessPage extends StatelessWidget {
 }
 
 class _AccessButton extends StatelessWidget {
-  const _AccessButton({
-    Key? key,
-  }) : super(key: key);
+  const _AccessButton();
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +53,7 @@ class _AccessButton extends StatelessWidget {
 }
 
 class _EnableGpsMessage extends StatelessWidget {
-  const _EnableGpsMessage({
-    Key? key,
-  }) : super(key: key);
+  const _EnableGpsMessage();
 
   @override
   Widget build(BuildContext context) {

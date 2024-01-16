@@ -7,14 +7,18 @@ import 'package:usuario_inri/routes/routes.dart';
 
 
 class LoadingPage extends StatelessWidget {
-  const LoadingPage({Key? key}) : super(key: key);
+  const LoadingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocBuilder<GpsBloc, GpsState>(
         builder: (context, state) {
-            return state.isAllGranted
+          
+            final gpsEnabled = state.gpsModel?.isGpsEnabled?? false;
+            final gpsGranted = state.gpsModel?.isGpsPermissionGranted ?? false;
+            
+            return gpsEnabled && gpsGranted == true
             ? const NotificationsAccessPage()
             : const GpsAccessPage();           
             

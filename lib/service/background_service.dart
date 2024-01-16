@@ -178,8 +178,7 @@ Future<bool> existAddress() async {
   // leer order de Data Base
   
   final address = await AddressService().getAddressesBackground(); 
-  final idOrderAct = address.id;  
-  print("*****address{ok:false}: $idOrderAct*********");
+  final idOrderAct = address.id;   
   
   if(idOrderAct != null){
     return true;

@@ -1,6 +1,5 @@
 
-import 'dart:convert';
-
+//import 'dart:convert';
 
 
 class OrderUser {
@@ -40,7 +39,7 @@ class OrderUser {
 
    
 
-    String toJson() => json.encode(toMap());
+    //String toJson() => json.encode(toMap());
 
     factory OrderUser.fromJson(Map<String, dynamic> json) => OrderUser(
         ok: json["ok"]?? false,
@@ -77,5 +76,27 @@ class OrderUser {
         "mensaje": List<dynamic>.from(mensaje!.map((x) => x)),
          "idDriver": idDriver,
     };
+
+    Map<String, dynamic> toJson() => {
+        "ok": ok,
+        "_id": id,
+        "email": email,
+        "nombre": nombre,
+        "apellido": apellido,
+        "vehiculo": vehiculo,
+        "modelo": modelo,
+        "patente": patente,
+        "online": online,
+        "order": order,
+        "estado": estado,
+        "createdAt": createdAt!.toIso8601String(),
+        "updatedAt": updatedAt!.toIso8601String(),
+        "mensaje": List<dynamic>.from(mensaje!.map((x) => x)),
+         "idDriver": idDriver,
+    }; 
+     
+     
+  
+
 }
 

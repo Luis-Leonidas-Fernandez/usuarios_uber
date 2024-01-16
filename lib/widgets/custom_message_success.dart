@@ -4,8 +4,8 @@ import 'package:usuario_inri/blocs/blocs.dart';
 
 class CustomSnackBarContentSuccess extends StatelessWidget {
   const CustomSnackBarContentSuccess({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class CustomSnackBarContentSuccess extends StatelessWidget {
           children: [
           Container(
             padding: const EdgeInsets.all(16),
-            height: 90,
+            height: 100,
             decoration: BoxDecoration(
               color: Color.fromARGB(248, 54, 160, 111),
                borderRadius: BorderRadius.all(Radius.circular(20)),

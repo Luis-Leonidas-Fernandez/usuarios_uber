@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:usuario_inri/blocs/address/address_bloc.dart';
@@ -10,7 +12,7 @@ import 'package:usuario_inri/widgets/button_options.dart';
 
 class BtnCancelTravel extends StatelessWidget {
 
-  const BtnCancelTravel({Key? key}) : super(key: key);
+  const BtnCancelTravel({super.key});
   
   bool get mounted => true;
 
@@ -36,10 +38,10 @@ class BtnCancelTravel extends StatelessWidget {
 
 class SmallButton extends StatelessWidget {
   const SmallButton({
-    Key? key,
+    super.key,
     required this.addressService,
     required this.addressBloc,
-  }) : super(key: key);
+  });
 
   final AddressService addressService;
   final AddressBloc addressBloc;
@@ -62,10 +64,15 @@ class SmallButton extends StatelessWidget {
                   await StorageService.instance.deleteIdDriver();
                   await StorageService.instance.deleteIdOrder();                     
                   
+                  // Clear Hydrated storage
+
                   
                   // intentando emitir un evento 
                   addressBloc.add(const OnClearStateEvent());
-                  
+
+                 
+                  Navigator.pushReplacementNamed(context, 'notification');
+                 
                                           
 
                  },
@@ -81,10 +88,10 @@ class SmallButton extends StatelessWidget {
 
 class BigButton extends StatelessWidget {
   const BigButton({
-    Key? key,
+    super.key,
     required this.addressService,
     required this.addressBloc,
-  }) : super(key: key);
+  });
 
   final AddressService addressService;
   final AddressBloc addressBloc;
@@ -105,15 +112,12 @@ class BigButton extends StatelessWidget {
                             await  addressService.finishTravel(); 
 
                             await StorageService.instance.deleteIdDriver();
-                            await StorageService.instance.deleteIdOrder();                       
-                            
-
-                            // ocultando boton finalizar
-                            //addressBloc.add(OnIsDeclinedTravel());
-                            
+                            await StorageService.instance.deleteIdOrder();                  
+                                                                             
                             // intentando emitir un evento 
-                            addressBloc.add(const OnClearStateEvent());
+                            addressBloc.add(const OnClearStateEvent()); 
 
+                            Navigator.pushReplacementNamed(context, 'notification');                           
                            
                                                     
 

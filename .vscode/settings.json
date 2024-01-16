@@ -20,5 +20,5 @@
         "commandCenter.border": "#15202b99"
     },
     "peacock.color": "#42b883",
-    "editor.inlineSuggest.showToolbar": "onHover"
+    "editor.inlineSuggest.showToolbar": "always"
 }

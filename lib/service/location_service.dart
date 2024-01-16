@@ -72,7 +72,7 @@ LocationService._internal();
         userPosition.add(location);
         // Position LatLng
         myPosition.add(res);
-        print("******//////$myPosition//////******");
+       
         return true;
       }else{
         return false;

@@ -12,8 +12,6 @@ import 'package:usuario_inri/service/storage_service.dart';
 
 class AuthService with ChangeNotifier {
 
-late Usuario usuario;
-late Usuario perfilUsuario;
 bool _autenticando = false;
 //crear storage
 final storage = StorageService.instance;
@@ -31,30 +29,26 @@ set autenticando( bool valor ) {
           
 
 //Registro de Usuario
-Future register(String nombre, String email, String password ) async {
-
-    _autenticando = true;
+Future<Usuario> register(String nombre, String email, String password ) async {
+   
 
     final data = {'nombre': nombre,'email': email,'password': password};    
     final body = jsonEncode(data);
     final headers = {'Content-Type': 'application/json'};
 
-    final resp = await http.post(Uri.parse('${Environment.apiUrl }/login/new'), body: body, headers: headers);       
+    final resp = await http.post(Uri.parse('${Environment.apiUrl }/login/new'), body: body, headers: headers);     
     
-    _autenticando = false;
-
+   
     if ( resp.statusCode == 200 ) {
     
-    final loginResponse = loginResponseFromJson( resp.body );
-    usuario = loginResponse.usuario;
-    
+    final loginResponse = loginResponseFromJson( resp.body );  
     final id = loginResponse.usuario.uid;
-    perfilUsuario= usuario;
+    final usuario = loginResponse.usuario;  
     
     await storage.saveToken(loginResponse.token);
     await storage.saveId(id);
     
-    return true;
+    return usuario;
     
     } else {
       final respBody = jsonDecode(resp.body);
@@ -73,10 +67,8 @@ Future register(String nombre, String email, String password ) async {
     final resp = await http.get( Uri.parse('${Environment.apiUrl }/login/renew'),   headers: headers);
 
     if ( resp.statusCode == 200 ) {
-      final loginResponse = loginResponseFromJson( resp.body );
 
-      usuario = loginResponse.usuario;
-      
+      final loginResponse = loginResponseFromJson( resp.body );        
       await storage.saveToken(loginResponse.token);
       
 
@@ -90,32 +82,32 @@ Future register(String nombre, String email, String password ) async {
     }
 
   }
-
-  Future<bool> login( String email, String password ) async {
+  
+  
+  Future<Usuario> loginUser( String email, String password ) async {    
     
-    _autenticando = true;
 
     final data = {'email': email, 'password': password};
     final headers = {'Content-Type': 'application/json'};    
     final body = jsonEncode(data);
+    
 
     final resp = await http.post(Uri.parse('${ Environment.apiUrl }/login'), body: body, headers: headers  );
-
-    _autenticando = false;
-
+      
+    
     if ( resp.statusCode == 200 ) {
       final loginResponse = loginResponseFromJson( resp.body );
 
-      usuario = loginResponse.usuario;
-      perfilUsuario= usuario;
+      final usuario = loginResponse.usuario;
+    
 
       await storage.saveToken(loginResponse.token);
       await storage.saveId(usuario.uid);
       
-      return true;
+      return usuario;
     } else {
-      return false;
+      final respBody = jsonDecode(resp.body);
+      return respBody['msg'];
     }
   }  
-  
 }
