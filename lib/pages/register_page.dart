@@ -6,6 +6,7 @@ import 'package:usuario_inri/blocs/user/auth_bloc.dart';
 
 import 'package:usuario_inri/login-ui/input_decorations.dart';
 import 'package:usuario_inri/providers/login_form_validar.dart';
+import 'package:usuario_inri/responsive/responsive_ui.dart';
 
 import 'package:usuario_inri/routes/routes.dart';
 import 'package:usuario_inri/widgets/alert_screen.dart';
@@ -16,6 +17,11 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    ResponsiveUtil responsiveUtil = ResponsiveUtil(context);
+ 
+  double responsiveFontSize = responsiveUtil.getResponsiveFontSize(17);
+  double responsiveHeight = responsiveUtil.getResponsiveHeight(0.37);
     return  Scaffold(
       body: AuthBackground(
         child: SingleChildScrollView(
@@ -25,7 +31,7 @@ class RegisterPage extends StatelessWidget {
 
           children: [
 
-            SizedBox( height: 250),
+            SizedBox( height: responsiveHeight),
 
             CardContainer(
               child: Column(
@@ -35,10 +41,10 @@ class RegisterPage extends StatelessWidget {
                   SizedBox(height: 10,),
 
                   Text('Registrarme', style: GoogleFonts.lobster(
-                    color: Colors.black, fontSize: 25
+                    color: Colors.black, fontSize: responsiveFontSize
                     ),),
 
-                  SizedBox(height: 45,),
+                  SizedBox(height: 28,),
 
                   ChangeNotifierProvider(
                     create: (_) => LoginFormValidar(),
@@ -69,10 +75,22 @@ class _LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<_LoginForm> {
+
+  late ResponsiveUtil responsiveUtil;
   
   final nameCtrl  = TextEditingController();
   final emailCtrl = TextEditingController();
   final passCtrl  = TextEditingController();
+
+
+
+  @override
+  void didChangeDependencies() {
+
+    super.didChangeDependencies();
+    // Initialize ResponsiveUtil here
+    responsiveUtil = ResponsiveUtil(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +163,7 @@ class _LoginFormState extends State<_LoginForm> {
               },
               controller: passCtrl, 
          ),
-         SizedBox(height: 25,),
+         SizedBox(height: 18,),
          
          MaterialButton(
            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
@@ -183,14 +201,14 @@ class _LoginFormState extends State<_LoginForm> {
              child: Text(
                loginFormValidar.isLoading? 'Espere'
                : 'Registrar',
-               style: const TextStyle(color: Colors.white, fontSize: 18),
+               style: TextStyle(color: Colors.white, fontSize: responsiveUtil.getResponsiveFontSize(27)),
              ),
            )           
       ),
       SizedBox(height: 15),
             ElevatedButton(onPressed: ()=> Navigator.pushReplacementNamed(context, 'login'),
             style: ButtonStyle(
-              overlayColor: MaterialStateProperty.all(Colors.indigo.withOpacity(0.2))
+              overlayColor: WidgetStateProperty.all(Colors.indigo.withOpacity(0.2))
             ),
              
               

@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -52,17 +50,19 @@ class _MapViewOrderState extends State<MapViewOrder> {
   @override
   Widget build(BuildContext context) {  
     
-   final  usuario      = Provider.of<AuthBloc>(context).state.usuario!; 
+    final  usuario      = Provider.of<AuthBloc>(context).state.usuario;
+
+    if(usuario == null) return Container(); 
+
     final locationBloc = BlocProvider.of<LocationBloc>(context);
     final myLocation   = locationBloc.state.lastKnownLocation!;
     final mapBloc  = BlocProvider.of<MapBloc>(context); 
-    final location = BlocProvider.of<AddressBloc>(context).state.orderUser!.mensaje;
+    final loc = BlocProvider.of<AddressBloc>(context).state.orderUser?.mensaje?.coordinates;
 
-    final driverPosition = LatLng(location![1], location[0]);
-     
-    final userLocation = List.from(location);
 
-    final zoom   = mapBloc.getZoom(userLocation);    
+    final location =  loc ?? [];   
+
+    final zoom   = mapBloc.getZoom(location);    
     final center = mapBloc.bounds(location); 
     
     final size = MediaQuery.of(context).size; 
@@ -73,13 +73,15 @@ class _MapViewOrderState extends State<MapViewOrder> {
         height: size.height,
         child: FlutterMap(          
           mapController: _mapController,          
-          options: MapOptions(             
-            zoom: zoom,
+          options: MapOptions( 
+            initialCenter:  center,            
+            initialZoom: zoom,
             minZoom: 1.0,
             maxZoom: 20.0,            
-            center:  center,
+            
           ),
-          nonRotatedChildren: [
+          children: [
+
             TileLayer(
               urlTemplate: usuario.urlMapbox,
               additionalOptions: {               
@@ -90,39 +92,38 @@ class _MapViewOrderState extends State<MapViewOrder> {
             ),
             
               MarkerLayer(
+
               markers: [
+
                 Marker(                  
                   point: LatLng(myLocation.latitude, myLocation.longitude),
-                  width: 90,
-                  height: 90,
-                  builder: (context) => 
+                  width: 70,
+                  height: 70,
+                  child:  
                  Container(                                                   
                   color: Colors.transparent,
                   child: Image.asset('assets/icon.png'),                  
                  ) 
                 ),
-                  
-              ],            
-            ),
-            MarkerLayer(
-              markers: [
+                
+                if (location.isNotEmpty)               
                 Marker(                  
-                  point: LatLng(  driverPosition.latitude, driverPosition.longitude,) ,
+                  point: LatLng(location[1], location[0]),
                   width: 110,
                   height: 110,
-                  builder: (context) => 
+                  child:  
                  Container(                                                   
                   color: Colors.transparent,
                   child: Image.asset('assets/driver.png'),                  
                  ) 
-                ),
+                )                
                   
               ],            
-            ),  
+            ),
+            
           ],          
         ),
        );
-       
-     
+            
   }
 }

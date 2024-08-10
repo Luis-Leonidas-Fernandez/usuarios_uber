@@ -2,6 +2,8 @@
 //import 'dart:convert';
 
 
+import 'dart:convert';
+
 class OrderUser {
     bool? ok;
     String? id;
@@ -16,7 +18,7 @@ class OrderUser {
     bool? estado;
     DateTime? createdAt;
     DateTime? updatedAt;
-    List<double>? mensaje;
+    Mensaje? mensaje;
     String? idDriver;
 
     OrderUser({
@@ -55,7 +57,7 @@ class OrderUser {
         estado: json["estado"]?? false,
         createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
         updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
-        mensaje: json["mensaje"] == null ? null :List<double>.from(json["mensaje"].map((x) => x?.toDouble())),
+        mensaje: json["mensaje"] == null ? null : Mensaje.fromMap(json["mensaje"]),
         idDriver: json["idDriver"]??'',
     );
 
@@ -71,9 +73,9 @@ class OrderUser {
         "online": online,
         "order": order,
         "estado": estado,
-        "createdAt": createdAt!.toIso8601String(),
-        "updatedAt": updatedAt!.toIso8601String(),
-        "mensaje": List<dynamic>.from(mensaje!.map((x) => x)),
+        "createdAt": createdAt?.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
+        "mensaje": mensaje?.toMap(),
          "idDriver": idDriver,
     };
 
@@ -89,14 +91,37 @@ class OrderUser {
         "online": online,
         "order": order,
         "estado": estado,
-        "createdAt": createdAt!.toIso8601String(),
-        "updatedAt": updatedAt!.toIso8601String(),
-        "mensaje": List<dynamic>.from(mensaje!.map((x) => x)),
-         "idDriver": idDriver,
+        "createdAt": createdAt?.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
+        "mensaje": mensaje?.toMap(),
+        "idDriver": idDriver,
     }; 
-     
-     
-  
+}
 
+
+class Mensaje {
+    
+    List<double> coordinates;
+    String type;
+
+    Mensaje({
+        
+        required this.coordinates,
+        required this.type,
+    });
+
+    factory Mensaje.fromJson(String str) => Mensaje.fromMap(json.decode(str));
+
+    String toJson() => json.encode(toMap());
+
+    factory Mensaje.fromMap(Map<String, dynamic> json) => Mensaje(
+        coordinates: List<double>.from(json["coordinates"].map((x) => x?.toDouble())),
+        type: json["type"],
+    );
+
+    Map<String, dynamic> toMap() => {
+        "coordinates": List<dynamic>.from(coordinates.map((x) => x)),
+        "type": type,
+    };
 }
 

@@ -1,7 +1,3 @@
-
-
-// ignore_for_file: avoid_print
-
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -36,8 +32,9 @@ LocationService._internal();
   }
 
   Future<bool> getIdUserAndToken() async {
+    
     final existToken = await StorageService.instance.getToken();
-    final existUser = await StorageService.instance.getId();
+    final existUser = await StorageService.instance.getId(); 
     
     if(existToken == null && existUser == null){
     return false;

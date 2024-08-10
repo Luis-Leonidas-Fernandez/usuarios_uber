@@ -2,16 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:usuario_inri/blocs/blocs.dart';
+import 'package:usuario_inri/responsive/responsive_ui.dart';
 
 import 'package:usuario_inri/service/addresses_service.dart';
+import 'package:usuario_inri/service/message_service.dart';
 import 'package:usuario_inri/service/storage_service.dart';
 
-class HomeStepper extends StatelessWidget {
-  const HomeStepper({super.key});
+class TimeLineAddress extends StatelessWidget {
+
+  final MessageService messageService; 
+  const TimeLineAddress({super.key, required this.messageService});
 
   @override
   Widget build(BuildContext context) {
+
+    late ResponsiveUtil responsiveUtil = ResponsiveUtil(context);
+    double responsiveTop = responsiveUtil.getResponsiveHeight(0.25);  
     late AddressService addressService = AddressService();
+    final authBloc = BlocProvider.of<AuthBloc>(context);
     
     final addressBloc = BlocProvider.of<AddressBloc>(context);
     final storageService = StorageService.instance;
@@ -22,7 +30,7 @@ class HomeStepper extends StatelessWidget {
         return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 50),
             child: Container(
-              margin: const EdgeInsets.only(top: 230, bottom: 50),
+              margin: EdgeInsets.only(top: responsiveTop , bottom: 50),
               width: 300,
               height: 400,
               decoration: _cardBorders(),
@@ -90,12 +98,17 @@ class HomeStepper extends StatelessWidget {
                         color: Colors.purple,
                         onPressed: () async {
 
-                          // Eliminando viaje de base de datos
-                          await addressService.finishTravel();
-                          await storageService.deleteIdDriver();
-                          await storageService.deleteIdOrder();                          
+                          //extrae token y idUser del State
+                          final String? token = authBloc.state.usuario?.token; 
+                          final String? idUser = authBloc.state.usuario?.uid;
 
-                          //addressBloc.add(OnIsDeclinedTravel());
+                          // Eliminando viaje de base de datos
+                          await addressService.finishTravel(token!, idUser!);
+                          await storageService.deleteIdDriver();
+                          await storageService.deleteIdOrder();  
+
+                          //desactiva mensajes de la address
+                          messageService.cancelPeriodicMessage();
 
                           //eliminar order de state
                           addressBloc.add(OnClearStateEvent());
@@ -126,8 +139,14 @@ class HomeStepper extends StatelessWidget {
 }
 
 class _AddressDetails extends StatelessWidget {
+
+
   @override
   Widget build(BuildContext context) {
+
+    late ResponsiveUtil responsiveUtil = ResponsiveUtil(context);   
+    final responsiveFont = responsiveUtil.getResponsiveFontSize(31.0);
+
     const procesado = 'Pedido exitoso';
     const buscando = 'Buscando un Conductor';
     const encontrado = 'Conductor encontrado';
@@ -147,7 +166,7 @@ class _AddressDetails extends StatelessWidget {
                 procesado,
                 style: GoogleFonts.roboto(
                     color: Colors.black,
-                    fontSize: 18,
+                    fontSize: responsiveFont,
                     fontWeight: FontWeight.w700),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -160,7 +179,7 @@ class _AddressDetails extends StatelessWidget {
                 buscando,
                 style: GoogleFonts.roboto(
                     color: Colors.black,
-                    fontSize: 18,
+                    fontSize: responsiveFont,
                     fontWeight: FontWeight.w700),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -173,7 +192,7 @@ class _AddressDetails extends StatelessWidget {
                 encontrado,
                 style: GoogleFonts.roboto(
                     color: Colors.grey,
-                    fontSize: 18,
+                    fontSize: responsiveFont,
                     fontWeight: FontWeight.w700),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

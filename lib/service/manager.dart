@@ -1,0 +1,1 @@
+export 'package:usuario_inri/service/taskmanager_service.dart';

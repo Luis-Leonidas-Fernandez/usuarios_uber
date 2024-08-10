@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:usuario_inri/responsive/responsive_ui.dart';
 
 class AuthBackground extends StatelessWidget {
   
@@ -13,17 +14,25 @@ class AuthBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
+    ResponsiveUtil responsiveUtil = ResponsiveUtil(context);
+  
+    double responsiveHeight = responsiveUtil.getResponsiveHeight(1.0); // Ejemplo de altura responsiva
+    
+
     return SizedBox(
       
       width:  double.infinity,
-      height: double.infinity,
+      height: responsiveHeight,
       child: Stack(
 
         children: [
 
           _PurpleBox(),
           _HederIconLocation(),
+         
           _HederIconText(),
+           
           _HederIcon(),          
           child,
 
@@ -39,16 +48,21 @@ class _HederIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
+    final responsiveUtil = ResponsiveUtil(context);
+   
+    double responsiveTop = responsiveUtil.getResponsiveHeight(0.17);   
+
     return Positioned(
-                top: 140,
-                left: 110,
-                right: 110,
+      top: responsiveTop,
+      left: 110,
+      right: 110,
       child: Container(
-        alignment: AlignmentDirectional.bottomCenter,       
+        alignment: AlignmentDirectional.bottomCenter,
         height: 80,
         width: 150,
-        margin: const EdgeInsets.only(top: 18),           
-        child: Image.asset('assets/driver.png'),        
+        margin: const EdgeInsets.only(top: 18),
+        child: Image.asset('assets/driver.png'),
       ),
     );
   }
@@ -62,20 +76,25 @@ class _HederIconText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
+    final responsiveUtil = ResponsiveUtil(context);
 
-      
+    final font = responsiveUtil.getResponsiveFontSize(16.0);
+    double responsiveTop = responsiveUtil.getResponsiveHeight(0.08);
+    double responsiveLeft = responsiveUtil.getResponsiveWidth(0.05); // Adjust the value to fit your design
+    double responsiveRight = responsiveUtil.getResponsiveWidth(0.05);
+    
     return Positioned(
-                top: 75,
-                left: 60,
-                right: 60,
-      child: Container(        
-        alignment: AlignmentDirectional.bottomCenter,    
-        margin: const EdgeInsets.only(top: 45),           
-        child: Text('I N R I   R E M I S E S',
-                  style: GoogleFonts.lobster(
-                    color: Colors.white, fontSize: 29
-                    ),
-                    ),
+      top: responsiveTop,
+      left: responsiveLeft,
+      right: responsiveRight,
+      child: Container(
+        alignment: AlignmentDirectional.bottomCenter,
+        margin: const EdgeInsets.only(top: 45),
+        child: Text(
+          'I N R I   R E M I S E S',
+          style: GoogleFonts.lobster(color: Colors.white, fontSize: font),
+        ),
       ),
     );
   }
@@ -86,16 +105,19 @@ class _HederIconLocation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final responsiveUtil = ResponsiveUtil(context);
+    final font = responsiveUtil.getResponsiveFontSize(6.0);
     return Positioned(
-                top: 10,
+                top: 5,
                 left: 105,
                 right: 105,
       child: Container(
         alignment: AlignmentDirectional.bottomCenter,     
         margin: const EdgeInsets.only(top: 16),           
-        child: const Icon(Icons.location_on,
+        child: Icon(Icons.location_on,
          color:  Colors.white,
-         size: 95 ,
+         size: font ,
 
          ),        
       ),

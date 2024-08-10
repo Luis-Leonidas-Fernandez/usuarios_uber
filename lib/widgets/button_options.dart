@@ -53,20 +53,7 @@ class ButtonOptions extends StatelessWidget {
     )
    )
   );
-    
-    
-    
-    
-    
-    
+   
   }
 }
-/* ElevatedButton(
-      onPressed: () {},
-        style: ButtonStyle(
-         overlayColor: MaterialStateProperty.all(Colors.indigo.withOpacity(0.2)),
-         backgroundColor: Colors.
-        ),
-        child:  const Text('Tengo una Cuenta', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)
-    ); */
 

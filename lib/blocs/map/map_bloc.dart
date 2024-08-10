@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
@@ -83,9 +81,9 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
    LatLng bounds(List<double> location) {
     
-
-    final driver = List.from(location);
-    final LatLng myPosition = locationBloc.state.lastKnownLocation!;
+     final LatLng myPosition = locationBloc.state.lastKnownLocation!;
+    if(location.isEmpty) return myPosition;
+    final driver = List.from(location);   
     final driverPosition = LatLng(driver[1], driver[0]);   
   
 
@@ -104,36 +102,31 @@ class MapBloc extends Bloc<MapEvent, MapState> {
       );    
    
   
-   
+  
    return center;
   }
 
-  dynamic getZoom(List<dynamic> location){
+  dynamic getZoom(List<double> location){
     
-    if(addressBloc.state.orderUser == null) return 6.0;
-
-    
+    if(location.isEmpty) return 15.0;    
 
     final driver = List.from(location);
     final LatLng userPosition = locationBloc.state.lastKnownLocation!;
-    final driverPosition = LatLng(driver[1], driver[0]);       
-
-    
+    final driverPosition = LatLng(driver[1], driver[0]);    
 
     
     final distance = getDistanceInKM(userPosition, driverPosition);
 
-
     double radius = distance / 2;
     double scale  = radius / 0.3;
-    final zoom    = (16 - math.log(scale) / math.log(2));
-   
+    final zoom    = (15 - math.log(scale) / math.log(2));   
     
     
-    if(distance == 0.0){
-      return 6.0;
+    if(distance <= 0.05){
+      return 16.0;
     }else{
      
+    
      return zoom;
     }
 

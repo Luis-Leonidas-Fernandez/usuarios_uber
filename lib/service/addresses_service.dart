@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'dart:async';
 import 'dart:convert';
 
@@ -25,8 +23,7 @@ class AddressService {
   Future getAddressesBackground() async {
 
     final token = await storage.getToken();
-    final idUser = await storage.getId();    
-    
+    final idUser = await storage.getId();
 
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
@@ -79,18 +76,16 @@ class AddressService {
 
 
 
-  Future<OrderUser> getAddress( ) async {  
-      
+  Future<OrderUser> getAddress(String token, String idUser ) async {        
    
-  final token = await storage.getToken();
-  final id    = await storage.getId();
+  
   final newMap = {'id': null};
  
   final Map<String, String> headers = {'Content-Type': 'application/json', 'Charset': 'utf-8','x-token': token.toString()};
   
-  final resp = await http.get(Uri.parse('${Environment.apiUrl }/viajes/$id'), headers: headers); 
+  final resp = await http.get(Uri.parse('${Environment.apiUrl }/viajes/$idUser'), headers: headers); 
   
-  
+    
   try {
     
     if ( resp.statusCode == 200) {    
@@ -98,11 +93,11 @@ class AddressService {
   //data decoded
   final dataMap = jsonDecode(resp.body)["address"];
   
- 
   //convert data a Address Model
   final Map<String, dynamic> response = dataMap ?? newMap;
   
-  final data           = OrderUser.fromJson(response);
+  final data = OrderUser.fromJson(response);
+  
   
   await storage.saveIdOrder(data.id);  
      
@@ -113,7 +108,7 @@ class AddressService {
   //convert data a Address Model
   final date = jsonDecode(resp.body)["emptyObject"];
   final result = OrderUser.fromJson(date);
-
+  
   await storage.deleteIdOrder();
 
   return result;
@@ -123,36 +118,39 @@ class AddressService {
   return OrderUser(id: null);
   
 } 
-  } on FormatException catch (e) {     
+  } on FormatException catch (e) {  
+    print("error : $e");   
         
       return throw Exception(e);
-  } 
+  } catch (e) {
+    // Handle all other errors
+    print('Error: $e');
+    throw Exception('Error: $e');
+  }
   
 }
 
    
-  Future postAddresses( LatLng ubicacion) async {  
+  Future postAddresses( LatLng ubicacion, String token, String idUser) async {  
       
    
-  final token = await storage.getToken();
-  final id    = await  storage.getId();
   final lat   = ubicacion.latitude;
   final long  = ubicacion.longitude;
-  final  position = [lat, long];
+  final  position = [long, lat ];
   
-  final data = {'miId': id, 'estado': true, 'ubicacion': position};  
+  final data = {'miId': idUser, 'estado': true, 'ubicacion': position};  
   final Map<String, String> headers = {'Content-Type': 'application/json', 'Charset': 'utf-8','x-token': token.toString()};
   final body = jsonEncode(data); 
     
 
   final resp = await http.post(Uri.parse('${Environment.apiUrl }/ubicaciones/lugar'), body: body, headers: headers);
-  
+ 
   if ( resp.statusCode == 200) {
 
   //data decoded
   final dataMap = jsonDecode(resp.body)["data"];
 
-  final response           = Location.fromJson(dataMap);
+  final response           = Location.fromMap(dataMap);
   final order          = response.id;  
   
 
@@ -172,13 +170,11 @@ class AddressService {
 
 
 
- Future<dynamic> finishTravel() async {  
+ Future<dynamic> finishTravel(String token, String idUser) async {    
   
-  final token = await StorageService.instance.getToken();
-  final id    = await StorageService.instance.getId();
 
   final Map<String, String> headers = {'Content-Type': 'application/json', 'Charset': 'utf-8','x-token': token.toString()};
-  final Map<String, String> data   = {'miId': id!, 'order': 'libre'};
+  final Map<String, String> data   = {'miId': idUser, 'order': 'libre'};
 
   
   final resp = await http.put(Uri.parse('${Environment.apiUrl }/ubicaciones/remove/address'), headers: headers, body: json.encode(data));

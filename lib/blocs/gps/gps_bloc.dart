@@ -1,8 +1,5 @@
 import 'dart:async';
-
-//import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -105,7 +102,7 @@ GpsBloc() : super(const GpsState(gpsModel: null)) {
     gpsServiceSubscription = Geolocator.getServiceStatusStream().listen((event) {
 
       final isEnabled = (event.index == 1) ? true : false;
-      debugPrint('service status $isEnabled');
+  
 
       add(GpsAndPermissionEvent(
         gpsModel: GpsModel(

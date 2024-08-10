@@ -3,29 +3,39 @@ import 'package:flutter/material.dart';
 import 'package:usuario_inri/models/address.dart';
 import 'package:usuario_inri/models/usuario.dart';
 import 'package:intl/intl.dart';
+import 'package:usuario_inri/responsive/responsive_ui.dart';
 
 
 class CardView extends StatelessWidget {
 
   final OrderUser orderUser;
-  final Usuario usuario;
+  final Usuario? usuario;
   
   const CardView({
   super.key,
   required this.orderUser,
-  required this.usuario
+  this.usuario
   });
 
   @override
   Widget build(BuildContext context) {    
+
+    late ResponsiveUtil responsiveUtil = ResponsiveUtil(context);
+
+    double responsiveTop = responsiveUtil.getResponsiveHeight(0.15);
+    double responsiveHeight = responsiveUtil.getResponsiveHeight(0.12);
+    double responsiveWidth = responsiveUtil.getResponsiveWidth(0.12); 
+
+    double responsiveTopIconPerson = responsiveUtil.getResponsiveHeight(0.0005);   
+    double responsiveHeightCard = responsiveUtil.getResponsiveHeight(0.29);
     
     return  Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
         
-        margin: const EdgeInsets.only(top: 110, bottom: 50,  ),
+        margin: EdgeInsets.only(top: responsiveTop, bottom: 50,  ),
         width: double.infinity,
-        height: 220,
+        height: responsiveHeightCard,
         decoration: _cardBorders(),
         child: Stack(
           
@@ -42,16 +52,16 @@ class CardView extends StatelessWidget {
               modelo: orderUser.modelo?? '',
               patente: orderUser.patente?? '',
               order: orderUser.order?? '',
-              cupon: usuario.cupon!.isEmpty? {} : usuario.cupon!.first,
+              cupon: usuario?.cupon ?? [],
                            
             ),
              
             Align(
                alignment: Alignment(0.9, -1.0),
               child: Container(              
-                margin: const EdgeInsets.only(top: 18, bottom: 12),                             
-                height: 50,
-                width: 63,
+                margin: EdgeInsets.only(top: responsiveTopIconPerson, bottom: 12),                             
+                height: responsiveHeight,
+                width: responsiveWidth,
                 color: Colors.transparent,
                 child: Image.asset('assets/person.jpg'),
               ),
@@ -97,7 +107,7 @@ class _AddressDetails extends StatelessWidget {
   final String modelo; 
   final String patente;
   final String order;
-  final Map<String, dynamic> cupon;
+  final List<dynamic>? cupon;
 
   const _AddressDetails({
   required this.nombre,
@@ -107,15 +117,19 @@ class _AddressDetails extends StatelessWidget {
   required this.modelo,
   required this.patente,
   required this.order,
-  required this.cupon  
+  this.cupon  
   
   }); 
 
   @override
   Widget build(BuildContext context) {
 
-    final idCupon = cupon.entries.isNotEmpty ? cupon.values.first : 0;
-    final price   = cupon.entries.isNotEmpty ? cupon.values.last :  0;
+    final responsiveUtil = ResponsiveUtil(context);
+    final responsiveFont = responsiveUtil.getResponsiveFontSize(31.0);
+ 
+
+    final idCupon = cupon!.isNotEmpty ? cupon?.first : 0;
+    final price   = cupon!.isNotEmpty ? cupon?.last  : 0;
    
 
     final nombreCustom    = 'nombre: $nombre';
@@ -144,7 +158,7 @@ class _AddressDetails extends StatelessWidget {
               alignment: Alignment(-0.9, 0),
               child: Text(
                 nombreCustom,
-                style: const TextStyle( fontSize: 18, color: Colors.white),
+                style: TextStyle( fontSize: responsiveFont, color: Colors.white),
                 
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -158,7 +172,7 @@ class _AddressDetails extends StatelessWidget {
                alignment: Alignment(-0.9, 0),
               child: Text(
                 apellidoCustom,
-                style: const TextStyle( fontSize: 18, color: Colors.white),
+                style: TextStyle( fontSize: responsiveFont, color: Colors.white),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -168,7 +182,7 @@ class _AddressDetails extends StatelessWidget {
               alignment: Alignment(-0.9, 0),
               child: Text(
                 vehiculoCustom,
-                style: const TextStyle( fontSize: 18, color: Colors.white),
+                style:  TextStyle( fontSize: responsiveFont, color: Colors.white),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -179,7 +193,7 @@ class _AddressDetails extends StatelessWidget {
               alignment: Alignment(-0.9, 0),
               child: Text(
                 orderCustom ,
-                style: const TextStyle( fontSize: 18, color: Colors.white),
+                style: TextStyle( fontSize: responsiveFont, color: Colors.white),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -189,7 +203,7 @@ class _AddressDetails extends StatelessWidget {
               alignment: Alignment(-0.9, 0),
               child: Text(
                 patenteCustom,
-                style: const TextStyle( fontSize: 18, color: Colors.white),
+                style: TextStyle( fontSize: responsiveFont, color: Colors.white),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -200,7 +214,7 @@ class _AddressDetails extends StatelessWidget {
               child: Text(
                 idCupon is String ? idCuponCustom 
                   : '',
-                style: const TextStyle( fontSize: 18, color: Colors.white),
+                style: TextStyle( fontSize: responsiveFont, color: Colors.white),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -212,7 +226,7 @@ class _AddressDetails extends StatelessWidget {
                 price is int?
                 'descuento: ${NumberFormat.currency(decimalDigits: 0).format(price)}'
                 : '',               
-                style: const TextStyle( fontSize: 18, color: Colors.white),
+                style: TextStyle( fontSize: responsiveFont, color: Colors.white),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),

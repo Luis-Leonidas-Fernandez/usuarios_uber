@@ -40,10 +40,7 @@ class AuthBloc extends HydratedBloc<AuthEvent, AuthState> {
       authenticando: state.authenticando      
        );
 
-      final data = authUserState.usuario!.uid;
-      
-      // ignore: avoid_print
-      print("USER UID: $data");      
+        
       
       return authUserState;  
 

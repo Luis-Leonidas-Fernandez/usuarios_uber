@@ -39,12 +39,6 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
 
     final position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     
-    final point = LatLng(position.latitude, position.longitude);
-    
-    // ignore: avoid_print
-    print("EVENT SAVE USER POSITION: $point");
-     
-    
     add(OnNewUserLocationEvent(LatLng(position.latitude, position.longitude)));
     
   }

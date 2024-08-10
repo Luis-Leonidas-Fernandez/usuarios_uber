@@ -41,14 +41,18 @@ Future<Usuario> register(String nombre, String email, String password ) async {
    
     if ( resp.statusCode == 200 ) {
     
-    final loginResponse = loginResponseFromJson( resp.body );  
-    final id = loginResponse.usuario.uid;
+    final loginResponse = loginResponseFromJson( resp.body ); 
     final usuario = loginResponse.usuario;  
     
-    await storage.saveToken(loginResponse.token);
-    await storage.saveId(id);
+    final user = Usuario(online: usuario.online, nombre: usuario.nombre, email: usuario.email, uid: usuario.email,
+    urlMapbox: usuario.urlMapbox, tokenMapBox: usuario.tokenMapBox, idMapBox: usuario.idMapBox, mapToken: usuario.mapToken,
+    token: usuario.token, cupon: usuario.cupon
+    );
     
-    return usuario;
+    await storage.saveToken(loginResponse.token);
+    await storage.saveId(usuario.uid);
+
+    return user;
     
     } else {
       final respBody = jsonDecode(resp.body);
@@ -99,12 +103,15 @@ Future<Usuario> register(String nombre, String email, String password ) async {
       final loginResponse = loginResponseFromJson( resp.body );
 
       final usuario = loginResponse.usuario;
-    
+
+      final user = Usuario(online: usuario.online, nombre: usuario.nombre, email: usuario.email, uid: usuario.uid,
+      urlMapbox: usuario.urlMapbox, tokenMapBox: usuario.tokenMapBox, idMapBox: usuario.idMapBox, mapToken: usuario.mapToken,
+      token:  loginResponse.token, cupon: usuario.cupon);    
 
       await storage.saveToken(loginResponse.token);
       await storage.saveId(usuario.uid);
       
-      return usuario;
+      return user;
     } else {
       final respBody = jsonDecode(resp.body);
       return respBody['msg'];
