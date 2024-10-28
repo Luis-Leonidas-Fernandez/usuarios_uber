@@ -204,7 +204,7 @@ class ContainerDetail extends StatelessWidget {
                           constraints: const BoxConstraints(maxWidth: 280, maxHeight: 22),                        
                           color: Colors.transparent,
                           child: Text(
-                            stateAddress.orderUser?.estado == false? "" : stateAddress.orderUser?.estado,
+                            stateAddress.orderUser == null ? "" : stateAddress.orderUser?.estado,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: screenHeight <= 346 ? 10 : 16,

@@ -71,11 +71,12 @@ class AddressBloc extends HydratedBloc<AddressEvent, AddressState> {
     final closeController = _addressController.isClosed;
   
     try {
+
       if (closeController) return;     
 
       final resp = await addressService.getAddress(token!, idUser!);      
       
-      final id = resp.idDriver;
+      final id = resp.idDriver;      
      
 
       if (id == '0') {

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:usuario_inri/blocs/blocs.dart';
 import 'package:usuario_inri/constants/constants.dart';
-import 'package:usuario_inri/models/address.dart';
 import 'package:usuario_inri/responsive/responsive_ui.dart';
 import 'package:usuario_inri/service/addresses_service.dart';
 import 'package:usuario_inri/service/message_service.dart';
@@ -49,11 +48,8 @@ class _BookingCardState extends State<BookingCard> {
     late AddressService addressService = AddressService();
     final authBloc = BlocProvider.of<AuthBloc>(context);
     final addressBloc = BlocProvider.of<AddressBloc>(context);
-    final locationBloc = BlocProvider.of<LocationBloc>(context);
-
-    final idOrder = addressBloc.state.orderUser?.id is String ? addressBloc.state.orderUser?.id : 1;
-
-    print("bloc id order: $idOrder");
+    final locationBloc = BlocProvider.of<LocationBloc>(context);   
+  
     final isAccepted = addressBloc.state.isAccepted!;  
    
 
@@ -145,21 +141,11 @@ class _BookingCardState extends State<BookingCard> {
                   child: BlocBuilder<AddressBloc, AddressState>(
                     builder: (context, stateAddress) {                     
                       
+                     final idDrivers = stateAddress.orderUser?.idDriver;                      
 
-                      /* if (stateAddress.existOrder == false && stateAddress.isAccepted == false) {
-                      return PresentationContainer();
-                      } else if (stateAddress.isAccepted == true ) {
-                      return TimeLineAddress();
-                      } else if (stateAddress.orderUser != null) {
-                      return ContainerDetail();
-                      }
-                      return Container();  */// Estado por defecto o error
-
-                      if( idOrder is String) {
-
-                        print("id order: $idOrder");
+                      if( idDrivers != null) {                      
                         return ContainerDetail();
-                      } else if(stateAddress.isAccepted == true){
+                      } else if(stateAddress.isAccepted == true && idDrivers == null){
                         return TimeLineAddress();
                       }
                       return PresentationContainer();
