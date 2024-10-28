@@ -2,7 +2,7 @@
 //import 'package:flutter/material.dart';
 
 import 'dart:async';
-
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:usuario_inri/constants/constants.dart';
 import 'package:usuario_inri/service/addresses_service.dart';
@@ -18,14 +18,16 @@ import 'package:usuario_inri/service/location_service.dart';
   // verifica si existe una order activa  en Storage Service
   final isActiveOrder = await LocationService.instance.isActiveOrder();
   final existUserIdAndToken = await LocationService.instance.getIdUserAndToken(); 
-
+  
+  // ignore: avoid_print
+  print("exist order: $isActiveOrder exist user : $existUserIdAndToken");
 
     if (isActiveOrder && existUserIdAndToken) {
         
         
         await existAddress();                      
        
-        const color   = AppConstants.cardColor;  
+        const color   =  Color.fromARGB(255, 63, 81, 184);  
         final fecha   =   AppConstants.getFormattedDate();
         final hora    =   AppConstants.getFormattedTime();
         const message =  'Felicitaciones ya tienes tu conductor!';

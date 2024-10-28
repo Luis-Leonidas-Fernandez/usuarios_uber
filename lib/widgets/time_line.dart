@@ -1,250 +1,204 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:usuario_inri/blocs/blocs.dart';
-import 'package:usuario_inri/responsive/responsive_ui.dart';
 
-import 'package:usuario_inri/service/addresses_service.dart';
-import 'package:usuario_inri/service/message_service.dart';
-import 'package:usuario_inri/service/storage_service.dart';
 
 class TimeLineAddress extends StatelessWidget {
-
-  final MessageService messageService; 
-  const TimeLineAddress({super.key, required this.messageService});
+  const TimeLineAddress({super.key});
 
   @override
   Widget build(BuildContext context) {
-
-    late ResponsiveUtil responsiveUtil = ResponsiveUtil(context);
-    double responsiveTop = responsiveUtil.getResponsiveHeight(0.25);  
-    late AddressService addressService = AddressService();
-    final authBloc = BlocProvider.of<AuthBloc>(context);
     
-    final addressBloc = BlocProvider.of<AddressBloc>(context);
-    final storageService = StorageService.instance;
+    final screenHeight = MediaQuery.sizeOf(context).height;
 
-    return addressBloc.state.existOrder == false && addressBloc.state.isAccepted == true? 
-    BlocBuilder<MapBloc, MapState>(
-      builder: (context, state) {
-        return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 50),
-            child: Container(
-              margin: EdgeInsets.only(top: responsiveTop , bottom: 50),
-              width: 300,
-              height: 400,
-              decoration: _cardBorders(),
-              child: Stack(
-                children: [
-                  _AddressDetails(),
-                  Align(
-                    alignment: Alignment(-0.9, -0.35),
+    return Container(
+      constraints: const BoxConstraints(maxWidth: 300, maxHeight: 180),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+
+        children: [
+          Container(
+            width: 372,
+            height: screenHeight <= 640 ? 48 : 55,
+            decoration: BoxDecoration(
+                border: Border.all(
+                    color: const Color.fromARGB(255, 156, 156, 156)
+                        .withOpacity(0.9),
+                    width: 1.6),
+                color: const Color.fromARGB(255, 2, 2, 2),
+                borderRadius: BorderRadius.circular(10)),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  child: Container(
+                    constraints:
+                        const BoxConstraints(maxWidth: 38, minHeight: 35),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      gradient: LinearGradient(
+                          colors: [
+                            const Color.fromARGB(188, 126, 124, 250)
+                                .withOpacity(0.5),
+                            const Color.fromARGB(188, 126, 124, 250),
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter),
+                    ),
+                    child: Icon(
+                      Icons.check_circle,
+                      color: const Color.fromARGB(255, 255, 254, 255),
+                      size: screenHeight <= 641 ? 30 : 32,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Align(
+                  alignment: const Alignment(0.0, 0.5),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Container(
-                      height: 40,
-                      width: 40,
+                      constraints:
+                          const BoxConstraints(maxWidth: 280, maxHeight: 22),
                       color: Colors.transparent,
-                      child: Icon(
-                        Icons.check_circle,
-                        color: Colors.green,
+                      child: Text(
+                        "Pedido exitoso",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: screenHeight <= 346 ? 10 : 16,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 0.5),
                       ),
                     ),
                   ),
-                  lineTime(),
-                  Align(
-                    alignment: Alignment(-0.9, 0),
+                )
+              ],
+            ),
+          ),
+          const SizedBox(height: 7),
+          Container(
+            width: 372,
+            height: screenHeight <= 640 ? 48: 55,
+            decoration: BoxDecoration(
+                border: Border.all(
+                    color: const Color.fromARGB(255, 156, 156, 156)
+                        .withOpacity(0.9),
+                    width: 1.6),
+                color: const Color.fromARGB(255, 2, 2, 2),
+                borderRadius: BorderRadius.circular(10)),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  child: Container(
+                    constraints:
+                        const BoxConstraints(maxWidth: 38, minHeight: 35),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      gradient: LinearGradient(
+                          colors: [
+                            const Color.fromARGB(188, 126, 124, 250)
+                                .withOpacity(0.5),
+                            const Color.fromARGB(188, 126, 124, 250),
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter),
+                    ),
+                    child: Icon(
+                      Icons.check_circle,
+                      color: const Color.fromARGB(255, 255, 255, 255),
+                      size: screenHeight <= 641 ? 30 : 32,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Align(
+                  alignment: const Alignment(0.0, 0.5),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Container(
-                      height: 40,
-                      width: 40,
+                      constraints:
+                          const BoxConstraints(maxWidth: 280, maxHeight: 22),
                       color: Colors.transparent,
-                      child: Icon(
-                        Icons.check_circle,
-                        color: Colors.green,
+                      child: Text(
+                        "Buscando un Conductor",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: screenHeight <= 346 ? 10 : 16,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 0.5),
                       ),
                     ),
                   ),
-                  Align(
-                    alignment: Alignment(-0.9, 0.35),
+                )
+              ],
+            ),
+          ),
+          const SizedBox(height: 7),
+          Container(
+            width: 372,
+            height: screenHeight <= 640 ? 48 : 55,
+            decoration: BoxDecoration(
+                border: Border.all(
+                    color: const Color.fromARGB(255, 156, 156, 156)
+                        .withOpacity(0.9),
+                    width: 1.6),
+                color: const Color.fromARGB(255, 2, 2, 2),
+                borderRadius: BorderRadius.circular(10)),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  child: Container(
+                    constraints:
+                        const BoxConstraints(maxWidth: 38, minHeight: 35),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      gradient: LinearGradient(
+                          colors: [
+                            const Color.fromARGB(188, 126, 124, 250)
+                                .withOpacity(0.5),
+                            const Color.fromARGB(188, 126, 124, 250),
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter),
+                    ),
+                    child: Icon(
+                      Icons.check_circle,
+                      color: const Color.fromARGB(255, 121, 122, 121),
+                      size: screenHeight <= 641 ? 30 : 32,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Align(
+                  alignment: const Alignment(0.0, 0.5),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Container(
-                      height: 40,
-                      width: 40,
+                      constraints:
+                          const BoxConstraints(maxWidth: 280, maxHeight: 32),
                       color: Colors.transparent,
-                      child: Icon(
-                        Icons.check_circle,
-                        color: Colors.grey,
+                      child: Text(
+                        "Conductor encontrado",
+                        style: TextStyle(
+                            color: const Color.fromARGB(255, 156, 155, 155),
+                            fontSize: screenHeight <= 346 ? 10 : 16,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 0.5),
                       ),
                     ),
                   ),
-                  lineTimeTwo(),
-                  Align(
-                    alignment: Alignment(0, -1.0),
-                    child: Container(
-                      margin: const EdgeInsets.only(top: 18, bottom: 12),
-                      height: 50,
-                      width: 68,
-                      color: Colors.transparent,
-                      child: Image.asset('assets/person.jpg'),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment(
-                      -0.1,
-                      0.8,
-                    ),
-                    child: MaterialButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        disabledColor: Colors.grey,
-                        elevation: 0,
-                        color: Colors.purple,
-                        onPressed: () async {
-
-                          //extrae token y idUser del State
-                          final String? token = authBloc.state.usuario?.token; 
-                          final String? idUser = authBloc.state.usuario?.uid;
-
-                          // Eliminando viaje de base de datos
-                          await addressService.finishTravel(token!, idUser!);
-                          await storageService.deleteIdDriver();
-                          await storageService.deleteIdOrder();  
-
-                          //desactiva mensajes de la address
-                          messageService.cancelPeriodicMessage();
-
-                          //eliminar order de state
-                          addressBloc.add(OnClearStateEvent());
-
-                          
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 60, vertical: 12),
-                          child: Text(
-                            'CANCELAR',
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 18),
-                          ),
-                        )),
-                  )
-                ],
-              ),
-            ));
-      },
-    ): const SizedBox(); 
-  }
-
-  BoxDecoration _cardBorders() => BoxDecoration(
-        color: Colors.grey[100],       
-        border: Border.all(color: Colors.grey)
-      );
-}
-
-class _AddressDetails extends StatelessWidget {
-
-
-  @override
-  Widget build(BuildContext context) {
-
-    late ResponsiveUtil responsiveUtil = ResponsiveUtil(context);   
-    final responsiveFont = responsiveUtil.getResponsiveFontSize(31.0);
-
-    const procesado = 'Pedido exitoso';
-    const buscando = 'Buscando un Conductor';
-    const encontrado = 'Conductor encontrado';
-
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
-        width: double.infinity,
-        height: 400,
-        color: Colors.grey[100],
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Align(
-              alignment: Alignment(-0.2, 1.0),
-              child: Text(
-                procesado,
-                style: GoogleFonts.roboto(
-                    color: Colors.black,
-                    fontSize: responsiveFont,
-                    fontWeight: FontWeight.w700),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+                )
+              ],
             ),
-            SizedBox(height: 40),
-            Align(
-              alignment: Alignment(0.3, 0),
-              child: Text(
-                buscando,
-                style: GoogleFonts.roboto(
-                    color: Colors.black,
-                    fontSize: responsiveFont,
-                    fontWeight: FontWeight.w700),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            SizedBox(height: 40),
-            Align(
-              alignment: Alignment(0.1, -0.9),
-              child: Text(
-                encontrado,
-                style: GoogleFonts.roboto(
-                    color: Colors.grey,
-                    fontSize: responsiveFont,
-                    fontWeight: FontWeight.w700),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
-}
-
-Widget lineTime() {
-  return Align(
-    alignment: Alignment(-0.79, -0.18),
-    child: Container(
-      height: 25,
-      width: 2,
-      color: Color.fromARGB(255, 4, 158, 9),
-    ),
-  );
-}
-
-Widget lineTimeTwo() {
-  return Align(
-    alignment: Alignment(-0.79, 0.15),
-    child: Container(
-      height: 25,
-      width: 2,
-      color: Colors.grey,
-    ),
-  );
-}
-
-Widget buttonCancel() {
-  return Align(
-    alignment: Alignment(
-      -0.1,
-      0.8,
-    ),
-    child: MaterialButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        disabledColor: Colors.grey,
-        elevation: 0,
-        color: Colors.purple,
-        onPressed: () async {},
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 12),
-          child: Text(
-            'CANCELAR',
-            style: const TextStyle(color: Colors.white, fontSize: 18),
-          ),
-        )),
-  );
 }

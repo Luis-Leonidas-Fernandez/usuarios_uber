@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:usuario_inri/responsive/responsive_ui.dart';
 
 class AuthBackground extends StatelessWidget {
@@ -93,7 +92,7 @@ class _HederIconText extends StatelessWidget {
         margin: const EdgeInsets.only(top: 45),
         child: Text(
           'I N R I   R E M I S E S',
-          style: GoogleFonts.lobster(color: Colors.white, fontSize: font),
+          style: TextStyle(fontSize: font, fontFamily: 'Lobster', color: Colors.white),
         ),
       ),
     );

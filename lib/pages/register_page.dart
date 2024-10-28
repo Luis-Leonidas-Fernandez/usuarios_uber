@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:usuario_inri/blocs/user/auth_bloc.dart';
-
-import 'package:usuario_inri/login-ui/input_decorations.dart';
+import 'package:usuario_inri/animation/animate_page.dart';
+import 'package:usuario_inri/constants/constants.dart';
+import 'package:usuario_inri/pages/login_page.dart';
 import 'package:usuario_inri/providers/login_form_validar.dart';
 import 'package:usuario_inri/responsive/responsive_ui.dart';
+import 'package:usuario_inri/widgets/imput_register.dart';
 
-import 'package:usuario_inri/routes/routes.dart';
-import 'package:usuario_inri/widgets/alert_screen.dart';
-import 'package:usuario_inri/widgets/card_container.dart';
+
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
@@ -18,204 +16,164 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    ResponsiveUtil responsiveUtil = ResponsiveUtil(context);
- 
-  double responsiveFontSize = responsiveUtil.getResponsiveFontSize(17);
-  double responsiveHeight = responsiveUtil.getResponsiveHeight(0.37);
+
+    final height = MediaQuery.of(context).size.height;
+
     return  Scaffold(
-      body: AuthBackground(
-        child: SingleChildScrollView(
-          
-        
-        child: Column(
-
-          children: [
-
-            SizedBox( height: responsiveHeight),
-
-            CardContainer(
-              child: Column(
-
-                children:  [
-
-                  SizedBox(height: 10,),
-
-                  Text('Registrarme', style: GoogleFonts.lobster(
-                    color: Colors.black, fontSize: responsiveFontSize
-                    ),),
-
-                  SizedBox(height: 28,),
-
-                  ChangeNotifierProvider(
-                    create: (_) => LoginFormValidar(),
-                    child:  _LoginForm(),
-                    
-                    ),
-                
-                ],
-              )
-            ),
-            
-            
-          
-          ],
-        ),
-        )
-      )
-            
-      );
-    
-  }
-}
-class _LoginForm extends StatefulWidget {
-  const _LoginForm();
-
-  @override
-  State<_LoginForm> createState() => _LoginFormState();
-}
-
-class _LoginFormState extends State<_LoginForm> {
-
-  late ResponsiveUtil responsiveUtil;
-  
-  final nameCtrl  = TextEditingController();
-  final emailCtrl = TextEditingController();
-  final passCtrl  = TextEditingController();
-
-
-
-  @override
-  void didChangeDependencies() {
-
-    super.didChangeDependencies();
-    // Initialize ResponsiveUtil here
-    responsiveUtil = ResponsiveUtil(context);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    final authUser = BlocProvider.of<AuthBloc>(context);
-    final loginFormValidar = Provider.of<LoginFormValidar>(context);
-    
-
-    return Form(
-
-      key: loginFormValidar.formKey,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-
-     child: Column(
-
-       children: [
-         TextFormField(
-           autocorrect: false,
-           keyboardType: TextInputType.text,                     
-           decoration: InputDecorations.authInputDecoration(
-             hintText: 'exequiel',
-             labelText: 'nombre',
-             prefixIcon: Icons.person_pin_sharp,      
-
-           ),
-           controller: nameCtrl,            
-           ),
-         
-         SizedBox(height: 10),
-         
-         TextFormField(
-           autocorrect: false,
-           keyboardType: TextInputType.emailAddress,            
-           decoration: InputDecorations.authInputDecoration(
-             hintText: 'exequiel7@gmail.com',
-             labelText: 'email',
-             prefixIcon: Icons.alternate_email_rounded,
-           ),
-
-           onChanged: (value) => loginFormValidar.email,
-             validator:(value){
-               String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                  RegExp regExp  = RegExp(pattern);
-                  
-                  return regExp.hasMatch(value ?? '')
-                    ? null
-                    : 'El valor ingresado no luce como un correo';
-             },
-             controller: emailCtrl,             
-           ),
-         
-         SizedBox(height: 10),
-         
-         TextFormField(
-           autocorrect: false,
-           obscureText: true,
-           keyboardType: TextInputType.emailAddress,            
-           decoration: InputDecorations.authInputDecoration(
-             hintText: '********',
-             labelText: 'password',
-             prefixIcon: Icons.lock_outline
-           ),
-           onChanged: (value) => loginFormValidar.password,
-            validator: ( value ) {
-
-                  return ( value != null && value.length >= 8 ) 
-                    ? null
-                    : 'La contraseña debe de ser de 8 caracteres';                                    
-                  
-              },
-              controller: passCtrl, 
-         ),
-         SizedBox(height: 18,),
-         
-         MaterialButton(
-           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-           disabledColor: Colors.grey,
-           elevation: 0,
-           color: Colors.indigo,           
-           onPressed:  authUser.state.authenticando == true ? (){} 
-           : () async {
-
-           
-           if (!loginFormValidar.isValidForm()) return;
-            loginFormValidar.isLoading = true;
-            await Future.delayed(Duration(seconds: 2));
-            loginFormValidar.isLoading = false;
-            
-             final registerOk = await authUser.initRegister(nameCtrl.text.toString(), emailCtrl.text.toString(), passCtrl.text.toString());             
-                         
-
-            if(!mounted) return;      
-                      
-            if(registerOk && mounted){
-
-             Navigator.pushReplacementNamed(context, 'loading');
-
-            }else{
-              
-             mostrarAlerta(context, 'Registro incorrecto', registerOk.toString() );
-            }
-
-            
-          
-        },
+      body: SingleChildScrollView(
         child: Container(
-             padding: const EdgeInsets.symmetric(horizontal:  80, vertical: 15),
-             child: Text(
-               loginFormValidar.isLoading? 'Espere'
-               : 'Registrar',
-               style: TextStyle(color: Colors.white, fontSize: responsiveUtil.getResponsiveFontSize(27)),
-             ),
-           )           
-      ),
-      SizedBox(height: 15),
-            ElevatedButton(onPressed: ()=> Navigator.pushReplacementNamed(context, 'login'),
-            style: ButtonStyle(
-              overlayColor: WidgetStateProperty.all(Colors.indigo.withOpacity(0.2))
-            ),
-             
-              
-              child: const Text('Tengo una Cuenta', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)
+            constraints: const BoxConstraints(maxHeight: 950),
+            decoration: BoxDecoration(
+                image: const DecorationImage(
+                    image: AssetImage('assets/background_image.png'),
+                    fit: BoxFit.cover,
+                    opacity: 0.9),
+                gradient: AppConstants.backgroundCard
+                ),
+            child: Stack(
+        
+              children: [
+        
+                Positioned(
+                  top: height * 0.6,
+                  left: 0.0,
+                  right: 0.0,
+                  child: Container(
+                    width: double.infinity,
+                    height: 600,                 
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(colors: [
+                      AppConstants.cardColor.withAlpha(2),
+                      AppConstants.cardColor,
+                    ], begin: Alignment.topCenter, end: Alignment.center)
+                    ), 
+                    ),
+                ),
+        
+                Positioned(
+                  top:  height < 650 ? 0.02  : 28,
+                  left: 05.0,
+                  right: 05.0,
+                  child: ChangeNotifierProvider(
+                    create: (_) => LoginFormValidar(),
+                    child: const FormRegister()
+                    )
+                  
+                 
+                ),
+        
+                Positioned(
+                  top: height * 0.30,
+                  left: 10.0,
+                  right: 10.0,
+                  child: Container(
+                   width: 250,
+                   height: 140,         
+                   decoration: const BoxDecoration(                
+                   image: DecorationImage(
+                   image: AssetImage('assets/car_b.png'),                
+                ),
+                
+                ),
+                  ),
+                )
+        
+        
+              ],
             )
-      ],
-     ) 
+           
+            ),
+      ),
     );
   }
 }
+
+
+class FormRegister extends StatefulWidget {
+
+  const FormRegister({super.key});
+
+  @override
+  State<FormRegister> createState() => _FormRegisterState();
+}
+
+class _FormRegisterState extends State<FormRegister> {
+  @override
+  Widget build(BuildContext context) {
+
+  final height = MediaQuery.of(context).size.height;
+  ResponsiveUtil responsiveUtil = ResponsiveUtil(context);
+  double responsiveHeight = responsiveUtil.getResponsiveHeight(0.33);
+
+    return SafeArea(
+      child: Center(
+    child: SingleChildScrollView(
+      child: Container(
+        height: 800,
+        color: Colors.transparent,
+        child: Column(
+          children: [
+            Text('¡Hola de Nuevo!',
+                style: GoogleFonts.lobsterTwo(
+                    fontSize: 48,
+                    color: AppConstants.textColor,
+                    shadows: <Shadow>[
+                      const Shadow(color: Colors.black87, blurRadius: 20.0)
+                    ])),
+            const SizedBox(height: 10),
+            ShaderMask(
+              shaderCallback: (bounds) {
+                return const RadialGradient(
+                    center: Alignment.topRight,
+                    radius: 4.0,
+                    colors: [
+                      Color.fromARGB(255, 99, 47, 241),
+                      Color.fromARGB(255, 42, 138, 248), 
+                    ]).createShader(bounds);
+              },
+              child: Text('Bienvenido, lo hemos extrañado',
+                  style: GoogleFonts.roboto(
+                      fontSize: 18,
+                      color: AppConstants.textColor,
+                      fontWeight: FontWeight.bold)),
+            ),
+            SizedBox(height: responsiveHeight),
+
+            const ImputsRegister(),   
+
+            SizedBox(height: height < 365 ? 1 : 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  '¿Tienes Cuenta?',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 221, 203, 252)),
+                ),
+                const SizedBox(width: 10),
+                TextButton(
+                    onPressed: () {
+
+                      Future.delayed(const Duration(milliseconds: 300), () {     
+                      Navigator.of(context).push(     
+                      AnimatePage(child: const LoginPage())    
+                      );
+                     });    
+                      //Navigator.pushNamed(context, 'login');
+                    },
+                    child: Text(
+                      'Inicia sesion aquí',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, color: AppConstants.yellow),
+                    ))
+              ],
+            )
+          ],
+        ),
+      ),
+    ),
+  ));
+  }
+}
+

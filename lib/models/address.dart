@@ -15,7 +15,7 @@ class OrderUser {
     String? patente;
     bool? online;
     String? order;
-    bool? estado;
+    dynamic estado;
     DateTime? createdAt;
     DateTime? updatedAt;
     Mensaje? mensaje;
@@ -54,7 +54,7 @@ class OrderUser {
         patente: json["patente"]?? '',
         online: json["online"]?? false,
         order: json["order"]?? '',
-        estado: json["estado"]?? false,
+        estado: json["estado"]?? '',
         createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
         updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
         mensaje: json["mensaje"] == null ? null : Mensaje.fromMap(json["mensaje"]),

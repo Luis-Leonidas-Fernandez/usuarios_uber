@@ -55,8 +55,17 @@ Future<Usuario> register(String nombre, String email, String password ) async {
     return user;
     
     } else {
-      final respBody = jsonDecode(resp.body);
-      return respBody['msg'];
+      //final respBody = jsonDecode(resp.body);
+      return Usuario(
+        online: false,
+        nombre: "",
+        email: "",
+        uid: "",
+        urlMapbox: "",
+        tokenMapBox: "",
+        idMapBox: "",
+        mapToken: ""
+        );
     }
 
   }
@@ -113,8 +122,17 @@ Future<Usuario> register(String nombre, String email, String password ) async {
       
       return user;
     } else {
-      final respBody = jsonDecode(resp.body);
-      return respBody['msg'];
+     
+      return Usuario(
+        online: false,
+        nombre: "",
+        email: "",
+        uid: "",
+        urlMapbox: "",
+        tokenMapBox: "",
+        idMapBox: "",
+        mapToken: ""
+        );
     }
   }  
 }
