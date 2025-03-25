@@ -1,16 +1,100 @@
-# usuario_inri
+![Flutter](https://img.shields.io/badge/Flutter-v3.27-blue)
 
-A new Flutter project.
 
-## Getting Started
+# 🚕 Usuario INRI - App de Viajes Tipo Uber
 
-This project is a starting point for a Flutter application.
+Aplicación móvil desarrollada con Flutter inspirada en la lógica de Uber, donde los usuarios pueden solicitar viajes y seguir el estado del conductor en tiempo real.
 
-A few resources to get you started if this is your first Flutter project:
+---
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## 📱 Características
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Registro e inicio de sesión de usuarios  
+- Solicitud de viajes  
+- Asignación dinámica de conductores  
+- Seguimiento en tiempo real en el mapa  
+- Finalización del viaje  
+- Notificaciones visuales personalizadas (SnackBars)  
+- Estado persistente con Hydrated Bloc  
+
+---
+
+## 🛠️ Tecnologías
+
+- **Flutter** (Frontend)  
+- **Dart** (Lógica)  
+- **Node.js + Express** (Backend)  
+- **MongoDB** (Base de datos)  
+- **Hydrated Bloc** para manejo de estado persistente  
+- **Mapbox** para mapas  
+
+---
+
+## 🚀 Instalación local
+
+1. Cloná el proyecto:
+
+   ```bash
+   git clone https://github.com/tu-usuario/usuarios_uber.git
+   cd usuarios_uber
+   ```
+
+2. Instalá las dependencias:
+
+   ```bash
+   flutter pub get
+   ```
+
+3. Configurá tu backend en:
+
+   ```
+   lib/global/environment.dart
+   ```
+
+4. Ejecutá la app:
+
+   ```bash
+   flutter run
+   ```
+
+---
+
+## 🔐 Seguridad
+
+- Implementación futura de mTLS, WAF y firewalls personalizados  
+- Tokens protegidos  
+- Persistencia controlada de información  
+
+---
+## 📷 Capturas de pantalla
+
+### Splash screen
+![Splash](screenshots/splash.png)
+
+### Inicio de sesión
+![Login](screenshots/login.png)
+
+### Politicas de Privacidad
+![Privacy](screenshots/privacy.png)
+
+### Registro de Usuario
+![Register](screenshots/register.png)
+
+### Home de la app sin solicitudes
+![Home](screenshots/home_clear.png)
+
+### Home de la app con orden en proceso
+![Home order](screenshots/home_order_in_process.png)
+
+### Home de la app con conductor asignado
+![Home driver](screenshots/home_with_driver.png)
+
+
+---
+## 📬 Contacto
+
+**Luis Leonidas Fernández**  
+Flutter Developer & Policía (Chaco, Argentina)  
+📧 Email: fernandezluis303@gmail.com  
+🌐 GitHub: [https://github.com/Luis-Leonidas-Fernandez](https://github.com/Luis-Leonidas-Fernandez)
+
