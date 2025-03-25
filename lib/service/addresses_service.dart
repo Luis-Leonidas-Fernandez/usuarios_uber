@@ -119,11 +119,13 @@ class AddressService {
   
 } 
   } on FormatException catch (e) {  
+    // ignore: avoid_print
     print("error : $e");   
         
       return throw Exception(e);
   } catch (e) {
     // Handle all other errors
+    // ignore: avoid_print
     print('Error: $e');
     throw Exception('Error: $e');
   }
@@ -147,24 +149,30 @@ class AddressService {
  
   if ( resp.statusCode == 200) {
 
+  try {
+  
+  
   //data decoded
   final dataMap = jsonDecode(resp.body)["data"];
+ 
 
   final response           = Location.fromMap(dataMap);
-  final order          = response.id;  
+  final idOrder          = response.id;  
   
 
-  await storage.saveIdOrder(order);     
+  await storage.saveIdOrder(idOrder);     
   
  
-   return order;
+   return idOrder;
+    
+  } catch (e) {
+      print('Error parseando respuesta del servidor: $e');
+      return null;  
+  }  
   
-  
-} else if(resp.statusCode == 201) {
-  
-  const idOrderNull = null;
-  return idOrderNull;
-}       
+ } 
+
+
 }
 
 

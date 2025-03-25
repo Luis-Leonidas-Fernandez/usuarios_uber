@@ -27,7 +27,7 @@ class ButtonPedir extends StatelessWidget {
                 decoration: BoxDecoration(    
                 border: Border.all(
                 color: AppConstants.blur
-                .withOpacity(0.9),
+                .withValues(),
                 width: 2.5
                 ),              
                 borderRadius: BorderRadius.circular(10),  
@@ -36,9 +36,9 @@ class ButtonPedir extends StatelessWidget {
                  
                 
                  
-                 const Color.fromARGB(188, 126, 124, 250).withOpacity(0.5),
-                 const Color.fromARGB(161, 47, 67, 247).withOpacity(0.09),
-                 const Color.fromARGB(161, 47, 67, 247).withOpacity(0.09),
+                 const Color.fromARGB(188, 126, 124, 250).withValues(),
+                 const Color.fromARGB(161, 47, 67, 247).withValues(),
+                 const Color.fromARGB(161, 47, 67, 247).withValues(),
                 
                  
                 ],             
@@ -57,7 +57,7 @@ class ButtonPedir extends StatelessWidget {
                           bottomLeft: Radius.circular(8)),  
                         gradient: LinearGradient(colors: 
                         [
-                       AppConstants.blur.withOpacity(0.5),
+                       AppConstants.blur.withValues(),
                       const Color.fromARGB(188, 126, 124, 250)
                       .withAlpha(2),
                         ],
@@ -91,7 +91,7 @@ class ButtonPedir extends StatelessWidget {
                         [
                        const Color.fromARGB(188, 126, 124, 250)
                       .withAlpha(2),
-                      AppConstants.blur.withOpacity(0.5),
+                      AppConstants.blur.withValues(),
                         ],
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight

@@ -32,6 +32,7 @@ class _MapViewOrderState extends State<MapViewOrder> {
   AuthService? authService;
 
 
+
   @override
   void initState() {    
     super.initState();
@@ -39,6 +40,7 @@ class _MapViewOrderState extends State<MapViewOrder> {
     BlocProvider.of<AddressBloc>(context);
     BlocProvider.of<AuthBloc>(context, listen:false);
     _mapController = MapController();
+    context.read<MapBloc>().add(OnMapInitializeEvent(_mapController));
     
   }
 @override
@@ -63,8 +65,17 @@ class _MapViewOrderState extends State<MapViewOrder> {
     final location =  loc ?? [];   
 
     final zoom   = mapBloc.getZoom(location);    
-    final center = mapBloc.bounds(location); 
-    
+   
+    /// desplazamos el centro manualmente hacia arriba
+    final center = (() {
+      final LatLng calculated = mapBloc.bounds(location);
+      return calculated;
+      //return LatLng(calculated.latitude - 0.004, calculated.longitude - 0.007);
+    })();
+
+
+   
+ 
     final size = MediaQuery.of(context).size; 
 
        return 
@@ -75,7 +86,7 @@ class _MapViewOrderState extends State<MapViewOrder> {
           mapController: _mapController,          
           options: MapOptions( 
             initialCenter:  center,            
-            initialZoom: zoom,
+            //initialZoom: zoom,
             minZoom: 1.0,
             maxZoom: 20.0,            
             

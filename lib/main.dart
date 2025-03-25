@@ -23,23 +23,23 @@ import 'package:intl/number_symbols_data.dart';
 
 import 'package:intl/number_symbols.dart';
 import 'package:usuario_inri/config/namber_symbol.dart';
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+//import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:usuario_inri/splash/splash_screen.dart';
 
 
 
 void main() async{
-     
+     //debugPrintRebuildDirtyWidgets = true;
      //proyecto final usuarios inri
      WidgetsFlutterBinding.ensureInitialized();
      
-      await AndroidAlarmManager.initialize();     
+      //await AndroidAlarmManager.initialize();     
      
 
      HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: kIsWeb
-        ? HydratedStorage.webStorageDirectory
-        : await getApplicationDocumentsDirectory(),
+        ? HydratedStorageDirectory.web
+        : HydratedStorageDirectory((await getTemporaryDirectory()).path),
   );     
      
     

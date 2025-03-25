@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'package:usuario_inri/animation/animate_page.dart';
 import 'package:usuario_inri/constants/constants.dart';
-import 'package:usuario_inri/pages/register_page.dart';
-import 'package:usuario_inri/providers/login_form_validar.dart';
-import 'package:usuario_inri/responsive/responsive_ui.dart';
+import 'package:usuario_inri/pages/privacy_page.dart';
 import 'package:usuario_inri/widgets/imputs.dart';
 
 class LoginPage extends StatefulWidget {
@@ -21,68 +18,72 @@ class _LoginPageState extends State<LoginPage> {
 
     final height = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-            constraints: const BoxConstraints(maxHeight: 950),
-            decoration: BoxDecoration(
-                image: const DecorationImage(
-                    image: AssetImage('assets/background_image.png'),
-                    fit: BoxFit.cover,
-                    opacity: 0.9),
-                gradient: AppConstants.backgroundCard
-                ),
-            child: Stack(
-        
-              children: [
-        
-                Positioned(
-                  top: height * 0.6,
-                  left: 0.0,
-                  right: 0.0,
-                  child: Container(
-                    width: double.infinity,
-                    height: 600,                 
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(colors: [
-                      AppConstants.cardColor.withAlpha(2),
-                      AppConstants.cardColor,
-                    ], begin: Alignment.topCenter, end: Alignment.center)
-                    ), 
-                    ),
-                ),
-        
-                Positioned(
-                  top: height * 0.05,
-                  left: 05.0,
-                  right: 05.0,
-                  child: ChangeNotifierProvider(
-                    create: (_) => LoginFormValidar(),
-                    child: FormImputs()
-                    )
-                ),
-        
-                Positioned(
-                  top: height * 0.30,
-                  left: 10.0,
-                  right: 10.0,
-                  child: Container(
-                   width: 250,
-                   height: 140,         
-                   decoration: const BoxDecoration(                
-                   image: DecorationImage(
-                   image: AssetImage('assets/car_b.png'),                
-                ),
-                
-                ),
+    return GestureDetector(
+      onTap: () {
+        // Oculta el teclado al tocar cualquier lugar fuera de los inputs
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Container(
+              constraints: const BoxConstraints(maxHeight: 950),
+              decoration: BoxDecoration(
+                  image: const DecorationImage(
+                      image: AssetImage('assets/background_image.png'),
+                      fit: BoxFit.cover,
+                      opacity: 0.9),
+                  gradient: AppConstants.backgroundCard
                   ),
-                )
-        
-        
-              ],
-            )
-           
-            ),
+              child: Stack(
+          
+                children: [
+          
+                  Positioned(
+                    top: height * 0.6,
+                    left: 0.0,
+                    right: 0.0,
+                    child: Container(
+                      width: double.infinity,
+                      height: 600,                 
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(colors: [
+                        AppConstants.cardColor.withAlpha(2),
+                        AppConstants.cardColor,
+                      ], begin: Alignment.topCenter, end: Alignment.center)
+                      ), 
+                      ),
+                  ),
+          
+                  Positioned(
+                    top: height * 0.08,
+                    left: 05.0,
+                    right: 05.0,
+                    child: FormImputs()
+                  ),
+          
+                  Positioned(
+                    top: height * 0.23,
+                    left: 10.0,
+                    right: 10.0,
+                    child: Container(
+                       
+                     width: 250,
+                     height: 220,         
+                     decoration: const BoxDecoration(                                    
+                     image: DecorationImage(
+                     image: AssetImage('assets/car_b.png'),                
+                  ),
+                  
+                  ),
+                    ),
+                  )
+          
+          
+                ],
+              )
+             
+              ),
+        ),
       ),
     );
     //);
@@ -102,9 +103,9 @@ class _FormImputsState extends State<FormImputs> {
   @override
   Widget build(BuildContext context) {
   
-  ResponsiveUtil responsiveUtil = ResponsiveUtil(context);
-  double responsiveHeight = responsiveUtil.getResponsiveHeight(0.33);
-  
+  //ResponsiveUtil responsiveUtil = ResponsiveUtil(context);
+  //double responsiveHeight = responsiveUtil.getResponsiveHeight(0.33);
+  final heigthScreen = MediaQuery.of(context).size.height;
 
   return SingleChildScrollView(
     child: Container(
@@ -130,15 +131,15 @@ class _FormImputsState extends State<FormImputs> {
               Color.fromARGB(255, 42, 138, 248), 
             ]).createShader(bounds);
       },
-      child: Text('Bienvenido, lo hemos extrañado',
+      child: Text('Bienvenido, nuevamente a Inri',
           style: GoogleFonts.roboto(
               fontSize: 18,
               color: AppConstants.textColor,
               fontWeight: FontWeight.bold)),
     ),
-    SizedBox(height: responsiveHeight),
+    SizedBox(height: heigthScreen *0.30),
     
-    const Imputs(),   
+    const ImputsUserLogin(),   
     
     const SizedBox(height: 25),
     Row(
@@ -153,12 +154,11 @@ class _FormImputsState extends State<FormImputs> {
         const SizedBox(width: 10),
         TextButton(
             onPressed: () {
-    
-                
-              Navigator.of(context).push(     
-              AnimatePage(child: const RegisterPage())    
-              );
-             
+              
+                 Navigator.of(context).push(     
+              AnimatePage(child: const PrivacyPage())    
+              );   
+              
             },
             child: Text(
               'Registrate Aqui',
@@ -174,6 +174,3 @@ class _FormImputsState extends State<FormImputs> {
 }
 
 }
-
-
-

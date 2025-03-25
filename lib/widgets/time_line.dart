@@ -21,7 +21,7 @@ class TimeLineAddress extends StatelessWidget {
             decoration: BoxDecoration(
                 border: Border.all(
                     color: const Color.fromARGB(255, 156, 156, 156)
-                        .withOpacity(0.9),
+                        .withValues(),
                     width: 1.6),
                 color: const Color.fromARGB(255, 2, 2, 2),
                 borderRadius: BorderRadius.circular(10)),
@@ -39,7 +39,7 @@ class TimeLineAddress extends StatelessWidget {
                       gradient: LinearGradient(
                           colors: [
                             const Color.fromARGB(188, 126, 124, 250)
-                                .withOpacity(0.5),
+                                .withValues(),
                             const Color.fromARGB(188, 126, 124, 250),
                           ],
                           begin: Alignment.topCenter,
@@ -82,7 +82,7 @@ class TimeLineAddress extends StatelessWidget {
             decoration: BoxDecoration(
                 border: Border.all(
                     color: const Color.fromARGB(255, 156, 156, 156)
-                        .withOpacity(0.9),
+                        .withValues(),
                     width: 1.6),
                 color: const Color.fromARGB(255, 2, 2, 2),
                 borderRadius: BorderRadius.circular(10)),
@@ -100,7 +100,7 @@ class TimeLineAddress extends StatelessWidget {
                       gradient: LinearGradient(
                           colors: [
                             const Color.fromARGB(188, 126, 124, 250)
-                                .withOpacity(0.5),
+                                .withValues(),
                             const Color.fromARGB(188, 126, 124, 250),
                           ],
                           begin: Alignment.topCenter,
@@ -143,7 +143,7 @@ class TimeLineAddress extends StatelessWidget {
             decoration: BoxDecoration(
                 border: Border.all(
                     color: const Color.fromARGB(255, 156, 156, 156)
-                        .withOpacity(0.9),
+                        .withValues(),
                     width: 1.6),
                 color: const Color.fromARGB(255, 2, 2, 2),
                 borderRadius: BorderRadius.circular(10)),
@@ -160,8 +160,8 @@ class TimeLineAddress extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                       gradient: LinearGradient(
                           colors: [
-                            const Color.fromARGB(188, 126, 124, 250)
-                                .withOpacity(0.5),
+                            const Color.fromARGB(187, 126, 124, 250)
+                                .withValues(),
                             const Color.fromARGB(188, 126, 124, 250),
                           ],
                           begin: Alignment.topCenter,

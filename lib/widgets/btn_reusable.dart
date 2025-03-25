@@ -94,17 +94,17 @@ class _ButtonReusableState extends State<ButtonReusable>
                     height: screenHeight < 362 ? 51 : 55,
                     decoration: BoxDecoration(
                         border: Border.all(
-                            color: AppConstants.blur.withOpacity(0.9),
+                            color: AppConstants.blur.withValues(),
                             width: 2.5),
                         borderRadius: BorderRadius.circular(10),
                         gradient: LinearGradient(
                             colors: [
                               const Color.fromARGB(188, 126, 124, 250)
-                                  .withOpacity(0.5),
+                                  .withValues(),
                               const Color.fromARGB(161, 47, 67, 247)
-                                  .withOpacity(0.09),
+                                  .withValues(),
                               const Color.fromARGB(161, 47, 67, 247)
-                                  .withOpacity(0.09),
+                                  .withValues(),
                             ],
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter)),
@@ -118,7 +118,7 @@ class _ButtonReusableState extends State<ButtonReusable>
                                 bottomLeft: Radius.circular(8)),
                             gradient: LinearGradient(
                               colors: [
-                                AppConstants.blur.withOpacity(0.5),
+                                AppConstants.blur.withValues(),
                                 const Color.fromARGB(188, 126, 124, 250)
                                     .withAlpha(2),
                               ],
@@ -147,7 +147,7 @@ class _ButtonReusableState extends State<ButtonReusable>
                                 bottomLeft: Radius.circular(8)),
                             gradient: LinearGradient(
                               colors: [
-                                AppConstants.blur.withOpacity(0.5),
+                                AppConstants.blur.withValues(),
                                 const Color.fromARGB(188, 126, 124, 250)
                                     .withAlpha(2),
                               ],

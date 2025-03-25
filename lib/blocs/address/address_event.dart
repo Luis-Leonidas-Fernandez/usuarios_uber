@@ -22,10 +22,22 @@ class OnClearStateEvent extends AddressEvent{
 
 }
 
+class CreateOrderUserEvent extends AddressEvent {
+  final LatLng ubicacion;
+  const CreateOrderUserEvent(this.ubicacion);
+
+  @override
+  List<Object?> get props => [ubicacion];
+}
+
+
 class OnStartLoadingOrderUser extends AddressEvent{}
 class OnStopLoadingOrderUser extends AddressEvent{}
-class ExistOrderUserEvent extends AddressEvent{}
+class OnNotExistOrderUserEvent extends AddressEvent{}
+class OnExistOrderUserEvent extends AddressEvent{}
 class OnIsAcceptedTravel extends AddressEvent{}
 class OnIsDeclinedTravel extends AddressEvent{}
+class ClearMessageEvent extends AddressEvent{}
+class FinishOrderEvent extends AddressEvent {}
 
 

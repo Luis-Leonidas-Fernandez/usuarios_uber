@@ -9,8 +9,8 @@ abstract class MapEvent extends Equatable {
 
 class OnMapInitializeEvent extends MapEvent{
   
-  final MapController mapController;
-  const OnMapInitializeEvent(this.mapController);
+  final MapController controller;
+  const OnMapInitializeEvent(this.controller);
     
 }
 class OnStopFollowingUserEvent extends MapEvent {}

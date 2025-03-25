@@ -1,89 +1,89 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:usuario_inri/constants/constants.dart';
-
-
+import 'package:usuario_inri/service/storage_service.dart';
 
 class AppBarConstants {
   AppBarConstants._();
 
   static AppBar customAppBar(BuildContext context) {
+  const nombre = 'Marco';
+  final screenHeight = MediaQuery.of(context).size.height;
+  final storage = StorageService.instance;
 
-    const nombre = 'Marco';    
-    final screenHeight= MediaQuery.of(context).size.height;
-
-    return AppBar(
-      backgroundColor: Colors.transparent,     
-      elevation: 0,
-      leading: Container(),
-      title: SafeArea(
-        child: Container(
-          color: Colors.transparent,
-          child: Column(children: [
-            Align(
-              alignment: const AlignmentDirectional(-1.63, 0.0),
-              child: Text(
-                'Hola,',
-                style: GoogleFonts.lobsterTwo(
-                    fontSize: screenHeight <= 640 ? 18 :23,
-                    fontWeight: FontWeight.w800,
-                    color: AppConstants.secondColor,
-                    shadows: <Shadow>[
-                      const Shadow(color:Color.fromRGBO(218, 145, 252, 0.843),
-                       blurRadius: 20.0)
-                    ],
-                    letterSpacing: 1.7
-                  ),
-                
+  return AppBar(
+    backgroundColor: Colors.transparent,
+    elevation: 0,
+    automaticallyImplyLeading: false,
+    title: SafeArea( // ✅ para evitar superposición con la barra de estado
+      child: Padding(
+        padding: const EdgeInsets.only(top: 8.0), // 🔝 espacio extra opcional
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Hola,',
+              style: GoogleFonts.lobsterTwo(
+                fontSize: screenHeight <= 640 ? 18 : 23,
+                fontWeight: FontWeight.w800,
+                color: AppConstants.secondColor,
+                shadows: const [
+                  Shadow(
+                    color: Color.fromRGBO(218, 145, 252, 0.843),
+                    blurRadius: 20.0,
+                  )
+                ],
+                letterSpacing: 1.7,
               ),
             ),
-            Align(
-              alignment: const AlignmentDirectional(-1.56, 0.0),
-              child: Text(
-                nombre,
-                style: TextStyle(
-                  fontSize: screenHeight <= 640 ? 18 :20,
-                  fontWeight: FontWeight.w700,
-                  color: AppConstants.secondColor,
-                  shadows: const <Shadow>[
-                    Shadow(
-                        color: Color.fromRGBO(218, 145, 252, 0.843),
-                        blurRadius: 20.0)
-                  ],
-                  letterSpacing: 0.3,
-                ),
+            Text(
+              nombre,
+              style: TextStyle(
+                fontSize: screenHeight <= 640 ? 18 : 20,
+                fontWeight: FontWeight.w700,
+                color: AppConstants.secondColor,
+                shadows: const [
+                  Shadow(
+                    color: Color.fromRGBO(218, 145, 252, 0.843),
+                    blurRadius: 20.0,
+                  )
+                ],
+                letterSpacing: 0.3,
               ),
             ),
-          ]),
+          ],
         ),
       ),
-      actions: [
-        Align(
-          alignment: const AlignmentDirectional(-1.0, 0.5),
-          child: Row(children: [
-            IconButton(
-                onPressed: () {},
-                icon: CircleAvatar(
-                  child: Icon(
-                    Icons.person,
-                    size: 27,
-                    color: AppConstants.secondColor,
-                  ),
-                )),
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, 'login');
-                },
-                iconAlignment: IconAlignment.start,
-                child: Icon(
-                  Icons.exit_to_app,
-                  size: 29,
-                  color: AppConstants.secondColor,
-                  
-                )),
-          ]),
-        )
-      ],
-    );
-  }
+    ),
+    actions: [
+      IconButton(
+        onPressed: () {},
+        icon: CircleAvatar(
+          backgroundColor: AppConstants.containerColors,
+          child: Icon(
+            Icons.person,
+            size: 26,
+            color: Colors.white,
+          ),
+        ),
+      ),
+      IconButton(
+        onPressed: () async {
+          await storage.deleteIdOrder();
+          HydratedBloc.storage.clear();
+          if(!context.mounted) return;
+          Navigator.pushNamed(context, 'login');
+        },
+        icon: Icon(
+          Icons.exit_to_app,
+          size: 26,
+          color: AppConstants.secondColor,
+        ),
+      ),
+      const SizedBox(width: 8),
+    ],
+  );
+}
+
 }

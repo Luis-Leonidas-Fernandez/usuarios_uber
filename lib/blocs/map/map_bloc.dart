@@ -53,7 +53,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
   void _onInitMap(OnMapInitializeEvent event, Emitter<MapState> emit){
 
-    mapController = event.mapController;        
+    mapController = event.controller;        
     emit(state.copyWith(isMapInitialized: true));
     
     
@@ -82,7 +82,12 @@ class MapBloc extends Bloc<MapEvent, MapState> {
    LatLng bounds(List<double> location) {
     
      final LatLng myPosition = locationBloc.state.lastKnownLocation!;
-    if(location.isEmpty) return myPosition;
+
+    if(location.isEmpty) {
+    final userCenter  = LatLng(myPosition.latitude - 0.015, myPosition.longitude + 0.017);
+    return userCenter;
+    }
+
     final driver = List.from(location);   
     final driverPosition = LatLng(driver[1], driver[0]);   
   
@@ -96,10 +101,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     final LatLng northeast = LatLng(right, top);
     
     
-     final LatLng  center = LatLng(
-      (southwest.latitude + northeast.latitude) /2,
-      (southwest.longitude + northeast.longitude) /2, 
-      );    
+     final LatLng center = LatLng(
+  (southwest.latitude + northeast.latitude) / 2 - 0.025,
+  (southwest.longitude + northeast.longitude) / 2 + 0.025,
+);
    
   
   
@@ -117,13 +122,13 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     
     final distance = getDistanceInKM(userPosition, driverPosition);
 
-    double radius = distance / 2;
-    double scale  = radius / 0.3;
+    double radius = distance / 0.15;
+    double scale  = radius / 0.2;
     final zoom    = (15 - math.log(scale) / math.log(2));   
-    
+    print('zoom inicial $zoom');
     
     if(distance <= 0.05){
-      return 16.0;
+      return 12.0;
     }else{
      
     

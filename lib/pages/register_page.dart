@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:usuario_inri/animation/animate_page.dart';
 import 'package:usuario_inri/constants/constants.dart';
 import 'package:usuario_inri/pages/login_page.dart';
+
 import 'package:usuario_inri/providers/login_form_validar.dart';
 import 'package:usuario_inri/responsive/responsive_ui.dart';
 import 'package:usuario_inri/widgets/imput_register.dart';
@@ -139,7 +140,7 @@ class _FormRegisterState extends State<FormRegister> {
             ),
             SizedBox(height: responsiveHeight),
 
-            const ImputsRegister(),   
+            const InputsUserRegister(),   
 
             SizedBox(height: height < 365 ? 1 : 8),
             Row(
@@ -156,6 +157,7 @@ class _FormRegisterState extends State<FormRegister> {
                     onPressed: () {
 
                       Future.delayed(const Duration(milliseconds: 300), () {     
+                      // ignore: use_build_context_synchronously
                       Navigator.of(context).push(     
                       AnimatePage(child: const LoginPage())    
                       );

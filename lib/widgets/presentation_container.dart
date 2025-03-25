@@ -15,11 +15,11 @@ class PresentationContainer extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: const Color.fromARGB(255, 156, 156, 156)
-                .withOpacity(0.6),
+                .withValues(),
                 width: 1.6 
         ),
         gradient: LinearGradient(colors: [
-          const Color.fromARGB(188, 126, 124, 250).withOpacity(0.2),
+          const Color.fromARGB(188, 126, 124, 250).withValues(),
           const Color.fromARGB(188, 126, 124, 250),
                
           

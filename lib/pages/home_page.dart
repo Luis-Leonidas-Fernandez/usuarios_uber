@@ -5,21 +5,17 @@ import 'package:latlong2/latlong.dart';
 import 'package:usuario_inri/blocs/blocs.dart';
 import 'package:usuario_inri/constants/app_bar.dart';
 
-
 import 'package:usuario_inri/models/address.dart';
 import 'package:usuario_inri/models/usuario.dart';
-//import 'package:usuario_inri/service/message_service.dart';
-
+import 'package:usuario_inri/service/message_service.dart';
 
 import 'package:usuario_inri/views/circular_progress_view.dart';
 import 'package:usuario_inri/views/map_view_order.dart';
 import 'package:usuario_inri/widgets/booking_card.dart';
-import 'package:usuario_inri/widgets/car.dart';
-import 'package:usuario_inri/widgets/small_booking_card.dart';
-
+import 'package:usuario_inri/widgets/custom_message_error.dart';
+import 'package:usuario_inri/widgets/custom_message_success.dart';
 
 class HomePage extends StatefulWidget {
-
   const HomePage({super.key});
 
   @override
@@ -27,29 +23,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  
   AddressBloc? addressBloc;
   LocationBloc? locationBloc;
   AuthBloc? usuarioBloc;
   Usuario? usuario;
-  //final MessageService messageService = MessageService();
-  
+  final MessageService messageService = MessageService();
+
   @override
   void initState() {
     super.initState();
-    
+
     final locationBloc = BlocProvider.of<LocationBloc>(context);
     locationBloc.startFollowingUser();
-    final addressBloc =  BlocProvider.of<AddressBloc>(context);
-    addressBloc.state.loading;    
+    final addressBloc = BlocProvider.of<AddressBloc>(context);
+    addressBloc.state.loading;
     addressBloc.startLoadingAddress();
     BlocProvider.of<AuthBloc>(context);
-          
-    
   }
 
   @override
-  void dispose() {   
+  void dispose() {
     locationBloc?.stopFollowingUser();
     addressBloc?.stopLoadingAddress();
     usuarioBloc?.deleteUser();
@@ -58,101 +51,74 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    
-    final addressBloc =  BlocProvider.of<AddressBloc>(context);
+    final addressBloc = BlocProvider.of<AddressBloc>(context);
     final usuarioBloc = BlocProvider.of<AuthBloc>(context);
 
-  
     final usuario = usuarioBloc.state.usuario;
     addressBloc.state.loading;
-    final height = MediaQuery.of(context).size.height;
 
- 
-    
     return Scaffold(
-      extendBodyBehindAppBar: true, 
-
+      extendBodyBehindAppBar: true,
       appBar: AppBarConstants.customAppBar(context),
-    
-      body: BlocBuilder<LocationBloc, LocationState>(
-        builder: (context, state) {
+      body: BlocBuilder<LocationBloc, LocationState>(builder: (context, state) {
+        if (state.lastKnownLocation == null || usuario == null)return CircularProgress();
 
-          
-          if(state.lastKnownLocation == null || usuario == null)  return CircularProgress();
+        final long = (state.lastKnownLocation!.longitude);
+        final lat = state.lastKnownLocation!.latitude;
+
+        return StreamBuilder(
+            stream: addressBloc.getOrderUser(),
+            builder: (context, AsyncSnapshot<OrderUser> snapshot) {
+              return SingleChildScrollView(
+                child: Stack(
+                  children: [
+
                     
-          final long = (state.lastKnownLocation!.longitude);
-          final lat  = state.lastKnownLocation!.latitude;          
-         
-                              
-              return StreamBuilder(
-              stream: addressBloc.getOrderUser(),
-              builder: (context, AsyncSnapshot<OrderUser> snapshot) {
-
-              //final order = snapshot.data; 
-
-              //final existOrder = addressBloc.state.existOrder!;
-              //final isAccepted = addressBloc.state.isAccepted!;
-
-                       
-
-                return SingleChildScrollView(
-                 
-                  child: Stack(              
-                    
-                    children: [
-              
-                      usuarioBloc.state.usuario != null ?
-                      MapViewOrder(initialLocation: LatLng( lat, long) )// IS ACCEPTED = TRUE
-                      : Container(),     
-                                            
-                       height < 778 ?
-                      const SmallBookingCard()
-                      : BookingCard() ,
+                    usuarioBloc.state.usuario != null
+                        ? MapViewOrder(
+                            initialLocation:
+                                LatLng(lat, long)) // IS ACCEPTED = TRUE
+                        : Container(),
 
 
-                      const CarImage()
-                      //existOrder == false && order?.id == null?
-                      //Container() //IS ACCEPTED= FALSE
-                      //: CardView(orderUser: order!, usuario: usuario), //IS ACCEPTED = TRUE
-                       
-                      //BUTTONS
 
-                      //existOrder == true && isAccepted ==  false ?                       
-                      //BtnFinishTravel(messageService: messageService) //IS ACCEPTED = TRUE
-                      //: Container(), // IS ACCEPTED = FALSE
-                      
+                    BlocListener<AddressBloc, AddressState>(
+                      listenWhen: (previous, current) =>
+                          previous.message != current.message,
+                      listener: (context, state) {
 
-                      //existOrder == true && isAccepted  ==  false ?                       
-                      //BtnCancelTravel(messageService: messageService) //IS ACCEPTED = TRUE
-                      //: Container(), // IS ACCEPTED = FALSE                      
-                      
+                        if (state.message == 'orden_creada') {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: CustomSnackBarContentSuccess(),
+                              backgroundColor: Colors.transparent,
+                              behavior: SnackBarBehavior.floating,
+                              elevation: 0,
+                              duration: Duration(seconds: 5),
+                            ),
+                          );
+                        } else if (state.message == 'fuera_cobertura') {                          
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: CustomSnackBarContentError(),
+                              backgroundColor: Colors.transparent,
+                              behavior: SnackBarBehavior.floating,
+                              elevation: 0,
+                              duration: Duration(seconds: 5),
+                            ),
+                          );
+                        }
 
-                      //existOrder == false && isAccepted == false?
-                       //ReservarButton(messageService: messageService) // IS ACCEPTED = FALSE
-                      //: Container(), // IS ACCEPTED = TRUE 
-
-
-                      //existOrder == false && isAccepted == true?                      
-                      //TimeLineAddress(messageService: messageService) // IS ACCEPTED = FALSE
-                      //: Container(),
-
-                     //const BtnMyTracking(), 
-                    
-              
-                 ],
-                ), 
-             );
-           }
-          );
-         }
-        ),      
-        
-     
-      );
-     }
-    }
-   
-   
-    
-   
-  
+                        // Limpia el mensaje una vez mostrado
+                        context.read<AddressBloc>().add(ClearMessageEvent());
+                      },
+                      child: const BookingCard(),
+                    ),
+                  ],
+                ),
+              );
+            });
+      }),
+    );
+  }
+}

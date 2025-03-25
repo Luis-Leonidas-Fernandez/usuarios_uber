@@ -6,23 +6,11 @@ class CarImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   
-    final screenHeight = MediaQuery.of(context).size.height;  
-
-    return Positioned(
-      top: screenHeight * 0.41,
-      left: 35,
-      right: 35,
-      child: Container(        
-        width: 250,
-        height: 140,         
-        decoration: const BoxDecoration(                
-            image: DecorationImage(
-                image: AssetImage('assets/car_b.png'),                
-              ),
-              
-              ),
-      ),
+    return Image.asset(
+      'assets/car_b.png',
+      width: 120,
+      height: 120,
+      fit: BoxFit.contain,
     );
   }
 }

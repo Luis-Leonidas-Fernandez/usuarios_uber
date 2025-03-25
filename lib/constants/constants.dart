@@ -22,6 +22,7 @@ var binevenidoColor = HexColor("#D7BBF5");
 var tableColor = HexColor("#EFE9FE");
 var titleColor = HexColor("#A27EFA");
 var containerColor = HexColor("#743DF7");
+static final containerColors = HexColor("#743DF7");
 
 var violet = const Color.fromARGB(255, 95, 92, 243);
 
