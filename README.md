@@ -94,7 +94,7 @@ Aplicación móvil desarrollada con Flutter inspirada en la lógica de Uber, don
 ## 📬 Contacto
 
 **Luis Leonidas Fernández**  
-Flutter Developer & Policía (Chaco, Argentina)  
+Flutter Developer (Chaco, Argentina)  
 📧 Email: fernandezluis303@gmail.com  
 🌐 GitHub: [https://github.com/Luis-Leonidas-Fernandez](https://github.com/Luis-Leonidas-Fernandez)
 
