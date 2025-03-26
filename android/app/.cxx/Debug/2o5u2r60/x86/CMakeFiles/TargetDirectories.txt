@@ -1,0 +1,2 @@
+/Users/luis/Desktop/usuarios_uber/android/app/.cxx/Debug/2o5u2r60/x86/CMakeFiles/edit_cache.dir
+/Users/luis/Desktop/usuarios_uber/android/app/.cxx/Debug/2o5u2r60/x86/CMakeFiles/rebuild_cache.dir
