@@ -2,7 +2,7 @@ name: usuario_inri
 description: A new Flutter project.
 publish_to: 'none'
 
-version: 2.0.0+1
+version: 2.0.1+8
 
 environment:
   sdk: ">=3.2.0 <4.0.0"
@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.5
+  
 
   # Core y arquitectura
   bloc: ^9.0.0
@@ -56,13 +57,12 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/icon.png
-    - assets/person.jpg
-    - assets/driver.png
-    - assets/no_internet.png
-    - assets/background_image.png
-    - assets/logo.png
-    - assets/car_b.png
+    - assets/icon.webp   
+    - assets/driver.webp   
+    - assets/background_image.webp
+    - assets/logo.webp
+    - assets/car_b.webp
+    - assets/tarifas.json
 
   fonts:
     - family: Lobster

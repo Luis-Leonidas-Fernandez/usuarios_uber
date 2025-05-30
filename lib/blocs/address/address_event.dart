@@ -30,6 +30,38 @@ class CreateOrderUserEvent extends AddressEvent {
   List<Object?> get props => [ubicacion];
 }
 
+class OnGuardarResumenViajeEvent extends AddressEvent {
+  final double distanciaKm;
+  final double precio;
+
+  const OnGuardarResumenViajeEvent({
+    required this.distanciaKm,
+    required this.precio,
+  });
+
+  @override
+  List<Object?> get props => [distanciaKm, precio];
+}
+
+class OnGuardarPrecioTotalEvent extends AddressEvent {
+  final double precioTotal;
+
+  const OnGuardarPrecioTotalEvent(this.precioTotal);
+
+  @override
+  List<Object?> get props => [precioTotal];
+}
+
+class OnGuardarDestinoEvent extends AddressEvent {
+  final LatLng destino;
+
+  const OnGuardarDestinoEvent(this.destino);
+
+  @override
+  List<Object?> get props => [destino];
+}
+
+
 
 class OnStartLoadingOrderUser extends AddressEvent{}
 class OnStopLoadingOrderUser extends AddressEvent{}
@@ -39,5 +71,20 @@ class OnIsAcceptedTravel extends AddressEvent{}
 class OnIsDeclinedTravel extends AddressEvent{}
 class ClearMessageEvent extends AddressEvent{}
 class FinishOrderEvent extends AddressEvent {}
+
+class OnUpdateVisualStateEvent extends AddressEvent {
+  final bool isWaitingDriver;
+  final bool isTripActive;
+  final bool isTripFinished;
+  final OrderUser orderUser;
+
+  const OnUpdateVisualStateEvent({
+    required this.isWaitingDriver,
+    required this.isTripActive,
+    required this.isTripFinished,
+    required this.orderUser,
+  });
+}
+
 
 

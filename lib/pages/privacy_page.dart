@@ -33,6 +33,7 @@ class _PrivacyPageState extends State<PrivacyPage> {
       )
       ..loadRequest(Uri.parse('https://inri-company.netlify.app/'));
   }
+ 
 
   @override
   Widget build(BuildContext context) {

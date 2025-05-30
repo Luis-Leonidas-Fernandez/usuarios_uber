@@ -79,15 +79,21 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     
   }
 
-   LatLng bounds(List<double> location) {
+   LatLng bounds(List<double>? location) {
     
      final LatLng myPosition = locationBloc.state.lastKnownLocation!;
 
-    if(location.isEmpty) {
-    final userCenter  = LatLng(myPosition.latitude - 0.015, myPosition.longitude + 0.017);
-    return userCenter;
-    }
+    if(location == null || location.first == 0.0 || location.last == 0.0) {
+    final userCenter  = LatLng(myPosition.latitude, myPosition.longitude);
 
+    final calculatedLat = (userCenter.latitude) - 0.025;
+    final calculatedLong = (userCenter.longitude) - 0.017;
+
+    final userFinalCenter = LatLng(calculatedLat, calculatedLong);
+  
+    return userFinalCenter;
+    }
+    
     final driver = List.from(location);   
     final driverPosition = LatLng(driver[1], driver[0]);   
   
@@ -124,8 +130,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
 
     double radius = distance / 0.15;
     double scale  = radius / 0.2;
-    final zoom    = (15 - math.log(scale) / math.log(2));   
-    print('zoom inicial $zoom');
+    final zoom    = (15 - math.log(scale) / math.log(2));     
     
     if(distance <= 0.05){
       return 12.0;

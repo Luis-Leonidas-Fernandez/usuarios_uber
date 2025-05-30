@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
               constraints: const BoxConstraints(maxHeight: 950),
               decoration: BoxDecoration(
                   image: const DecorationImage(
-                      image: AssetImage('assets/background_image.png'),
+                      image: AssetImage('assets/background_image.webp'),
                       fit: BoxFit.cover,
                       opacity: 0.9),
                   gradient: AppConstants.backgroundCard
@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                      height: 220,         
                      decoration: const BoxDecoration(                                    
                      image: DecorationImage(
-                     image: AssetImage('assets/car_b.png'),                
+                     image: AssetImage('assets/car_b.webp'),                
                   ),
                   
                   ),
@@ -101,10 +101,8 @@ class FormImputs extends StatefulWidget {
 class _FormImputsState extends State<FormImputs> {
 
   @override
-  Widget build(BuildContext context) {
-  
-  //ResponsiveUtil responsiveUtil = ResponsiveUtil(context);
-  //double responsiveHeight = responsiveUtil.getResponsiveHeight(0.33);
+  Widget build(BuildContext context) {  
+
   final heigthScreen = MediaQuery.of(context).size.height;
 
   return SingleChildScrollView(

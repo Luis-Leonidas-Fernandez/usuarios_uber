@@ -4,9 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:usuario_inri/animation/animate_page.dart';
 import 'package:usuario_inri/constants/constants.dart';
 import 'package:usuario_inri/pages/login_page.dart';
-
 import 'package:usuario_inri/providers/login_form_validar.dart';
-import 'package:usuario_inri/responsive/responsive_ui.dart';
 import 'package:usuario_inri/widgets/imput_register.dart';
 
 
@@ -26,7 +24,7 @@ class RegisterPage extends StatelessWidget {
             constraints: const BoxConstraints(maxHeight: 950),
             decoration: BoxDecoration(
                 image: const DecorationImage(
-                    image: AssetImage('assets/background_image.png'),
+                    image: AssetImage('assets/background_image.webp'),
                     fit: BoxFit.cover,
                     opacity: 0.9),
                 gradient: AppConstants.backgroundCard
@@ -64,15 +62,15 @@ class RegisterPage extends StatelessWidget {
                 ),
         
                 Positioned(
-                  top: height * 0.30,
+                  top: height * 0.18,
                   left: 10.0,
                   right: 10.0,
                   child: Container(
                    width: 250,
-                   height: 140,         
+                   height: 250,         
                    decoration: const BoxDecoration(                
                    image: DecorationImage(
-                   image: AssetImage('assets/car_b.png'),                
+                   image: AssetImage('assets/car_b.webp'),                
                 ),
                 
                 ),
@@ -102,9 +100,7 @@ class _FormRegisterState extends State<FormRegister> {
   @override
   Widget build(BuildContext context) {
 
-  final height = MediaQuery.of(context).size.height;
-  ResponsiveUtil responsiveUtil = ResponsiveUtil(context);
-  double responsiveHeight = responsiveUtil.getResponsiveHeight(0.33);
+   final heigthScreen = MediaQuery.of(context).size.height;
 
     return SafeArea(
       child: Center(
@@ -138,11 +134,11 @@ class _FormRegisterState extends State<FormRegister> {
                       color: AppConstants.textColor,
                       fontWeight: FontWeight.bold)),
             ),
-            SizedBox(height: responsiveHeight),
+            SizedBox(height: heigthScreen * 0.28),
 
             const InputsUserRegister(),   
 
-            SizedBox(height: height < 365 ? 1 : 8),
+            SizedBox(height: heigthScreen < 365 ? 1 : 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -162,7 +158,7 @@ class _FormRegisterState extends State<FormRegister> {
                       AnimatePage(child: const LoginPage())    
                       );
                      });    
-                      //Navigator.pushNamed(context, 'login');
+                      
                     },
                     child: Text(
                       'Inicia sesion aquí',

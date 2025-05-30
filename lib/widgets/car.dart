@@ -7,7 +7,7 @@ class CarImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Image.asset(
-      'assets/car_b.png',
+      'assets/car_b.webp',
       width: 120,
       height: 120,
       fit: BoxFit.contain,

@@ -32,6 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     // Navegar al login después de unos segundos
     Future.delayed(const Duration(seconds: 5), () {
+      if (!mounted) return;
       Navigator.of(context).push(
         AnimatePage(child: const LoginPage()),
       );
@@ -69,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen> {
             width: 350,
             height: 350,
             child: Image(
-              image: AssetImage('assets/logo.png'),
+              image: AssetImage('assets/logo.webp'),
               fit: BoxFit.cover,
             ),
           ),

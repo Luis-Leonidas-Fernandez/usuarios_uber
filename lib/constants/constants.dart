@@ -50,9 +50,10 @@ static final blur = HexColor("#497bff");
   }
 
   static String getFormattedTime() {
-    final now = DateTime.now();
-    return "${now.hour}:${now.minute.toString().padLeft(2, '0')}";
-  }
+  final now = DateTime.now().toLocal(); // 👈 muy importante
+  return "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}";
+}
+
 
  static final backgroundCard = LinearGradient(colors: [
 

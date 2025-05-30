@@ -54,7 +54,7 @@ class ParseData{
     
     final object  = OrderUser.fromJson(response);
     
-    await Future.delayed(const Duration(seconds: 3));
+    //await Future.delayed(const Duration(milliseconds: 500));
     
     
     Isolate.exit(resultPort, object); 

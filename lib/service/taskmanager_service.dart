@@ -7,22 +7,25 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:usuario_inri/constants/constants.dart';
 import 'package:usuario_inri/service/addresses_service.dart';
 import 'package:usuario_inri/service/location_service.dart';
+import 'package:usuario_inri/service/message_service.dart';
+import 'package:usuario_inri/service/storage_service.dart';
 
 @pragma('vm:entry-point')
- void getStatusAddress() async {  
+ void getStatusAddress() async { 
 
+ 
   /// OPTIONAL when use custom notification
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   // verifica si existe una order activa  en Storage Service
   final isActiveOrder = await LocationService.instance.isActiveOrder();
-  final existUserIdAndToken = await LocationService.instance.getIdUserAndToken(); 
+  final existUserIdAndToken = await LocationService.instance.getIdUserAndToken();
+  final idOrder =  await StorageService.instance.getIdOrder(); 
+  final alreadyNotified = await StorageService.instance.isAlreadyNotified(idOrder);
   
-  // ignore: avoid_print
-  print("exist order: $isActiveOrder exist user : $existUserIdAndToken");
-
-    if (isActiveOrder && existUserIdAndToken) {
+  
+    if (isActiveOrder && existUserIdAndToken && !alreadyNotified ) {
         
         
         await existAddress();                      
@@ -46,17 +49,19 @@ import 'package:usuario_inri/service/location_service.dart';
             icon: '@drawable/car_launcher',
             largeIcon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),           
             color: color,
-            colorized: true,
-            sound: null
+            colorized: true,           
             
           )),
         );   
     
-       
+       await StorageService.instance.saveNotified(idOrder);
+       await MessageService().cancelPeriodicMessage();
   
        } else{
         return;
        }
+       
+
 
  }
 

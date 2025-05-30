@@ -1,0 +1,2 @@
+/Users/luis/Desktop/usuarios_uber/android/app/.cxx/RelWithDebInfo/276u456x/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/luis/Desktop/usuarios_uber/android/app/.cxx/RelWithDebInfo/276u456x/arm64-v8a/CMakeFiles/rebuild_cache.dir

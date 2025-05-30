@@ -5,8 +5,8 @@ import 'package:usuario_inri/styles/containers_decorations.dart';
 import 'package:usuario_inri/styles/text_field_decorations.dart';
 import 'package:usuario_inri/utils/responsive_utils.dart';
 import 'package:usuario_inri/validators/input_field_validator.dart';
-import 'package:usuario_inri/widgets/alert_screen.dart';
-import 'package:usuario_inri/widgets/btn_reusable.dart';
+import 'package:usuario_inri/widgets/dialogs/alert_screen.dart';
+import 'package:usuario_inri/widgets/buttons/btn_reusable.dart';
 
 
 
@@ -139,7 +139,7 @@ class _InputsUserRegisterState extends State<InputsUserRegister> {
         children: [
           for (final field in fields)
             Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
+              padding: const EdgeInsets.only(bottom: 10.0),
               child: _buildInputField(field, screenHeight, isFullWidth: true),
             ),
           const SizedBox(height: 20),
@@ -147,13 +147,14 @@ class _InputsUserRegisterState extends State<InputsUserRegister> {
             text: 'Registrarme',
             onPressed: () async {
               if (!_formKey.currentState!.validate()) return;
+         
 
               final registerOk = await authBloc.initRegister(
                 nameCtrl.text.trim(),
                 emailCtrl.text.trim(),
                 passCtrl.text.trim(),
               );
-
+            
               if (!context.mounted) return;
 
               if (registerOk) {
@@ -177,7 +178,7 @@ class _InputsUserRegisterState extends State<InputsUserRegister> {
         paddingHorizontal: 6.8,
         isFullWidth: isFullWidth,
       ),
-      height: screenHeight <= 640 ? 55 : 50,
+      height: screenHeight <= 640 ? 51 : 55,
       decoration: ContainerStyles.containerDecoration(),
       child: Row(
         children: [
@@ -197,9 +198,9 @@ class _InputsUserRegisterState extends State<InputsUserRegister> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           gradient: LinearGradient(
-            colors: [
-              const Color.fromARGB(188, 126, 124, 250).withValues(),
-              const Color.fromARGB(188, 126, 124, 250),
+            colors: const [
+              Color.fromARGB(188, 126, 124, 250),
+              Color.fromARGB(188, 126, 124, 250),
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,

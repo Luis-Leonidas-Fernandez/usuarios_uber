@@ -5,9 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
-//import 'package:usuario_inri/service/socket_service.dart';
 import 'package:latlong2/latlong.dart' show LatLng;
-
 
 
 part 'location_event.dart';
@@ -45,14 +43,20 @@ class LocationBloc extends Bloc<LocationEvent, LocationState> {
 
 
   void startFollowingUser(){
+
+    const locationSettings = LocationSettings(
+    accuracy: LocationAccuracy.best,
+    distanceFilter: 5,        // Emitir solo si se movió al menos 5 metros
+    
+     );
     
     // FollowingUser = true;
     add(OnStartFollowingUser());
-
-     positionStream = Geolocator.getPositionStream().listen((event) {
+    
+     positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen((event) {
       
      final position = event;
-    
+        
     //Agrega la ubicacion del usuario a un evento
     add(OnNewUserLocationEvent(LatLng(position.latitude, position.longitude)));
     

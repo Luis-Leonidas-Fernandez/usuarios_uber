@@ -11,17 +11,13 @@ import 'package:usuario_inri/models/usuario.dart';
 import 'package:usuario_inri/service/auth_service.dart';
 import 'package:usuario_inri/service/storage_service.dart';
 
-
-class AddressService {   
-  
+class AddressService {
   late AuthService authService;
   //Address? address;
   Usuario? usuario;
   final storage = StorageService.instance;
 
-
   Future getAddressesBackground() async {
-
     final token = await storage.getToken();
     final idUser = await storage.getId();
 
@@ -36,24 +32,20 @@ class AddressService {
         headers: headers);
 
     if (resp.statusCode == 200) {
-      
-      final data = resp.body;      
-    
-     await storage.deleteIdOrder();  
-      
+      final data = resp.body;
+
+      await storage.deleteIdOrder();
 
       final respuesta = await ParseData.instance.isolateFunction(data);
-     
 
       final idOrder = respuesta.id;
-      
+
       await storage.saveIdOrder(idOrder);
 
       return respuesta;
     }
 
     if (resp.statusCode == 201) {
-
       //convert data a Address Model
       await storage.deleteIdOrder();
       final date = OrderUser(id: null);
@@ -63,7 +55,6 @@ class AddressService {
     }
 
     if (resp.statusCode == 401) {
-
       await storage.deleteIdOrder();
 
       final date = OrderUser(id: null);
@@ -74,137 +65,153 @@ class AddressService {
     }
   }
 
+  Future<OrderUser> getAddress(String token, String idUser) async {
+    final Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Charset': 'utf-8',
+      'x-token': token,
+    };
 
+    final uri = Uri.parse('${Environment.apiUrl}/viajes/$idUser');
 
-  Future<OrderUser> getAddress(String token, String idUser ) async {        
-   
-  
-  final newMap = {'id': null};
- 
-  final Map<String, String> headers = {'Content-Type': 'application/json', 'Charset': 'utf-8','x-token': token.toString()};
-  
-  final resp = await http.get(Uri.parse('${Environment.apiUrl }/viajes/$idUser'), headers: headers); 
-  
-    
-  try {
-    
-    if ( resp.statusCode == 200) {    
-  
-  //data decoded
-  final dataMap = jsonDecode(resp.body)["address"];
-  
-  //convert data a Address Model
-  final Map<String, dynamic> response = dataMap ?? newMap;
-  
-  final data = OrderUser.fromJson(response);
-  
-  
-  await storage.saveIdOrder(data.id);  
-     
-  return data;  
-  
-} if(resp.statusCode == 201){
+    try {
+      final resp = await http.get(uri, headers: headers);
 
-  //convert data a Address Model
-  final date = jsonDecode(resp.body)["emptyObject"];
-  final result = OrderUser.fromJson(date);
-  
-  await storage.deleteIdOrder();
+      if (resp.statusCode != 200) {       
+        return OrderUser.empty();
+      }
 
-  return result;
+      final decoded = jsonDecode(resp.body);
 
-} else{
-   
-  return OrderUser(id: null);
-  
-} 
-  } on FormatException catch (e) {  
-    // ignore: avoid_print
-    print("error : $e");   
-        
-      return throw Exception(e);
-  } catch (e) {
-    // Handle all other errors
-    // ignore: avoid_print
-    print('Error: $e');
-    throw Exception('Error: $e');
-  }
-  
-}
-
-   
-  Future postAddresses( LatLng ubicacion, String token, String idUser) async {  
+      // 🟨 Caso: el backend respondió con address: null (orden eliminada)
+      if (decoded["address"] == null) {
       
+        await storage.deleteIdOrder();
+        
+
+        return OrderUser(
+          id: 'resumen',
+          finalizado: true,
+          ok: false,
+          email: '',
+          nombre: '',
+          apellido: '',
+          vehiculo: '',
+          modelo: '',
+          patente: '',
+          online: false,
+          order: '',
+          estado: null,
+          createdAt: null,
+          updatedAt: null,
+          mensaje: null,
+          destino: null,
+          idDriver: '',
+          distanciaKm: null,
+          precio: null,
+          horaEsperaInicio: null,
+          horaEsperaFin: null,
+          precioTotal: 0.0,
+        );
+      }
+
+      // ✅ Caso normal: devolvemos la orden activa
+      final dataMap = decoded["address"];
+      final order = OrderUser.fromJson(dataMap);
+
+      if (order.id != null && order.id!.isNotEmpty) {
+        await storage.saveIdOrder(order.id);
+      }
+
+      return order;
+    } on FormatException catch (_) {
    
-  final lat   = ubicacion.latitude;
-  final long  = ubicacion.longitude;
-  final  position = [long, lat ];
-  
-  final data = {'miId': idUser, 'estado': true, 'ubicacion': position};  
-  final Map<String, String> headers = {'Content-Type': 'application/json', 'Charset': 'utf-8','x-token': token.toString()};
-  final body = jsonEncode(data); 
-    
+      return OrderUser.empty();
+    } catch (e) {      
+      return OrderUser.empty();
+    }
+  }
 
-  final resp = await http.post(Uri.parse('${Environment.apiUrl }/ubicaciones/lugar'), body: body, headers: headers);
- 
-  if ( resp.statusCode == 200) {
+  Future postAddresses(LatLng ubicacion, LatLng destino, String token,
+      String idUser, double distanciaKm, double precio) async {
+    final lat = ubicacion.latitude;
+    final long = ubicacion.longitude;
+    final position = [long, lat];
 
-  try {
-  
-  
-  //data decoded
-  final dataMap = jsonDecode(resp.body)["data"];
- 
+    final latDestino = destino.latitude;
+    final longDestino = destino.longitude;
+    final userDestino = [longDestino, latDestino];
 
-  final response           = Location.fromMap(dataMap);
-  final idOrder          = response.id;  
-  
+    final data = {
+      'miId': idUser,
+      'estado': true,
+      'ubicacion': position,
+      'destino': userDestino,
+      'distanciaKm': distanciaKm,
+      'precio': precio
+    };
+    final Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Charset': 'utf-8',
+      'x-token': token.toString()
+    };
+    final body = jsonEncode(data);
 
-  await storage.saveIdOrder(idOrder);     
-  
- 
-   return idOrder;
-    
-  } catch (e) {
-      print('Error parseando respuesta del servidor: $e');
-      return null;  
-  }  
-  
- } 
+    final resp = await http.post(
+        Uri.parse('${Environment.apiUrl}/ubicaciones/lugar'),
+        body: body,
+        headers: headers);
 
+    await Future.delayed(const Duration(seconds: 2));
+    if (resp.statusCode == 200) {
+      try {
+        //data decoded
+        final dataMap = jsonDecode(resp.body)["data"];
 
-}
+        final response = Location.fromMap(dataMap);
+        final idOrder = response.id;
 
+        await storage.saveIdOrder(idOrder);
 
+        return idOrder;
+      } catch (e) {
+        return null;
+      }
+    }
+  }
 
+  Future<dynamic> finishTravel(
+      String token, String idUser, double precioTotal) async {
+    final Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Charset': 'utf-8',
+      'x-token': token.toString()
+    };
+    final Map<String, dynamic> data = {
+      'miId': idUser,
+      'order': 'libre',
+      'precioTotal': precioTotal
+    };
 
- Future<dynamic> finishTravel(String token, String idUser) async {    
-  
+    final resp = await http.put(
+        Uri.parse('${Environment.apiUrl}/ubicaciones/remove/address'),
+        headers: headers,
+        body: json.encode(data));
+    if (resp.statusCode == 200) {
+      final Map<String, dynamic> address = jsonDecode(resp.body);
 
-  final Map<String, String> headers = {'Content-Type': 'application/json', 'Charset': 'utf-8','x-token': token.toString()};
-  final Map<String, String> data   = {'miId': idUser, 'order': 'libre'};
+      return address;
+    } else {
+      return '';
+    }
+  }
 
-  
-  final resp = await http.put(Uri.parse('${Environment.apiUrl }/ubicaciones/remove/address'), headers: headers, body: json.encode(data));
-  if ( resp.statusCode == 200 ) {
-
-  final Map<String, dynamic> address = jsonDecode(resp.body);
-  
-
-  return address;    
-} else {
-  return '';
-}
-}
-
-
-Future<bool> isActiveOrder() async {
+  Future<bool> isActiveOrder() async {
     final isActive = await StorageService.instance.getIdOrder();
-    
-    if(isActive == null ){
-    return false;
+
+    if (isActive == null) {
+      return false;
     }
     return true;
   }
- 
 }

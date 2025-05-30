@@ -5,8 +5,8 @@ import 'package:usuario_inri/styles/containers_decorations.dart';
 import 'package:usuario_inri/styles/text_field_decorations.dart';
 import 'package:usuario_inri/utils/responsive_utils.dart';
 import 'package:usuario_inri/validators/input_field_validator.dart';
-import 'package:usuario_inri/widgets/alert_screen.dart';
-import 'package:usuario_inri/widgets/btn_reusable.dart';
+import 'package:usuario_inri/widgets/dialogs/alert_screen.dart';
+import 'package:usuario_inri/widgets/buttons/btn_reusable.dart';
 
 
 class InputFieldConfig {
@@ -117,12 +117,15 @@ class _ImputsUserLoginState extends State<ImputsUserLogin> {
           ButtonReusable(
             text: 'Ingresar',
             onPressed: authUser.state.usuario != null
-                ? () {}
+                ? () {                 
+                }
                 : () async {
+                    
                     if (!_formKey.currentState!.validate()) {
+                      
                       return; // Si algún campo falla, no sigue
                     }
-
+                    
                     final loginOk = await authUser.initLogin(
                       emailCtrl.text.trim(),
                       passCtrl.text.trim(),

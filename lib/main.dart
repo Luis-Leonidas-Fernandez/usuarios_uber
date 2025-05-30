@@ -1,12 +1,13 @@
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:usuario_inri/blocs/searchBar/search_bar_bloc.dart';
+import 'package:usuario_inri/blocs/tarifario/tarifario_bloc.dart';
 import 'package:usuario_inri/pages/alarm_page.dart';
 
 import 'package:usuario_inri/pages/notifications_access.dart';
@@ -23,17 +24,21 @@ import 'package:intl/number_symbols_data.dart';
 
 import 'package:intl/number_symbols.dart';
 import 'package:usuario_inri/config/namber_symbol.dart';
-//import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:usuario_inri/service/tarifario_loader.dart';
 import 'package:usuario_inri/splash/splash_screen.dart';
 
 
 
 void main() async{
-     //debugPrintRebuildDirtyWidgets = true;
+
+   
      //proyecto final usuarios inri
      WidgetsFlutterBinding.ensureInitialized();
-     
-      //await AndroidAlarmManager.initialize();     
+    
+     await AndroidAlarmManager.initialize();   
+
+     // Cargar tarifas desde assets
+     final tarifas = await TarifarioLoader.cargarDesdeAssets();  
      
 
      HydratedBloc.storage = await HydratedStorage.build(
@@ -62,16 +67,20 @@ runApp(
       ],
       child: MultiBlocProvider(
         providers: [
-      
+          BlocProvider(create: (context) => TarifarioBloc()..add(InitTarifarioEvent(tarifas))),
+          BlocProvider(create: (context) => PrecioDistanciaBloc(tarifas: tarifas) ),
+          BlocProvider(create: (context) => CronometroBloc() ),
           BlocProvider(create: (context) => AuthBloc(authService: AuthService())),
           BlocProvider(create: (context) => GpsBloc() ),
           BlocProvider(create: (context) => NotificationBloc()),
           BlocProvider(create: (context) => AlarmBloc()),                
           BlocProvider(create: (context) => LocationBloc() ),
-          BlocProvider(create: (context) => AddressBloc(addressService: AddressService(), authBloc: BlocProvider.of<AuthBloc>(context)) ),        
+          BlocProvider(create: (context) => AddressBloc(addressService: AddressService(),
+          authBloc: BlocProvider.of<AuthBloc>(context), cronometroBloc: BlocProvider.of<CronometroBloc>(context),
+          precioDistanciaBloc: BlocProvider.of<PrecioDistanciaBloc>(context))),        
           BlocProvider(create: (context) => MapBloc(locationBloc: BlocProvider.of<LocationBloc>(context),
          addressBloc: BlocProvider.of<AddressBloc>(context),)),
-         
+         BlocProvider(create: (context) => SearchBarBloc(authBloc: BlocProvider.of<AuthBloc>(context))),
           
         ],
       
@@ -81,6 +90,9 @@ runApp(
   );
    
  }
+
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -112,11 +124,4 @@ class MyApp extends StatelessWidget {
   }
 
   
-}
-
-
-
- 
-
-
- 
+} 

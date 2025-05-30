@@ -31,7 +31,7 @@ set autenticando( bool valor ) {
 //Registro de Usuario
 Future<Usuario> register(String nombre, String email, String password ) async {
    
-
+    
     final data = {'nombre': nombre,'email': email,'password': password};    
     final body = jsonEncode(data);
     final headers = {'Content-Type': 'application/json'};
@@ -42,7 +42,8 @@ Future<Usuario> register(String nombre, String email, String password ) async {
     if ( resp.statusCode == 200 ) {
     
     final loginResponse = loginResponseFromJson( resp.body ); 
-    final usuario = loginResponse.usuario;  
+    final usuario = loginResponse.usuario;
+    
     
     final user = Usuario(online: usuario.online, nombre: usuario.nombre, email: usuario.email, uid: usuario.email,
     urlMapbox: usuario.urlMapbox, tokenMapBox: usuario.tokenMapBox, idMapBox: usuario.idMapBox, mapToken: usuario.mapToken,
@@ -107,7 +108,7 @@ Future<Usuario> register(String nombre, String email, String password ) async {
 
     final resp = await http.post(Uri.parse('${ Environment.apiUrl }/login'), body: body, headers: headers  );
       
-    
+   
     if ( resp.statusCode == 200 ) {
       final loginResponse = loginResponseFromJson( resp.body );
 

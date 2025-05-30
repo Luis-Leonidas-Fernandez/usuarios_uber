@@ -7,7 +7,7 @@ class Location {
     String? miId;
     bool? estado;
     Mensaje? ubicacion;
-    Mensaje? mensaje;    
+    List<Mensaje>? mensaje;      
     DateTime? createdAt;
     DateTime? updatedAt;
 
@@ -26,11 +26,11 @@ class Location {
     String toJson() => json.encode(toMap());
 
     factory Location.fromMap(Map<String, dynamic> json) => Location(
-        id: json["_id"]?? '',
+        id: json["id"]?? '',
         miId: json["miId"]?? '',
         estado: json["estado"]?? false,
         ubicacion:  Mensaje.fromMap(json["ubicacion"]),
-        mensaje: Mensaje.fromMap(json["mensaje"]),        
+        mensaje: List<Mensaje>.from(json["mensaje"].map((x) => Mensaje.fromMap(x))),        
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
     );
@@ -40,7 +40,7 @@ class Location {
         "miId": miId,
         "estado": estado,
         "ubicacion": ubicacion!.toMap(),
-        "mensaje": mensaje!.toMap(),       
+        "mensaje": mensaje?.map((x) => x.toMap()).toList(),       
         "createdAt": createdAt!.toIso8601String(),
         "updatedAt": updatedAt!.toIso8601String(),
     };
