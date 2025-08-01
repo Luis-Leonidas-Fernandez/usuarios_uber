@@ -34,7 +34,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     
-    compileSdkVersion 34  
+    compileSdkVersion 35  
     namespace 'com.luisleonidasfernandez.flutterinri'    
     
     compileOptions {        
@@ -54,11 +54,11 @@ android {
         applicationId "com.luisleonidasfernandez.flutterinri"
         minSdkVersion 21 
         //flutter.minSdkVersion
-        targetSdkVersion 34 
+        targetSdkVersion 35 
         //flutter.targetSdkVersion
-        versionCode 8         
+        versionCode 9         
         //flutterVersionCode.toInteger()
-        versionName "2.0.2"
+        versionName "2.0.3"
         //flutterVersionName
         manifestPlaceholders['foregroundServiceType'] = 'location'
     }
@@ -88,7 +88,7 @@ dependencies {
 // you can upgrade the window library too
 implementation 'androidx.window:window:1.0.0'
 implementation 'androidx.window:window-java:1.0.0'
-coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
+coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
 }
 
 flutter {

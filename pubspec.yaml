@@ -2,7 +2,7 @@ name: usuario_inri
 description: A new Flutter project.
 publish_to: 'none'
 
-version: 2.0.1+8
+version: 2.0.3+9
 
 environment:
   sdk: ">=3.2.0 <4.0.0"
@@ -31,10 +31,10 @@ dependencies:
   path_provider: ^2.1.2
 
   # Funcionalidades del dispositivo
-  geolocator: ^9.0.2
-  permission_handler: ^11.3.0
+  geolocator: ^14.0.2
+  permission_handler: ^12.0.1
   android_alarm_manager_plus: ^4.0.7
-  flutter_local_notifications: ^17.2.1+2
+  flutter_local_notifications: ^19.0.3
 
   # UI y visuales
   flutter_map: ^7.0.2

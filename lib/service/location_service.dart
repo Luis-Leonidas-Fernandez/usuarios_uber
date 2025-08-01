@@ -55,9 +55,13 @@ LocationService._internal();
 
       if (isPermisionLocation) {
 
+     final locationSettings = LocationSettings(
+     accuracy: LocationAccuracy.high,
+    timeLimit: Duration(seconds: 10),
+     );
+
         final position = await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high,
-            timeLimit: const Duration(seconds: 5));
+        locationSettings: locationSettings);
 
         final location = "${position.latitude} ${position.longitude}";
         final res = LatLng(position.latitude, position.longitude);
