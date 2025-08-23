@@ -52,12 +52,9 @@ class ParseData{
     final Map<String, dynamic> response = dataMap ?? newMap;
 
     
-    final object  = OrderUser.fromJson(response);
+    final addressParsed  = OrderUser.fromJson(response);
     
-    //await Future.delayed(const Duration(milliseconds: 500));
-    
-    
-    Isolate.exit(resultPort, object); 
+    Isolate.exit(resultPort, addressParsed); 
         
     
   }

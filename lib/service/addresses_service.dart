@@ -17,7 +17,7 @@ class AddressService {
   Usuario? usuario;
   final storage = StorageService.instance;
 
-  Future getAddressesBackground() async {
+  Future<OrderUser> getAddressesBackground() async {
     final token = await storage.getToken();
     final idUser = await storage.getId();
 
@@ -48,7 +48,7 @@ class AddressService {
     if (resp.statusCode == 201) {
       //convert data a Address Model
       await storage.deleteIdOrder();
-      final date = OrderUser(id: null);
+      final date = OrderUser(id: null, idDriver: '0' ,order: null);
       final result = date;
 
       return result;
@@ -57,7 +57,7 @@ class AddressService {
     if (resp.statusCode == 401) {
       await storage.deleteIdOrder();
 
-      final date = OrderUser(id: null);
+      final date = OrderUser(id: null, idDriver: '0',order: null);
       final result = date;
       return result;
     } else {

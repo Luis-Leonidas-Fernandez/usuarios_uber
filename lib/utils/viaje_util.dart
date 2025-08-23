@@ -31,7 +31,7 @@ class ViajeUtils {
     //5. Limpiar Notification saved
     final orderId = await StorageService.instance.getIdOrder();
     if (orderId != null) {
-    await StorageService.instance.clearNotified(orderId);
+    await StorageService.instance.clearAll();
     }
    
     

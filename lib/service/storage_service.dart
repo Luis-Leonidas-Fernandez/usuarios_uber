@@ -22,7 +22,7 @@ class StorageService {
   final storage = const FlutterSecureStorage( );
   
   //Guardar token en storage 
-  Future saveToken( String? token ) async {   
+  Future<void> saveToken( String? token ) async {   
   return await storage.write(key: 'token', value: token, aOptions: _getAndroidOptions() );
   } 
 
@@ -92,7 +92,6 @@ class StorageService {
   // Obteniendo ID DRIVER
   Future<dynamic> getIdDriver() async {    
     
-    final storage = FlutterSecureStorage();
     final id = await storage.read(key: 'idDriver', aOptions: _getAndroidOptions());       
     return id; 
   }
@@ -100,26 +99,46 @@ class StorageService {
   
   // Eliminando ID del Driver
   Future<void> deleteIdDriver() async {
-    final storage = FlutterSecureStorage();
+    
     await storage.delete(key: 'idDriver', aOptions: _getAndroidOptions());
   }  
 
-  //manejo de notificaciones
 
-  Future<void> saveNotified(String? orderId) async {
-    await storage.write(key: 'notified_$orderId', value: 'true');
-  }
+  // Guardar el último ID notificado globalmente
+Future<void> saveLastNotifiedOrderId(String orderId) async {
+  await storage.write(
+    key: 'last_notified_order_id',
+    value: orderId,
+    aOptions: _getAndroidOptions(),
+  );
+}
 
-  // Consultar si ya fue notificado por id de orden
-  Future<bool> isAlreadyNotified(String? orderId) async {
-    final value = await storage.read(key: 'notified_$orderId');
-    return value == 'true';
-  }
+// Obtener el último ID notificado
+Future<String?> getLastNotifiedOrderId() async {
+  return await storage.read(
+    key: 'last_notified_order_id',
+    aOptions: _getAndroidOptions(),
+  );
+}
 
-  // Limpiar notificación previa (opcional si querés resetear)
-  Future<void> clearNotified(String? orderId) async {
-    await storage.delete(key: 'notified_$orderId');
-  }
+// Guardar que se notificó un estado de una orden específica
+Future<void> saveNotifiedStatus(String orderId, String status) async {
+  final key = 'notified_${orderId}_$status';
+  await storage.write(key: key, value: 'true', aOptions: _getAndroidOptions());
+}
+
+// Verificar si ya se notificó un estado específico de una orden
+Future<bool> isStatusAlreadyNotified(String orderId, String status) async {
+  final key = 'notified_${orderId}_$status';
+  final value = await storage.read(key: key, aOptions: _getAndroidOptions());
+  return value == 'true';
+}
+
+// Eliminar todo el contenido del storage seguro
+Future<void> clearAll() async {
+  await storage.deleteAll(aOptions: _getAndroidOptions());
+}
+
   
 
 }

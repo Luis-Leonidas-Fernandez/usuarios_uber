@@ -221,6 +221,8 @@ class AddressBloc extends HydratedBloc<AddressEvent, AddressState> {
     if (token == null || idUser == null) return;
 
     try {
+
+    
       final newOrder = await addressService.getAddress(token, idUser);
  
 
@@ -234,7 +236,7 @@ class AddressBloc extends HydratedBloc<AddressEvent, AddressState> {
             state.orderUser?.id == 'resumen' &&
             state.orderUser?.precio != null &&
             state.orderUser?.distanciaKm != null) {
-         
+      
           return;
         }
 
@@ -246,7 +248,7 @@ class AddressBloc extends HydratedBloc<AddressEvent, AddressState> {
           isTripFinished: true,
           orderUser: resumen,
         ));
-
+      
         messageService.cancelPeriodicMessage();
         precioDistanciaBloc.add(ResetearPrecioDistanciaEvent());
         cronometroBloc.add(const ResetCronometroEvent());
@@ -287,7 +289,7 @@ class AddressBloc extends HydratedBloc<AddressEvent, AddressState> {
           isTripFinished: true,
           orderUser: resumenFinal,
         ));
-
+       
         messageService.cancelPeriodicMessage();
         return;
       }

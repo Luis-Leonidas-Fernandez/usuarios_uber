@@ -2,8 +2,7 @@
 
 class Environment {
   // Entorno dinámico (dev o prod)
-  static bool get isProduction => true;
-  //const bool.fromEnvironment('dart.vm.product');
+  static bool get isProduction => const bool.fromEnvironment('dart.vm.product');
 
   // URLs de desarrollo
   static const String _devApiUrl     = 'http://10.0.2.2:3000/api';

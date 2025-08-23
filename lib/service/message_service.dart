@@ -8,9 +8,10 @@ class MessageService {
   
   Future initPeriodicMessage() async {    
 
-    return await AndroidAlarmManager.periodic(const Duration(minutes: 2),
+    return await AndroidAlarmManager.periodic(const Duration(seconds: 45),
     helloAlarmID,
-    getStatusAddress
+    getStatusAddress,
+    wakeup: true,
     ); 
 
   }

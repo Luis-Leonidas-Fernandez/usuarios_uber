@@ -31,6 +31,8 @@ android/app/profile/
 android/app/release/
 android/key.properties
 android/local.properties
+android/app/upload-keystore.jks
+
 
 # iOS
 ios/Flutter/.last_build_id

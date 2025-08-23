@@ -26,15 +26,25 @@ import 'package:intl/number_symbols.dart';
 import 'package:usuario_inri/config/namber_symbol.dart';
 import 'package:usuario_inri/service/tarifario_loader.dart';
 import 'package:usuario_inri/splash/splash_screen.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-
+     // inicializando notificaciones
+     final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+     FlutterLocalNotificationsPlugin();
 
 void main() async{
 
-   
-     //proyecto final usuarios inri
-     WidgetsFlutterBinding.ensureInitialized();
+    //proyecto final usuarios inri
+    WidgetsFlutterBinding.ensureInitialized();
     
+    const AndroidInitializationSettings initializationSettingsAndroid =
+    AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    const InitializationSettings initializationSettings =
+    InitializationSettings(android: initializationSettingsAndroid);
+
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
      await AndroidAlarmManager.initialize();   
 
      // Cargar tarifas desde assets
