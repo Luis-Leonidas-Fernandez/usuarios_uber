@@ -1,12 +1,12 @@
-name: Android Release (Usuario) to Google Play
+name: CD Android Release (Usuario) to Google Play
 
 on:
   push:
     tags:
-      - "user-v*.*.*+*"
+      - "user-v*"
 
 concurrency:
-  group: user-cd-${{ github.ref }}
+  group: cd-user-${{ github.ref }}
   cancel-in-progress: true        
 
 jobs:
@@ -36,34 +36,33 @@ jobs:
       - name: Flutter pub get
         run: flutter pub get
 
-      # Parseamos versionName y versionCode desde el tag
-      - name: Extract versionName and versionCode from tag
-        id: extract
+      # Parseamos el tag: user-v2.0.4+10 -> BUILD_NAME=2.0.4 | BUILD_NUMBER=10
+      - name: Parse tag -> versionName/versionCode
+        id: parse
         run: |
-          TAG_NAME="${GITHUB_REF##*/}"
-          echo "Tag recibido: $TAG_NAME"
-
-          # Ejemplo esperado: user-v2.0.4+10
-          VERSION_NAME=$(echo "$TAG_NAME" | sed -E 's/user-v([0-9]+\.[0-9]+\.[0-9]+)\+.*/\1/')
-          VERSION_CODE=$(echo "$TAG_NAME" | sed -E 's/.*\+([0-9]+)/\1/')
-
-          echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
-          echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV
-          echo "✔ Extraído versionName=$VERSION_NAME, versionCode=$VERSION_CODE"
+          TAG="${GITHUB_REF_NAME}"  # ej: user-v2.0.4+10
+          if [[ ! "$TAG" =~ ^user-v([0-9]+\.[0-9]+\.[0-9]+)\+([0-9]+)$ ]]; then
+            echo "Tag inválido. Usa: user-v<versionName>+<versionCode> (ej: user-v2.0.4+10)"
+            exit 1
+          fi
+          NAME="${BASH_REMATCH[1]}"
+          NUM="${BASH_REMATCH[2]}"
+          echo "BUILD_NAME=$NAME" >> $GITHUB_OUTPUT
+          echo "BUILD_NUMBER=$NUM" >> $GITHUB_OUTPUT
+          echo "✔ Version => $NAME | Code => $NUM"
 
       - name: Write local.properties versions
-        shell: bash
         run: |
           mkdir -p android
           touch android/local.properties
           sed -i '/^flutter\.versionName=/d' android/local.properties || true
           sed -i '/^flutter\.versionCode=/d' android/local.properties || true
           {
-            echo "flutter.versionName=${VERSION_NAME}"
-            echo "flutter.versionCode=${VERSION_CODE}"
+            echo "flutter.versionName=${{ steps.parse.outputs.BUILD_NAME }}"
+            echo "flutter.versionCode=${{ steps.parse.outputs.BUILD_NUMBER }}"
           } >> android/local.properties
-          echo "✔ local.properties actualizado:"
-          cat android/local.properties
+          echo "✔ local.properties:"
+          tail -n +1 android/local.properties
 
       - name: Restore keystore & key.properties
         run: |
@@ -82,7 +81,7 @@ jobs:
           flutter clean
           flutter build appbundle --release
           ls -lah build/app/outputs/bundle/release
-
+      
       - name: Upload AAB artifact
         uses: actions/upload-artifact@v4
         with:
@@ -95,8 +94,8 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: "com.luisleonidasfernandez.flutterinri"
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
-          track: internal   # podés cambiarlo a alpha, beta o production
-          status: completed # queda enviado a revisión automáticamente
+          track: internal
+          status: completed
 
       - name: Done
-        run: echo "🎉 Usuario publicado en Play Store con tag ${{ github.ref_name }}"
+        run: echo "🎉 Usuario desplegado a Google Play con tag ${{ github.ref_name }}"
