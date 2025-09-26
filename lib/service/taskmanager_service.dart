@@ -19,7 +19,7 @@ import 'package:usuario_inri/main.dart' show flutterLocalNotificationsPlugin;
   final isActiveOrder = await LocationService.instance.isActiveOrder();
   final existUserIdAndToken = await LocationService.instance.getIdUserAndToken();
   final idOrder =  await StorageService.instance.getIdOrder(); 
-  final lastNotified = await StorageService.instance.getLastNotifiedOrderId();
+  //final lastNotified = await StorageService.instance.getLastNotifiedOrderId();
   
   
     if (isActiveOrder && existUserIdAndToken && idOrder != null ) {

@@ -56,10 +56,8 @@ android {
         //flutter.minSdkVersion
         targetSdkVersion 35 
         //flutter.targetSdkVersion
-        versionCode 10         
-        //flutterVersionCode.toInteger()
-        versionName "2.0.4"
-        //flutterVersionName
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
         manifestPlaceholders['foregroundServiceType'] = 'location'
     }
 
