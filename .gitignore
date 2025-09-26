@@ -48,3 +48,7 @@ app.*.symbols
 # Obfuscation related
 app.*.map.json
 
+# Ignorar archivo de versión local
+version.txt
+
+
