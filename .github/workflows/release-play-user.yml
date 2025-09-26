@@ -1,31 +1,16 @@
 name: Android Release (Usuario) to Google Play
 
 on:
-  workflow_dispatch:
-    inputs:
-      track:
-        description: "Track (internal, alpha, beta, production)"
-        required: true
-        default: "internal"
-      build_name:
-        description: "versionName (ej: 2.0.4)"
-        required: true
-        default: "2.0.4"
-      build_number:
-        description: "versionCode (ej: 10)"
-        required: true
-        default: "10"
-      dry_run:
-        description: "Solo compilar (no subir a Play)"
-        required: true
-        default: "true"
+  push:
+    tags:
+      - "user-v*.*.*+*"
 
 concurrency:
-  group: user-${{ github.ref }}-${{ github.event.inputs.track }}
+  group: user-cd-${{ github.ref }}
   cancel-in-progress: true        
 
 jobs:
-  build-and-deploy-user:
+  cd-deploy-user:
     runs-on: ubuntu-latest
     timeout-minutes: 45
 
@@ -45,32 +30,41 @@ jobs:
           channel: stable
           cache: true
 
-      # (Opcional) UPDATED: cache de Gradle para acelerar builds
       - name: Setup Gradle cache
         uses: gradle/actions/setup-gradle@v3    
 
       - name: Flutter pub get
         run: flutter pub get
 
-      # Escribimos la versión que leerá tu build.gradle desde local.properties
+      # Parseamos versionName y versionCode desde el tag
+      - name: Extract versionName and versionCode from tag
+        id: extract
+        run: |
+          TAG_NAME="${GITHUB_REF##*/}"
+          echo "Tag recibido: $TAG_NAME"
 
-      - name: Write local.properties versions (idempotent)
+          # Ejemplo esperado: user-v2.0.4+10
+          VERSION_NAME=$(echo "$TAG_NAME" | sed -E 's/user-v([0-9]+\.[0-9]+\.[0-9]+)\+.*/\1/')
+          VERSION_CODE=$(echo "$TAG_NAME" | sed -E 's/.*\+([0-9]+)/\1/')
+
+          echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
+          echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV
+          echo "✔ Extraído versionName=$VERSION_NAME, versionCode=$VERSION_CODE"
+
+      - name: Write local.properties versions
         shell: bash
         run: |
           mkdir -p android
           touch android/local.properties
-          # eliminar líneas previas, si las hubiera
           sed -i '/^flutter\.versionName=/d' android/local.properties || true
           sed -i '/^flutter\.versionCode=/d' android/local.properties || true
-          # escribir valores actuales
           {
-            echo "flutter.versionName=${{ github.event.inputs.build_name }}"
-            echo "flutter.versionCode=${{ github.event.inputs.build_number }}"
+            echo "flutter.versionName=${VERSION_NAME}"
+            echo "flutter.versionCode=${VERSION_CODE}"
           } >> android/local.properties
-          echo "✔ local.properties:"
-          tail -n +1 android/local.properties
-      
-      # UPDATED: restaura el keystore desde secret base64 y genera key.properties    
+          echo "✔ local.properties actualizado:"
+          cat android/local.properties
+
       - name: Restore keystore & key.properties
         run: |
           echo "$KS" | base64 -d > android/app/key.jks
@@ -88,26 +82,21 @@ jobs:
           flutter clean
           flutter build appbundle --release
           ls -lah build/app/outputs/bundle/release
-      
-      # guardar el .aab como artifact
+
       - name: Upload AAB artifact
         uses: actions/upload-artifact@v4
         with:
           name: usuario-aab-${{ github.run_number }}
           path: build/app/outputs/bundle/release/app-release.aab    
-      
-      
-      # UPDATED: status=completed => queda enviado a revisión automáticamente
 
       - name: Upload to Google Play
-        if: ${{ github.event.inputs.dry_run != 'true' }}
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: "com.luisleonidasfernandez.flutterinri"
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
-          track: ${{ github.event.inputs.track }}
-          status: completed
+          track: internal   # podés cambiarlo a alpha, beta o production
+          status: completed # queda enviado a revisión automáticamente
 
       - name: Done
-        run: echo "🎉 Usuario listo. Upload=${{ github.event.inputs.dry_run != 'true' && 'sí' || 'no (dry_run)'}}"
+        run: echo "🎉 Usuario publicado en Play Store con tag ${{ github.ref_name }}"
