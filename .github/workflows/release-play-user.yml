@@ -79,7 +79,9 @@ jobs:
       - name: Build appbundle (AAB)
         run: |
           flutter clean
-          flutter build appbundle --release
+          flutter build appbundle --release \
+            --build-name="${{ steps.parse.outputs.BUILD_NAME }}" \
+            --build-number="${{ steps.parse.outputs.BUILD_NUMBER }}"
           ls -lah build/app/outputs/bundle/release
       
       - name: Upload AAB artifact
@@ -94,7 +96,7 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: "com.luisleonidasfernandez.flutterinri"
           releaseFiles: build/app/outputs/bundle/release/app-release.aab
-          track: internal
+          track: production
           status: completed
 
       - name: Done

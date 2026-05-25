@@ -32,6 +32,7 @@ android/app/release/
 android/key.properties
 android/local.properties
 android/app/upload-keystore.jks
+android/app/keystore.txt
 
 
 # iOS
@@ -50,5 +51,4 @@ app.*.map.json
 
 # Ignorar archivo de versión local
 version.txt
-
 
